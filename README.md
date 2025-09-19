@@ -16,3 +16,64 @@
 
 ## Course / Section
 **BSCS - JA4**
+
+---
+
+## Programming Languages Concept Review Activity
+
+This repository contains our exploration of fundamental programming language concepts through practical code examples in Python and JavaScript.
+
+### 📁 Project Structure
+
+```
+prelim-review/
+├── syntax-semantic-errors/    # Syntax vs Semantic error demonstrations
+├── token-examples/           # Keywords, identifiers, and literals
+├── variable-scope/          # Global vs local scope examples  
+└── typing-systems/          # Strong vs weak typing demonstrations
+```
+
+### 🔍 Concepts Explored
+
+1. **Syntax vs Semantic Errors**
+   - Syntax errors: Caught by parser before execution
+   - Semantic errors: Runtime errors with valid syntax but incorrect logic
+   - Examples in both Python and JavaScript with proper error handling
+
+2. **Token Analysis**
+   - Keywords: Reserved words with special meaning
+   - Identifiers: Variable, function, and class names
+   - Literals: Fixed values (numeric, string, boolean, collections)
+
+3. **Variable Scope**
+   - Python: LEGB rule (Local, Enclosing, Global, Built-in)
+   - JavaScript: Function scope (var) vs Block scope (let/const)
+   - Demonstrations of hoisting, closures, and scope chains
+
+4. **Typing Systems**
+   - Python: Strong typing with dynamic behavior and duck typing
+   - JavaScript: Weak typing with extensive implicit coercion
+   - Type safety comparisons and best practices
+
+### 💭 Reflection
+
+**What concept was most challenging in the activity?**
+
+The most challenging concept was understanding the nuances between strong and weak typing systems. While both Python and JavaScript are dynamically typed (types determined at runtime), their approach to type coercion is fundamentally different. Python's strong typing requires explicit conversions and prevents potentially unsafe operations, while JavaScript's weak typing performs automatic conversions that can lead to unexpected results. 
+
+The challenge was not just in demonstrating these differences, but in understanding when and why each approach is beneficial. JavaScript's implicit coercion can make code more flexible but less predictable, while Python's explicit approach reduces ambiguity but requires more verbose type handling.
+
+**What tools did you use to complete the exercise?**
+
+- **Programming Languages**: Python 3.9.6 and JavaScript (demonstrated conceptually)
+- **Development Environment**: VS Code with integrated terminal
+- **Version Control**: Git with proper commit message formatting
+- **Testing Tools**: Python interpreter for validating code execution
+- **Documentation**: Markdown for clear explanations and code comments
+- **Code Organization**: Structured directory layout for different concepts
+
+The combination of hands-on coding, systematic testing, and incremental version control helped reinforce the theoretical concepts through practical implementation.
+
+---
+
+*This activity demonstrates our understanding of fundamental programming language concepts through comparative analysis and practical examples.*
