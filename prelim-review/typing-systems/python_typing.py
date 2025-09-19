@@ -195,23 +195,3 @@ except TypeError:
 print(f"  int('5') + 3 = {int('5') + 3}")
 print(f"  '5' + str(3) = {'5' + str(3)}")
 
-# Simulate JavaScript-style weak typing behavior
-def weak_typing_simulation():
-    """Simulate how JavaScript would handle type coercion"""
-    print("\nSimulating JavaScript-style weak typing:")
-    
-    # JavaScript: "5" + 3 = "53"
-    js_style_1 = str(5) + str(3)
-    print(f"  '5' + 3 → '{js_style_1}' (string concatenation)")
-    
-    # JavaScript: "5" - 3 = 2
-    js_style_2 = int("5") - 3
-    print(f"  '5' - 3 → {js_style_2} (numeric subtraction)")
-    
-    # JavaScript: true + 1 = 2
-    js_style_3 = int(True) + 1
-    print(f"  True + 1 → {js_style_3} (boolean to number)")
-
-weak_typing_simulation()
-
-print("\nPython's strong typing prevents many type-related bugs!")
