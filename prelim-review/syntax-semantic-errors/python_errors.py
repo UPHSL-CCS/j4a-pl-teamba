@@ -59,3 +59,27 @@ except IndexError as e:
     print(f"Semantic Error: {e}")
 
 print("\nSemantic errors occur during program execution")
+
+# ===== ADDITIONAL EXAMPLES (CONTRIBUTED) =====
+
+print("\n=== ADDITIONAL SYNTAX ERROR EXAMPLE ===")
+
+# Example 5: Invalid class definition syntax
+# class MyClass()  # SyntaxError: expected ':'
+#     pass
+
+print("Additional syntax error also prevents code execution")
+
+print("\n=== ADDITIONAL SEMANTIC ERROR EXAMPLE ===")
+
+# Example 5: Attribute error (trying to access a non-existent attribute)
+try:
+    class SimpleClass:
+        pass
+    
+    obj = SimpleClass()
+    print(obj.non_existent_attribute)  # This will raise AttributeError
+except AttributeError as e:
+    print(f"Additional Semantic Error: {e}")
+
+print("This demonstrates how accessing undefined attributes fails during execution")

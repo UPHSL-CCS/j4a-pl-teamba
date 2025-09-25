@@ -66,3 +66,24 @@ console.log(`"5" - 3 = ${"5" - 3}`);        // 2 (numeric subtraction)
 console.log(`true + 1 = ${true + 1}`);      // 2 (boolean to number)
 
 console.log("\nSemantic errors occur during program execution");
+
+// ===== ADDITIONAL EXAMPLES (CONTRIBUTED) =====
+
+console.log("\n=== ADDITIONAL SYNTAX ERROR EXAMPLE ===");
+
+// Example 5: Missing parentheses in function call
+// console.log "Missing parentheses";  // SyntaxError: Unexpected string
+
+console.log("Additional syntax error also prevents code execution");
+
+console.log("\n=== ADDITIONAL SEMANTIC ERROR EXAMPLE ===");
+
+// Example 6: Incorrect mathematical operation with strings
+try {
+    let result = 10 / "apple";  // This will throw TypeError (division with non-number)
+    console.log(result);
+} catch (error) {
+    console.log(`Additional Semantic Error: ${error.name} - ${error.message}`);
+}
+
+console.log("This demonstrates how seemingly valid operations can fail during execution");

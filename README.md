@@ -57,13 +57,18 @@ prelim-review/
 
 ### 💭 Reflection
 
-**What concept was most challenging in the activity?**
+#### **What concept was most challenging in the activity?**
 
 The most challenging concept was understanding the nuances between strong and weak typing systems. While both Python and JavaScript are dynamically typed (types determined at runtime), their approach to type coercion is fundamentally different. Python's strong typing requires explicit conversions and prevents potentially unsafe operations, while JavaScript's weak typing performs automatic conversions that can lead to unexpected results. 
 
 The challenge was not just in demonstrating these differences, but in understanding when and why each approach is beneficial. JavaScript's implicit coercion can make code more flexible but less predictable, while Python's explicit approach reduces ambiguity but requires more verbose type handling.
 
-**What tools did you use to complete the exercise?**
+#### **Individual Reflections:**
+
+**Larie:**
+I'm familiar with variable scope, shadowing, closures, and typing in JavaScript and Python, but they can still be confusing at times. I often have to look up terms like hoisting or closures to remind myself how they work. Even though I understand the basics, some of the quirks in weak typing and scope rules can trip me up occasionally.
+
+#### **What tools did you use to complete the exercise?**
 
 - **Programming Languages**: Python 3.9.6 and JavaScript (demonstrated conceptually)
 - **Development Environment**: VS Code with integrated terminal
