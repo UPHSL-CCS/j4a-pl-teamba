@@ -83,3 +83,30 @@ except AttributeError as e:
     print(f"Additional Semantic Error: {e}")
 
 print("This demonstrates how accessing undefined attributes fails during execution")
+
+print("\nADDITIONAL SNIPPETS DEMONSTRATING SYNTAX VS SEMANTIC ERRORS")
+
+print("\nSyntax Errors are mistakes in the structure and format of the code. They are similar to grammatical errors in the English language.")
+
+# Sample 1 - Missing colon after function definition")
+# def my_function()  # SyntaxError: expected ':' after function definition
+#    print("Hello")
+
+# Sample 2 - Invalid syntax (using 'for' as a variable name)
+# for = 10  # SyntaxError: invalid syntax (cannot use 'for' as variable) because it is a reserved keyword
+
+# Sample 3 - Mismatched parentheses
+# my_list = [1, 2, 3)  # SyntaxError: closing parenthesis does not match opening bracket
+
+print("\nSemantic Errors are mistakes in the logic and meaning of the code. They occur when the code runs but produces incorrect results or behavior.")
+
+print("\nSample 1 - Wrong Logic")
+
+def calculate_average(a, b):
+    return a + b / 2
+
+result = calculate_average(10, 6)
+print(f"Inputs: a = 10, b = 6")
+print(f"Operation performed: a + b / 2")
+print(f"Calculated average (incorrect due to semantic error): {result}")
+print("Correct operation should be (a + b) / 2 to get the average.")

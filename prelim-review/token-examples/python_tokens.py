@@ -134,3 +134,18 @@ print(f"List: {list_literal}")
 print(f"Tuple: {tuple_literal}")
 print(f"Dictionary: {dict_literal}")
 print(f"Set: {set_literal}")
+
+print("\nADDITIONAL EXAMPLES OF TOKENS")
+
+print("\nToken is defined as the smallest unit of a program that has meaning to the compiler. It is like words in a sentence.")
+
+print ("\nPYTHON OPERATORS")
+a,b = 8,10
+print(f"Arithmetic Operators:")
+print(f"{a} + {b} = {a + b} [Addition '+']")
+print(f"{a} - {b} = {a - b} [Subtraction '-']")
+print(f"{a} * {b} = {a * b} [Multiplication '*']")
+print(f"{a} / {b} = {a / b} [Division '/']")
+print(f"{a} // {b} = {a // b} [Floor Division '//']")
+print(f"{a} % {b} = {a % b} [Modulus '%']")
+print(f"{a} ** {b} = {a ** b} [Exponent '**']")
