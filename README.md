@@ -10,7 +10,7 @@
 
 ## Group Members
 - Hernandez, Mark Anthony  
-- Amimiorg, Larie  
+- Amimirog, Larie  
 - Gonzaga, Al Jorome  
 - Floreta, Agatha Wendie  
 
@@ -67,6 +67,9 @@ The challenge was not just in demonstrating these differences, but in understand
 
 **Larie:**
 I'm familiar with variable scope, shadowing, closures, and typing in JavaScript and Python, but they can still be confusing at times. I often have to look up terms like hoisting or closures to remind myself how they work. Even though I understand the basics, some of the quirks in weak typing and scope rules can trip me up occasionally.
+
+**Agatha:**
+For me, the most challenging concept in this activity was the kinds of typing. Although I understand the difference between the two, weak typing allows implicit type conversion while strong typing enforces types explicitly, applying and identifying them in a code snippet proved to be a bit difficult. I found it tricky to predict whether a certain language convert types on its own or give errors when types didn’t match.
 
 #### **What tools did you use to complete the exercise?**
 
