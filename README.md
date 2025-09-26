@@ -71,6 +71,9 @@ I'm familiar with variable scope, shadowing, closures, and typing in JavaScript 
 **Agatha:**
 For me, the most challenging concept in this activity was the kinds of typing. Although I understand the difference between the two, weak typing allows implicit type conversion while strong typing enforces types explicitly, applying and identifying them in a code snippet proved to be a bit difficult. I found it tricky to predict whether a certain language convert types on its own or give errors when types didn’t match.
 
+**Al jorome:**
+I started this not even knowing what a typing system was, so everything felt new. In Python, the easiest part was strong typing because it clearly errors when types don’t match, but duck typing and type hints were harder to wrap my head around. In JavaScript, dynamic typing made sense quickly, but weak typing and its strange coercions, like [] + [] turning into an empty string—were the most challenging.
+
 #### **What tools did you use to complete the exercise?**
 
 - **Programming Languages**: Python 3.9.6 and JavaScript (demonstrated conceptually)
