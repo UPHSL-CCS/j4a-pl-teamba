@@ -32,8 +32,8 @@ prelim-review/
 ├── variable-scope/          # Global vs local scope examples  
 └── typing-systems/          # Strong vs weak typing demonstrations
 control-flow/
-├── javascript_if_else.js     # If-else statements in JavaScript
-└── python_if_else.py        # If-else statements in Python
+├── if-else-statements/    # If-else statements 
+└── loops/       # Loops (for, while)
 ```
 
 ### 🔍 Concepts Explored
