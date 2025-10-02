@@ -106,6 +106,11 @@ This repository also contains our exploration of control flow structures in prog
    - Multiple examples in both languages showing different use cases
    - Comparison of syntax and behavior
 
+2. **Loops (for, while)**
+   - **For loops**: Traditional counting loops and modern iteration patterns
+   - **While loops**: Condition-based iteration and loop control
+   - **Loop control**: Break and continue statements
+
 ### 💭 Control Flow Reflection
 
 #### **What concept was most challenging in the activity?**
@@ -126,6 +131,9 @@ Implementing if-else statements across different programming languages highlight
 
 **Larie (If-else statements):**
 While implementing if-else statements in both languages, I found that the biggest difference wasn't just syntax but how each language evaluates conditions. JavaScript's loose typing means almost anything can be a condition, while Python is more explicit. The JavaScript ternary operator (`? :`) versus Python's conditional expression (`if-else`) also shows how languages can approach the same concept with different syntax priorities.
+
+**Agatha (Loops):**
+Working on the loops made me realized that Python and JavaScript both use loops, but they handle them differently. In Python, for loops are usually used to go through a list or a range while in JavaScript, the for loop needs initialization, condition, and an increment. JavaScript also has a do-while loop, which Python doesn’t have. Python uses indentation to define the loop body, while JavaScript uses curly braces. Both languages support while, break, and continue in similar ways.
 
 ---
 
