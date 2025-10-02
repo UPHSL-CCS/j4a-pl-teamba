@@ -31,6 +31,9 @@ prelim-review/
 ├── token-examples/           # Keywords, identifiers, and literals
 ├── variable-scope/          # Global vs local scope examples  
 └── typing-systems/          # Strong vs weak typing demonstrations
+control-flow/
+├── javascript_if_else.js     # If-else statements in JavaScript
+└── python_if_else.py        # If-else statements in Python
 ```
 
 ### 🔍 Concepts Explored
@@ -54,6 +57,11 @@ prelim-review/
    - Python: Strong typing with dynamic behavior and duck typing
    - JavaScript: Weak typing with extensive implicit coercion
    - Type safety comparisons and best practices
+
+5. **Control Flow Structures**
+   - If-else statements: Conditional branching
+   - Loops: For and while loop implementations
+   - Arithmetic and logical expressions in control flow
 
 ### 💭 Reflection
 
@@ -84,6 +92,40 @@ I started this not even knowing what a typing system was, so everything felt new
 - **Code Organization**: Structured directory layout for different concepts
 
 The combination of hands-on coding, systematic testing, and incremental version control helped reinforce the theoretical concepts through practical implementation.
+
+---
+
+## Control Flow Activity
+
+This repository also contains our exploration of control flow structures in programming languages, comparing their implementation in Python and JavaScript.
+
+### 🔍 Control Flow Structures Explored
+
+1. **If-else statements**
+   - Conditional execution based on boolean expressions
+   - Multiple examples in both languages showing different use cases
+   - Comparison of syntax and behavior
+
+### 💭 Control Flow Reflection
+
+#### **What concept was most challenging in the activity?**
+
+Implementing if-else statements across different programming languages highlighted how the same logical concept can have different syntactic implementations. The most challenging aspect was understanding the nuanced differences in how conditions are evaluated between languages, particularly with truthy and falsy values.
+
+#### **Differences in how each language handles control flow:**
+
+**If-else statements:**
+- **JavaScript**: Uses curly braces `{}` to define blocks. Has the ternary operator `condition ? value1 : value2` as a shorthand for if-else. Coerces values to booleans in conditions.
+- **Python**: Uses indentation and colons to define blocks. Has the conditional expression `value1 if condition else value2`. Is more strict about boolean types.
+
+**Logical operators:**
+- **JavaScript**: Uses `&&` (AND), `||` (OR), and `!` (NOT).
+- **Python**: Uses English keywords `and`, `or`, and `not`.
+
+#### **Individual Reflections:**
+
+**Larie (If-else statements):**
+While implementing if-else statements in both languages, I found that the biggest difference wasn't just syntax but how each language evaluates conditions. JavaScript's loose typing means almost anything can be a condition, while Python is more explicit. The JavaScript ternary operator (`? :`) versus Python's conditional expression (`if-else`) also shows how languages can approach the same concept with different syntax priorities.
 
 ---
 
