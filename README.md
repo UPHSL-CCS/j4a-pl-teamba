@@ -138,6 +138,11 @@ Working on the loops made me realized that Python and JavaScript both use loops,
 **Anthony Hernandez (Arithmetic and Logical Expressions):**
 Implementing arithmetic and logical expressions revealed fascinating differences between the languages. Python's approach to operator precedence and the availability of unique operators like floor division (`//`) and chained comparisons (`1 < x < 10`) made it feel more mathematically intuitive. JavaScript's automatic type coercion in arithmetic operations was both powerful and potentially dangerous - the same expression could yield different results based on context. The most interesting discovery was how both languages handle short-circuit evaluation differently, especially with truthy/falsy values
 
+**Al Jorome Gonzaga (Summary Reflection):**
+After reviewing the different aspects of control flow discussed by my groupmates, I realized that Python and JavaScript share similar core concepts but differ significantly in implementation. From Larie’s observation, we see that if-else statements highlight how JavaScript’s loose typing allows flexible conditions, while Python enforces clarity with stricter evaluation rules. Agatha’s insight into loops shows how Python emphasizes readability with simpler iteration constructs, while JavaScript provides more variation, such as the do-while loop. Lastly, Anthony’s reflection on arithmetic and logical expressions emphasizes that Python feels more mathematically precise with operators like floor division and chained comparisons, while JavaScript’s type coercion adds both flexibility and risk. Overall, these comparisons show that while both languages achieve the same control flow goals, Python prioritizes clarity and strictness, whereas JavaScript offers flexibility but requires careful handling of types.
+
+
+
 ---
 
 *This activity demonstrates our understanding of fundamental programming language concepts through comparative analysis and practical examples.*
