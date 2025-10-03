@@ -135,6 +135,9 @@ While implementing if-else statements in both languages, I found that the bigges
 **Agatha (Loops):**
 Working on the loops made me realized that Python and JavaScript both use loops, but they handle them differently. In Python, for loops are usually used to go through a list or a range while in JavaScript, the for loop needs initialization, condition, and an increment. JavaScript also has a do-while loop, which Python doesn’t have. Python uses indentation to define the loop body, while JavaScript uses curly braces. Both languages support while, break, and continue in similar ways.
 
+**Anthony Hernandez (Arithmetic and Logical Expressions):**
+Implementing arithmetic and logical expressions revealed fascinating differences between the languages. Python's approach to operator precedence and the availability of unique operators like floor division (`//`) and chained comparisons (`1 < x < 10`) made it feel more mathematically intuitive. JavaScript's automatic type coercion in arithmetic operations was both powerful and potentially dangerous - the same expression could yield different results based on context. The most interesting discovery was how both languages handle short-circuit evaluation differently, especially with truthy/falsy values
+
 ---
 
 *This activity demonstrates our understanding of fundamental programming language concepts through comparative analysis and practical examples.*
