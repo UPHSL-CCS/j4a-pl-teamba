@@ -142,6 +142,12 @@ Implementing arithmetic and logical expressions revealed fascinating differences
 After reviewing the different aspects of control flow discussed by my groupmates, I realized that Python and JavaScript share similar core concepts but differ significantly in implementation. From Larie’s observation, we see that if-else statements highlight how JavaScript’s loose typing allows flexible conditions, while Python enforces clarity with stricter evaluation rules. Agatha’s insight into loops shows how Python emphasizes readability with simpler iteration constructs, while JavaScript provides more variation, such as the do-while loop. Lastly, Anthony’s reflection on arithmetic and logical expressions emphasizes that Python feels more mathematically precise with operators like floor division and chained comparisons, while JavaScript’s type coercion adds both flexibility and risk. Overall, these comparisons show that while both languages achieve the same control flow goals, Python prioritizes clarity and strictness, whereas JavaScript offers flexibility but requires careful handling of types.
 
 
+## 🛠️ Subprograms and Modularity
+
+#### **Individual Reflections:**
+
+**Al Jorome Gonzaga :**
+In this activity, I learned how important subprograms, modularity, and abstraction are in writing clean and efficient code. By separating the prime-checking logic into its own module and importing it into the main program, I saw how modular design makes the code more organized and easier to manage. It felt satisfying to see how a simple function like is_prime() could be reused in different programs without rewriting it. Abstraction also helped me understand that I don’t always need to know how a function works internally—as long as I know what it does and how to use it. This approach made my code look more professional and easier to maintain. Overall, the activity showed me that modular programming isn’t just about splitting code—it’s about designing it in a way that makes collaboration, debugging, and future updates much simpler.
 
 ---
 
