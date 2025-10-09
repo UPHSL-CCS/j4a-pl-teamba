@@ -30,8 +30,23 @@ function isAnagram(str1, str2) {
         return false;
     }
     
-    // Character frequency counting will be added in the next commit
-    return false;
+    // Count character frequencies in first string
+    const charCount = {};
+    for (let char of cleanStr1) {
+        charCount[char] = (charCount[char] || 0) + 1;
+    }
+    
+    // Verify character frequencies in second string
+    for (let char of cleanStr2) {
+        // If character doesn't exist or count becomes negative, not an anagram
+        if (!charCount[char]) {
+            return false;
+        }
+        charCount[char]--;
+    }
+    
+    // If all counts are zero, strings are anagrams
+    return true;
 }
 
 // Export the anagram checker function
