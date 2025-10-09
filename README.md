@@ -149,6 +149,9 @@ After reviewing the different aspects of control flow discussed by my groupmates
 **Al Jorome Gonzaga :**
 In this activity, I learned how important subprograms, modularity, and abstraction are in writing clean and efficient code. By separating the prime-checking logic into its own module and importing it into the main program, I saw how modular design makes the code more organized and easier to manage. It felt satisfying to see how a simple function like is_prime() could be reused in different programs without rewriting it. Abstraction also helped me understand that I don’t always need to know how a function works internally—as long as I know what it does and how to use it. This approach made my code look more professional and easier to maintain. Overall, the activity showed me that modular programming isn’t just about splitting code—it’s about designing it in a way that makes collaboration, debugging, and future updates much simpler.
 
+**Agatha**
+Through this activity, I realized how valuable modularity and abstraction are in programming. By dividing the code into separate modules, like placing the palindrome checker in its own file, I found it much easier to keep the work organized and manageable. Modularity allowed me to focus on one part of the program at a time and make changes without worrying about breaking other parts. Abstraction was also helpful because I could use the palindrome function in my main program without needing to remember all the details of how it works. This experience showed me that modular code is not only easier to maintain and debug but it also makes it simple to reuse functions in other projects or share them with my teammates.
+
 ---
 
 *This activity demonstrates our understanding of fundamental programming language concepts through comparative analysis and practical examples.*
