@@ -1,4 +1,11 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/A8wrl9OQ)  
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab97**Al Jorome Gonzaga:**
+In this activity, I learned how important subprograms, modularity, and abstraction are in writing clean and efficient code. By separating the prime-checking logic into its own module and importing it into the main program, I saw how modular design makes the code more organized and easier to manage. It felt satisfying to see how a simple function like is_prime() could be reused in different programs without rewriting it. Abstraction also helped me understand that I don't always need to know how a function works internally—as long as I know what it does and how to use it. This approach made my code look more professional and easier to maintain. Overall, the activity showed me that modular programming isn't just about splitting code—it's about designing it in a way that makes collaboration, debugging, and future updates much simpler.
+
+**Agatha:**
+Through this activity, I realized how valuable modularity and abstraction are in programming. By dividing the code into separate modules, like placing the palindrome checker in its own file, I found it much easier to keep the work organized and manageable. Modularity allowed me to focus on one part of the program at a time and make changes without worrying about breaking other parts. Abstraction was also helpful because I could use the palindrome function in my main program without needing to remember all the details of how it works. This experience showed me that modular code is not only easier to maintain and debug but it also makes it simple to reuse functions in other projects or share them with my teammates.
+
+**Larie:**
+Creating the anagram checker as a separate module from the palindrome function showed me how powerful modular programming can be. By designing these text-processing functions as independent modules with clear interfaces, I experienced firsthand how modularity enhances code organization and reusability. The main program could import both modules without needing to understand their internal implementations—that's the beauty of abstraction. When I updated the main.js to include both functions, I was impressed by how seamlessly they integrated despite having completely different internal logic. This approach makes maintenance much easier; I could fix or optimize the anagram checker without touching the palindrome code or the main program. It also makes testing simpler since each function can be tested in isolation. I now see why large-scale software development relies so heavily on these principles—they turn complex programs into manageable collections of well-defined components.596c.svg)](https://classroom.github.com/a/A8wrl9OQ)  
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=20344359&assignment_repo_type=AssignmentRepo)  
 
 ---
@@ -32,8 +39,17 @@ prelim-review/
 ├── variable-scope/          # Global vs local scope examples  
 └── typing-systems/          # Strong vs weak typing demonstrations
 control-flow/
-├── if-else-statements/    # If-else statements 
-└── loops/       # Loops (for, while)
+├── if-else-statements/     # If-else statements 
+├── loops/                  # Loops (for, while)
+└── expressions/            # Arithmetic and logical expressions
+subprograms/
+├── js-subprograms/         # JavaScript subprograms and modules
+│   ├── main.js             # Main program using modular functions
+│   ├── palindrome.js       # Palindrome checker module
+│   └── anagram.js          # Anagram checker module
+└── python-subprograms/     # Python subprograms and modules
+    ├── main.py             # Main program using modular functions
+    └── prime_checking.py   # Prime number checker module
 ```
 
 ### 🔍 Concepts Explored
@@ -144,13 +160,47 @@ After reviewing the different aspects of control flow discussed by my groupmates
 
 ## 🛠️ Subprograms and Modularity
 
+This section explores the implementation of modular code through subprograms in different programming languages. The repository contains examples of modular programming, with separate files for different functions that work together through well-defined interfaces.
+
+### 🔍 Modularity and Abstraction Concepts
+
+1. **Function Encapsulation**
+   - Functions encapsulate specific operations (palindrome checking, anagram verification, prime number testing)
+   - Each function has a clear purpose and well-defined interface
+
+2. **Module Organization**
+   - Related functions grouped in modules
+   - Separation of concerns between modules
+
+3. **Abstraction Benefits**
+   - Hide implementation details behind simple interfaces
+   - Allow using functionality without understanding internal workings
+   - Facilitate code reuse and maintenance
+
+4. **Cross-language Comparison**
+   - JavaScript module.exports vs Python import system
+   - Different approaches to function definitions and parameter passing
+
+### 💭 Modularity Reflection
+
+#### **Why Modular Code is Easier to Maintain and Reuse:**
+
+Modular code significantly improves maintainability by isolating functionality into discrete components. When bugs occur or features need enhancement, developers can focus on specific modules without worrying about side effects in unrelated code. This compartmentalization also facilitates testing, as each module can be validated independently.
+
+Reusability benefits directly from modularity—well-designed functions with clear purposes can be imported into multiple projects. The palindrome and anagram checkers, for example, could be reused in text processing applications, search engines, or educational tools without modification.
+
+Abstraction further enhances these benefits by providing clear interfaces that hide implementation details. This allows developers to use modules without needing to understand their internal workings, leading to more efficient collaboration and development.
+
 #### **Individual Reflections:**
 
 **Al Jorome Gonzaga :**
 In this activity, I learned how important subprograms, modularity, and abstraction are in writing clean and efficient code. By separating the prime-checking logic into its own module and importing it into the main program, I saw how modular design makes the code more organized and easier to manage. It felt satisfying to see how a simple function like is_prime() could be reused in different programs without rewriting it. Abstraction also helped me understand that I don’t always need to know how a function works internally—as long as I know what it does and how to use it. This approach made my code look more professional and easier to maintain. Overall, the activity showed me that modular programming isn’t just about splitting code—it’s about designing it in a way that makes collaboration, debugging, and future updates much simpler.
 
-**Agatha**
+**Agatha:**
 Through this activity, I realized how valuable modularity and abstraction are in programming. By dividing the code into separate modules, like placing the palindrome checker in its own file, I found it much easier to keep the work organized and manageable. Modularity allowed me to focus on one part of the program at a time and make changes without worrying about breaking other parts. Abstraction was also helpful because I could use the palindrome function in my main program without needing to remember all the details of how it works. This experience showed me that modular code is not only easier to maintain and debug but it also makes it simple to reuse functions in other projects or share them with my teammates.
+
+**Larie:**
+Creating the anagram checker as a separate module from the palindrome function showed me how powerful modular programming can be. By designing these text-processing functions as independent modules with clear interfaces, I experienced firsthand how modularity enhances code organization and reusability. The main program could import both modules without needing to understand their internal implementations—that's the beauty of abstraction. When I updated the main.js to include both functions, I was impressed by how seamlessly they integrated despite having completely different internal logic. This approach makes maintenance much easier; I could fix or optimize the anagram checker without touching the palindrome code or the main program. It also makes testing simpler since each function can be tested in isolation. I now see why large-scale software development relies so heavily on these principles—they turn complex programs into manageable collections of well-defined components.
 
 ---
 
