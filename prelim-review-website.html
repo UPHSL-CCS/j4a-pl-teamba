@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Languages Prelim Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .topic-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .topic-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .demo-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .demo-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-example pre {
+            margin: 0;
+            overflow-x: auto;
+        }
+
+        .language-label {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .language-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .language-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .python-content {
+            display: none;
+        }
+
+        .javascript-content {
+            display: block;
+        }
+
+        .run-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .run-button:hover {
+            background: #218838;
+        }
+
+        .output {
+            background: #343a40;
+            color: #28a745;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .interactive-demo {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            align-items: center;
+        }
+
+        .input-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .input-group button {
+            padding: 8px 15px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .input-group button:hover {
+            background: #1976d2;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Programming Languages Prelim Review</h1>
+            <p>Interactive demonstrations of fundamental programming concepts</p>
+        </div>
+
+        <div id="main-menu" class="topics-grid">
+            <div class="topic-card" onclick="showTopic('tokens')">
+                <h2>🔤 Tokens</h2>
+                <p>The building blocks of programming languages</p>
+                <ul>
+                    <li>Keywords (reserved words)</li>
+                    <li>Identifiers (variable names)</li>
+                    <li>Literals (fixed values)</li>
+                    <li>Operators (symbols)</li>
+                </ul>
+            </div>
+
+            <div class="topic-card" onclick="showTopic('errors')">
+                <h2>🐛 Syntax vs Semantic Errors</h2>
+                <p>Understanding different types of programming errors</p>
+                <ul>
+                    <li>Syntax: Grammar violations</li>
+                    <li>Semantic: Logic violations</li>
+                    <li>When they're caught</li>
+                    <li>How to fix them</li>
+                </ul>
+            </div>
+
+            <div class="topic-card" onclick="showTopic('typing')">
+                <h2>🏷️ Typing Systems</h2>
+                <p>How languages handle data types</p>
+                <ul>
+                    <li>Dynamic vs Static typing</li>
+                    <li>Weak vs Strong typing</li>
+                    <li>Type coercion examples</li>
+                    <li>JavaScript vs Python</li>
+                </ul>
+            </div>
+
+            <div class="topic-card" onclick="showTopic('scope')">
+                <h2>🌐 Variable Scope</h2>
+                <p>Where variables can be accessed</p>
+                <ul>
+                    <li>Global scope</li>
+                    <li>Function scope</li>
+                    <li>Block scope</li>
+                    <li>Scope chain & closures</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tokens Demo -->
+        <div id="tokens-demo" class="demo-section">
+            <button class="back-button" onclick="showMainMenu()">← Back to Topics</button>
+            <h3>🔤 Tokens - The Building Blocks</h3>
+            
+            <div class="language-selector">
+                <button class="language-btn active" onclick="switchLanguage('tokens', 'javascript')">JavaScript</button>
+                <button class="language-btn" onclick="switchLanguage('tokens', 'python')">Python</button>
+            </div>
+            
+            <div class="highlight">
+                <strong>What are tokens?</strong> Tokens are the smallest meaningful units in a programming language, like words in a sentence.
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🔍 Token Analyzer</h4>
+                <div class="input-group">
+                    <input type="text" id="token-input" placeholder="Enter code:" value="let userName = 42;">
+                    <button onclick="analyzeTokens()">Analyze Tokens</button>
+                </div>
+                <div id="token-output" class="output"></div>
+            </div>
+
+            <div id="tokens-javascript" class="javascript-content">
+                <div class="code-example">
+                    <div class="language-label">JavaScript</div>
+                    <pre>let userName = "John";
+//  ↑      ↑    ↑    ↑
+// keyword identifier operator literal</pre>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">JavaScript Examples</div>
+                    <pre>// Keywords
+let, const, var, if, else, for, while, function, return, class
+
+// Identifiers (camelCase convention)
+userName, firstName, calculateTotal, myArray
+
+// Literals
+42, "hello", true, false, null, undefined
+
+// Operators
++, -, *, /, =, ==, ===, &&, ||, !, <, ></pre>
+                    <button class="run-button" onclick="runTokenExamples('javascript')">Run Examples</button>
+                </div>
+            </div>
+
+            <div id="tokens-python" class="python-content">
+                <div class="code-example">
+                    <div class="language-label">Python</div>
+                    <pre>user_name = "John"
+#    ↑       ↑   ↑
+# identifier operator literal</pre>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">Python Examples</div>
+                    <pre># Keywords
+def, if, elif, else, for, while, class, import, return
+
+# Identifiers (snake_case convention)
+user_name, first_name, calculate_total, my_list
+
+# Literals
+42, "hello", True, False, None
+
+# Operators
++, -, *, /, =, ==, and, or, not, <, ></pre>
+                    <button class="run-button" onclick="runTokenExamples('python')">Show Examples</button>
+                </div>
+            </div>
+
+            <div id="token-examples-output" class="output" style="display:none;"></div>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Token Type</th>
+                    <th>JavaScript Examples</th>
+                    <th>Python Examples</th>
+                </tr>
+                <tr>
+                    <td><strong>Keywords</strong></td>
+                    <td>let, const, if, for, function</td>
+                    <td>def, if, for, while, class</td>
+                </tr>
+                <tr>
+                    <td><strong>Identifiers</strong></td>
+                    <td>userName, myFunction, counter</td>
+                    <td>user_name, my_function, counter</td>
+                </tr>
+                <tr>
+                    <td><strong>Literals</strong></td>
+                    <td>42, "hello", true, null</td>
+                    <td>42, "hello", True, None</td>
+                </tr>
+                <tr>
+                    <td><strong>Operators</strong></td>
+                    <td>+, -, *, =, ==, &&, ||</td>
+                    <td>+, -, *, =, ==, and, or</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Errors Demo -->
+        <div id="errors-demo" class="demo-section">
+            <button class="back-button" onclick="showMainMenu()">← Back to Topics</button>
+            <h3>🐛 Syntax vs Semantic Errors</h3>
+            
+            <div class="language-selector">
+                <button class="language-btn active" onclick="switchLanguage('errors', 'javascript')">JavaScript</button>
+                <button class="language-btn" onclick="switchLanguage('errors', 'python')">Python</button>
+            </div>
+            
+            <div class="highlight">
+                <strong>Key Difference:</strong> Syntax errors are caught before running (parsing), semantic errors are caught while running (execution).
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🔍 Error Detector</h4>
+                <div class="input-group">
+                    <select id="error-type">
+                        <option value="syntax">Syntax Error Examples</option>
+                        <option value="semantic">Semantic Error Examples</option>
+                    </select>
+                    <button onclick="showErrorExample()">Show Example</button>
+                </div>
+                <div id="error-output" class="output"></div>
+            </div>
+
+            <div id="errors-javascript" class="javascript-content">
+                <div class="code-example">
+                    <div class="language-label">JavaScript Syntax Error</div>
+                    <pre>// Missing closing brace
+function test() {
+    console.log("Hello");
+// ❌ SyntaxError: Unexpected end of input</pre>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">JavaScript Semantic Error</div>
+                    <pre>// Grammar is correct, logic is wrong
+let obj = null;
+console.log(obj.property);
+// ❌ TypeError: Cannot read property of null</pre>
+                    <button class="run-button" onclick="runErrorExamples('javascript')">Run Examples</button>
+                </div>
+            </div>
+
+            <div id="errors-python" class="python-content">
+                <div class="code-example">
+                    <div class="language-label">Python Syntax Error</div>
+                    <pre># Missing colon
+if True
+    print("Missing colon")
+# ❌ SyntaxError: invalid syntax</pre>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">Python Semantic Error</div>
+                    <pre># Grammar is correct, logic is wrong
+obj = None
+print(obj.property)
+# ❌ AttributeError: 'NoneType' object has no attribute 'property'</pre>
+                    <button class="run-button" onclick="runErrorExamples('python')">Show Examples</button>
+                </div>
+            </div>
+
+            <div id="error-examples-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Typing Demo -->
+        <div id="typing-demo" class="demo-section">
+            <button class="back-button" onclick="showMainMenu()">← Back to Topics</button>
+            <h3>🏷️ Typing Systems</h3>
+            
+            <div class="language-selector">
+                <button class="language-btn active" onclick="switchLanguage('typing', 'javascript')">JavaScript</button>
+                <button class="language-btn" onclick="switchLanguage('typing', 'python')">Python</button>
+            </div>
+            
+            <div class="highlight">
+                <strong>JavaScript:</strong> Dynamic + Weak (flexible, automatic conversions)<br>
+                <strong>Python:</strong> Dynamic + Strong (flexible, explicit conversions)
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🧪 Type Coercion Tester</h4>
+                <div class="input-group">
+                    <input type="text" id="value1" placeholder="First value" value="5">
+                    <select id="operator">
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="*">*</option>
+                        <option value="/">/</option>
+                        <option value="==">==/option>
+                        <option value="===">=== </option>
+                    </select>
+                    <input type="text" id="value2" placeholder="Second value" value="3">
+                    <button onclick="testCoercion()">Test in JavaScript</button>
+                </div>
+                <div id="coercion-output" class="output"></div>
+            </div>
+
+            <div id="typing-javascript" class="javascript-content">
+                <div class="code-example">
+                    <div class="language-label">JavaScript (Weak)</div>
+                    <pre>"5" + 3        // "53" (string concatenation)
+"5" - 3        // 2 (numeric subtraction)
+true + 1       // 2 (boolean to number)
+[] + []        // "" (empty string!)</pre>
+                    <button class="run-button" onclick="runTypingExamples('javascript')">Run Examples</button>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">Dynamic Typing</div>
+                    <pre>let x = 42;        // Number
+x = "hello";       // Now string
+x = [1, 2, 3];     // Now array
+console.log(typeof x); // "object"</pre>
+                </div>
+            </div>
+
+            <div id="typing-python" class="python-content">
+                <div class="code-example">
+                    <div class="language-label">Python (Strong)</div>
+                    <pre>"5" + 3        # ❌ TypeError
+int("5") + 3   # ✅ 8 (explicit conversion)
+"5" + str(3)   # ✅ "53" (explicit conversion)</pre>
+                    <button class="run-button" onclick="runTypingExamples('python')">Show Examples</button>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">Dynamic Typing</div>
+                    <pre>x = 42           # Integer
+x = "hello"      # Now string
+x = [1, 2, 3]    # Now list
+print(type(x))   # &lt;class 'list'&gt;</pre>
+                </div>
+            </div>
+
+            <div id="typing-examples-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Scope Demo -->
+        <div id="scope-demo" class="demo-section">
+            <button class="back-button" onclick="showMainMenu()">← Back to Topics</button>
+            <h3>🌐 Variable Scope</h3>
+            
+            <div class="language-selector">
+                <button class="language-btn active" onclick="switchLanguage('scope', 'javascript')">JavaScript</button>
+                <button class="language-btn" onclick="switchLanguage('scope', 'python')">Python</button>
+            </div>
+            
+            <div class="highlight">
+                <strong>Scope Chain:</strong> Variables are searched from innermost to outermost scope - Block → Function → Global
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🔍 Scope Visualizer</h4>
+                <div class="input-group">
+                    <select id="scope-example">
+                        <option value="global">Global Scope</option>
+                        <option value="function">Function Scope</option>
+                        <option value="block">Block Scope</option>
+                        <option value="shadow">Variable Shadowing</option>
+                    </select>
+                    <button onclick="showScopeExample()">Visualize</button>
+                </div>
+                <div id="scope-output" class="output"></div>
+            </div>
+
+            <div id="scope-javascript" class="javascript-content">
+                <div class="code-example">
+                    <div class="language-label">JavaScript Scope Levels</div>
+                    <pre>let global = "Everyone sees me";     // 🌍 Global
+
+function myFunction() {
+    let funcScope = "Function only";   // 🏠 Function
+    
+    if (true) {
+        let blockScope = "Block only"; // 📦 Block
+        console.log(global);          // ✅ Can access
+        console.log(funcScope);       // ✅ Can access  
+        console.log(blockScope);      // ✅ Can access
+    }
+    
+    console.log(blockScope);          // ❌ Error!
+}</pre>
+                    <button class="run-button" onclick="runScopeExamples('javascript')">Run Example</button>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">Variable Hoisting</div>
+                    <pre>console.log(hoistedVar);  // undefined (not error!)
+var hoistedVar = "I'm hoisted";
+
+console.log(hoistedLet);  // ❌ ReferenceError
+let hoistedLet = "Temporal dead zone";</pre>
+                </div>
+            </div>
+
+            <div id="scope-python" class="python-content">
+                <div class="code-example">
+                    <div class="language-label">Python Scope (LEGB Rule)</div>
+                    <pre>global_var = "Everyone sees me"     # 🌍 Global
+
+def my_function():
+    func_var = "Function only"       # 🏠 Local
+    
+    def nested_function():
+        nested_var = "Nested only"   # 📦 Local
+        print(global_var)           # ✅ Can access
+        print(func_var)             # ✅ Enclosing scope
+        print(nested_var)           # ✅ Can access
+    
+    print(nested_var)               # ❌ NameError!</pre>
+                    <button class="run-button" onclick="runScopeExamples('python')">Show Example</button>
+                </div>
+
+                <div class="code-example">
+                    <div class="language-label">Global & Nonlocal Keywords</div>
+                    <pre>counter = 0
+
+def modify_global():
+    global counter
+    counter += 1  # Modifies global
+
+def outer():
+    x = 10
+    def inner():
+        nonlocal x
+        x += 1    # Modifies enclosing scope
+    return inner</pre>
+                </div>
+            </div>
+
+            <div id="scope-examples-output" class="output" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Language switching functionality
+        function switchLanguage(topic, language) {
+            // Update button states
+            const buttons = document.querySelectorAll(`#${topic}-demo .language-btn`);
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide all language content for this topic
+            const jsContent = document.getElementById(`${topic}-javascript`);
+            const pyContent = document.getElementById(`${topic}-python`);
+            
+            if (language === 'javascript') {
+                if (jsContent) {
+                    jsContent.style.display = 'block';
+                    jsContent.classList.add('javascript-content');
+                }
+                if (pyContent) {
+                    pyContent.style.display = 'none';
+                    pyContent.classList.add('python-content');
+                }
+            } else {
+                if (jsContent) {
+                    jsContent.style.display = 'none';
+                    jsContent.classList.add('javascript-content');
+                }
+                if (pyContent) {
+                    pyContent.style.display = 'block';
+                    pyContent.classList.remove('python-content');
+                }
+            }
+            
+            // Update input placeholders for tokens
+            if (topic === 'tokens') {
+                const input = document.getElementById('token-input');
+                if (language === 'javascript') {
+                    input.placeholder = "Enter JavaScript code: let userName = 42;";
+                    input.value = "let userName = 42;";
+                } else {
+                    input.placeholder = "Enter Python code: user_name = 42";
+                    input.value = "user_name = 42";
+                }
+                analyzeTokens(); // Re-analyze with new example
+            }
+        }
+
+        // Main navigation
+        function showTopic(topic) {
+            document.getElementById('main-menu').style.display = 'none';
+            document.querySelectorAll('.demo-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(topic + '-demo').classList.add('active');
+        }
+
+        function showMainMenu() {
+            document.querySelectorAll('.demo-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('main-menu').style.display = 'grid';
+        }
+
+        // Enhanced token analyzer
+        function analyzeTokens() {
+            const input = document.getElementById('token-input').value;
+            const output = document.getElementById('token-output');
+            
+            // Determine if it's Python or JavaScript based on current selection
+            const activeBtn = document.querySelector('#tokens-demo .language-btn.active');
+            const isPython = activeBtn && activeBtn.textContent === 'Python';
+            
+            // Language-specific token analysis
+            const jsKeywords = ['let', 'const', 'var', 'if', 'else', 'for', 'while', 'function', 'return', 'class', 'true', 'false', 'null', 'undefined'];
+            const pyKeywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'class', 'import', 'return', 'True', 'False', 'None', 'and', 'or', 'not'];
+            const jsOperators = ['+', '-', '*', '/', '=', '==', '===', '<', '>', '!', '&&', '||'];
+            const pyOperators = ['+', '-', '*', '/', '=', '==', '<', '>', '!', 'and', 'or', 'not'];
+            
+            const keywords = isPython ? pyKeywords : jsKeywords;
+            const operators = isPython ? pyOperators : jsOperators;
+            
+            const tokens = input.split(/(\s+|[+\-*/=<>!(){}[\];,])/).filter(t => t.trim());
+            
+            let result = `Token Analysis (${isPython ? 'Python' : 'JavaScript'}):\n\n`;
+            tokens.forEach(token => {
+                if (keywords.includes(token)) {
+                    result += `"${token}" → KEYWORD\n`;
+                } else if (operators.includes(token)) {
+                    result += `"${token}" → OPERATOR\n`;
+                } else if (/^[0-9]+$/.test(token)) {
+                    result += `"${token}" → NUMBER LITERAL\n`;
+                } else if (/^".*"$/.test(token) || /^'.*'$/.test(token)) {
+                    result += `"${token}" → STRING LITERAL\n`;
+                } else if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(token)) {
+                    result += `"${token}" → IDENTIFIER\n`;
+                } else if (token.trim()) {
+                    result += `"${token}" → OTHER\n`;
+                }
+            });
+            
+            output.textContent = result;
+        }
+
+        // Token examples runner
+        function runTokenExamples(language) {
+            const output = document.getElementById('token-examples-output');
+            output.style.display = 'block';
+            
+            if (language === 'javascript') {
+                output.textContent = `JavaScript Token Examples:
+
+Keywords in action:
+  let x = 10;           // 'let' keyword
+  if (x > 5) {          // 'if' keyword
+    function test() {}  // 'function' keyword
+  }
+
+Identifiers (camelCase):
+  myVariable, userName, calculateTotal
+
+Literals:
+  42 (number), "hello" (string), true (boolean)
+  null, undefined (special literals)
+
+Operators:
+  =, +, -, *, /, ==, ===, &&, ||, !`;
+            } else {
+                output.textContent = `Python Token Examples:
+
+Keywords in action:
+  def my_function():    # 'def' keyword
+  if x > 5:            # 'if' keyword
+    for i in range(3): # 'for', 'in' keywords
+      pass
+
+Identifiers (snake_case):
+  my_variable, user_name, calculate_total
+
+Literals:
+  42 (int), "hello" (str), True (bool)
+  None (special literal)
+
+Operators:
+  =, +, -, *, /, ==, and, or, not`;
+            }
+        }
+
+        // Enhanced error examples
+        function showErrorExample() {
+            const type = document.getElementById('error-type').value;
+            const output = document.getElementById('error-output');
+            const activeBtn = document.querySelector('#errors-demo .language-btn.active');
+            const isPython = activeBtn && activeBtn.textContent === 'Python';
+            
+            if (type === 'syntax') {
+                if (isPython) {
+                    output.textContent = `Python Syntax Error Examples:
+
+❌ Missing colon:
+   if True
+       print("Missing colon")
+   # SyntaxError: invalid syntax
+
+❌ Incorrect indentation:
+   def my_function():
+   print("Wrong indentation")
+   # IndentationError: expected an indented block
+
+❌ Invalid assignment:
+   5 = x
+   # SyntaxError: can't assign to literal
+
+These are caught BEFORE the code runs!`;
+                } else {
+                    output.textContent = `JavaScript Syntax Error Examples:
+
+❌ Missing closing brace:
+   function test() {
+       console.log("hello");
+   // SyntaxError: Unexpected end of input
+
+❌ Invalid variable name:
+   let 123invalid = "test";
+   // SyntaxError: Unexpected number
+
+❌ Missing quotes:
+   console.log("missing quote);
+   // SyntaxError: Unterminated string
+
+These are caught BEFORE the code runs!`;
+                }
+            } else {
+                if (isPython) {
+                    output.textContent = `Python Semantic Error Examples:
+
+❌ Using undefined variable:
+   print(undefined_variable)
+   # NameError: name 'undefined_variable' is not defined
+
+❌ Accessing attribute of None:
+   obj = None
+   print(obj.property)
+   # AttributeError: 'NoneType' object has no attribute
+
+❌ Type mismatch:
+   "hello" + 5
+   # TypeError: can only concatenate str to str
+
+These are caught WHILE the code runs!`;
+                } else {
+                    output.textContent = `JavaScript Semantic Error Examples:
+
+❌ Calling undefined function:
+   unknownFunction();
+   // ReferenceError: unknownFunction is not defined
+
+❌ Accessing property of null:
+   let obj = null;
+   obj.property;
+   // TypeError: Cannot read property of null
+
+❌ Wrong argument types:
+   Math.max("hello", "world");
+   // Returns NaN (not what we expect)
+
+These are caught WHILE the code runs!`;
+                }
+            }
+        }
+
+        // Error examples runner
+        function runErrorExamples(language) {
+            const output = document.getElementById('error-examples-output');
+            output.style.display = 'block';
+            
+            if (language === 'javascript') {
+                output.textContent = `JavaScript Error Examples:
+
+Syntax Errors (caught at parse time):
+  Missing braces, semicolons, quotes
+  Invalid variable names
+  Malformed expressions
+
+Semantic Errors (caught at runtime):
+  ReferenceError: Variable not defined
+  TypeError: Wrong type operations
+  RangeError: Invalid array length
+
+Try: console.log(obj.property) when obj = null`;
+            } else {
+                output.textContent = `Python Error Examples:
+
+Syntax Errors (caught at parse time):
+  IndentationError: Wrong indentation
+  SyntaxError: Missing colons, invalid syntax
+  
+Semantic Errors (caught at runtime):
+  NameError: Variable not defined
+  TypeError: Incompatible types
+  AttributeError: Missing attributes
+
+Try: print(obj.property) when obj = None`;
+            }
+        }
+
+        // Enhanced type coercion tester
+        function testCoercion() {
+            const val1 = document.getElementById('value1').value;
+            const op = document.getElementById('operator').value;
+            const val2 = document.getElementById('value2').value;
+            const output = document.getElementById('coercion-output');
+            
+            try {
+                // Convert string inputs to appropriate types for demo
+                let v1 = isNaN(val1) ? (val1 === 'true' ? true : val1 === 'false' ? false : val1) : Number(val1);
+                let v2 = isNaN(val2) ? (val2 === 'true' ? true : val2 === 'false' ? false : val2) : Number(val2);
+                
+                let result;
+                switch(op) {
+                    case '+': result = v1 + v2; break;
+                    case '-': result = v1 - v2; break;
+                    case '*': result = v1 * v2; break;
+                    case '/': result = v1 / v2; break;
+                    case '==': result = v1 == v2; break;
+                    case '===': result = v1 === v2; break;
+                }
+                
+                const activeBtn = document.querySelector('#typing-demo .language-btn.active');
+                const isPython = activeBtn && activeBtn.textContent === 'Python';
+                
+                if (isPython) {
+                    output.textContent = `Python would handle this differently:
+
+${val1} ${op} ${val2}
+
+Python (Strong Typing):
+- Requires explicit type conversion
+- Would likely raise TypeError for mixed types
+- Example: int("5") + 3 = 8
+- Example: "5" + str(3) = "53"
+
+Python doesn't allow automatic type mixing like JavaScript!`;
+                } else {
+                    output.textContent = `JavaScript Result:
+${val1} ${op} ${val2} = ${result}
+
+Type of result: ${typeof result}
+Type of ${val1}: ${typeof v1}
+Type of ${val2}: ${typeof v2}
+
+JavaScript automatically converted types as needed!`;
+                }
+            } catch (error) {
+                output.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Typing examples runner
+        function runTypingExamples(language) {
+            const output = document.getElementById('typing-examples-output');
+            output.style.display = 'block';
+            
+            if (language === 'javascript') {
+                output.textContent = `JavaScript Type Coercion Results:
+
+"5" + 3 = ${"5" + 3}
+"5" - 3 = ${"5" - 3}
+true + 1 = ${true + 1}
+[] + [] = "${[] + []}"
+[] + {} = "${[] + {}}"
+"2" == 2 = ${"2" == 2}
+"2" === 2 = ${"2" === 2}
+
+Dynamic Typing:
+let x = 42;      // typeof x = "number"
+x = "hello";     // typeof x = "string"
+x = [1,2,3];     // typeof x = "object"
+
+JavaScript automatically converts types!`;
+            } else {
+                output.textContent = `Python Type System:
+
+Strong Typing (Explicit Conversions):
+"5" + 3          # ❌ TypeError
+int("5") + 3     # ✅ 8
+"5" + str(3)     # ✅ "53"
+
+Dynamic Typing:
+x = 42           # type(x) = <class 'int'>
+x = "hello"      # type(x) = <class 'str'>
+x = [1,2,3]      # type(x) = <class 'list'>
+
+Python requires explicit type conversions!`;
+            }
+        }
+
+        // Enhanced scope examples
+        function showScopeExample() {
+            const type = document.getElementById('scope-example').value;
+            const output = document.getElementById('scope-output');
+            const activeBtn = document.querySelector('#scope-demo .language-btn.active');
+            const isPython = activeBtn && activeBtn.textContent === 'Python';
+            
+            if (isPython) {
+                switch(type) {
+                    case 'global':
+                        output.textContent = `Python Global Scope Example:
+
+🌍 Global variables are accessible everywhere:
+
+global_var = "I'm global!"
+
+def any_function():
+    print(global_var)  # ✅ Works
+
+any_function()  # Prints: "I'm global!"
+
+# To modify global variables:
+def modify_global():
+    global global_var
+    global_var = "Modified!"`;
+                        break;
+                    case 'function':
+                        output.textContent = `Python Local Scope Example:
+
+🏠 Local variables are private to that function:
+
+def my_function():
+    local_var = "Only inside function"
+    print(local_var)  # ✅ Works
+
+print(local_var)  # ❌ NameError!
+
+# Python follows LEGB rule:
+# Local → Enclosing → Global → Built-in`;
+                        break;
+                    case 'block':
+                        output.textContent = `Python Block Scope:
+
+📦 Python doesn't have true block scope like JavaScript:
+
+if True:
+    block_var = "Available outside!"
+
+print(block_var)  # ✅ Works! (unlike JavaScript)
+
+# Only functions and classes create new scope
+# if, for, while don't create block scope`;
+                        break;
+                    case 'shadow':
+                        output.textContent = `Python Variable Shadowing:
+
+👻 Inner variables can shadow outer ones:
+
+name = "Global"
+
+def test():
+    name = "Local"  # Shadows global
+    
+    def nested():
+        name = "Nested"  # Shadows local
+        print(name)     # "Nested"
+    
+    nested()
+    print(name)  # "Local"
+
+print(name)  # "Global"`;
+                        break;
+                }
+            } else {
+                switch(type) {
+                    case 'global':
+                        output.textContent = `JavaScript Global Scope Example:
+
+🌍 Global variables are accessible everywhere:
+
+let globalVar = "I'm global!";
+
+function anyFunction() {
+    console.log(globalVar); // ✅ Works
+}
+
+anyFunction(); // Prints: "I'm global!"`;
+                        break;
+                    case 'function':
+                        output.textContent = `JavaScript Function Scope Example:
+
+🏠 Function variables are private to that function:
+
+function myFunction() {
+    let privateVar = "Only inside function";
+    console.log(privateVar); // ✅ Works
+}
+
+console.log(privateVar); // ❌ ReferenceError!`;
+                        break;
+                    case 'block':
+                        output.textContent = `JavaScript Block Scope Example:
+
+📦 Block variables (let/const) stay in their { } block:
+
+if (true) {
+    let blockVar = "Only in this block";
+    console.log(blockVar); // ✅ Works
+}
+
+console.log(blockVar); // ❌ ReferenceError!`;
+                        break;
+                    case 'shadow':
+                        output.textContent = `JavaScript Variable Shadowing Example:
+
+👻 Inner variables can "shadow" outer ones:
+
+let name = "Global";
+
+function test() {
+    let name = "Function"; // Shadows global
+    
+    if (true) {
+        let name = "Block"; // Shadows function
+        console.log(name); // "Block"
+    }
+    
+    console.log(name); // "Function"
+}
+
+console.log(name); // "Global"`;
+                        break;
+                }
+            }
+        }
+
+        // Scope examples runner
+        function runScopeExamples(language) {
+            const output = document.getElementById('scope-examples-output');
+            output.style.display = 'block';
+            
+            if (language === 'javascript') {
+                output.textContent = `JavaScript Scope Examples:
+
+✅ global: "Everyone sees me"
+✅ funcScope: "Function only" 
+✅ blockScope: "Block only"
+❌ blockScope outside block: ReferenceError!
+
+Variable Hoisting:
+console.log(hoistedVar);  // undefined (not error)
+var hoistedVar = "I'm hoisted";
+
+The scope chain: Block → Function → Global`;
+            } else {
+                output.textContent = `Python Scope Examples (LEGB Rule):
+
+Local → Enclosing → Global → Built-in
+
+✅ global_var: accessible everywhere
+✅ func_var: only in function
+✅ nested_var: only in nested function
+❌ nested_var outside: NameError!
+
+No hoisting in Python:
+print(my_var)  # ❌ NameError
+my_var = "Defined after use"
+
+Python creates scope with: functions, classes, modules`;
+            }
+        }
+
+        // Initialize with token analysis
+        document.addEventListener('DOMContentLoaded', function() {
+            analyzeTokens();
+        });
+    </script>
+</body>
+</html>
