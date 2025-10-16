@@ -19,3 +19,15 @@ if __name__ == "__main__":
     # Get input from user
     first_num = int(input("Enter the first number: "))
     second_num = int(input("Enter the second number: "))
+
+    # Create two separate threads for addition and multiplication
+    addition_thread = threading.Thread(target=addition, args=(first_num, second_num))
+    multiplication_thread = threading.Thread(target=multiplication, args=(first_num, second_num))
+
+    # Start both threads which will run in parallel
+    addition_thread.start()
+    multiplication_thread.start()
+
+    # Wait for both threads to complete before continuing
+    addition_thread.join()
+    multiplication_thread.join()
