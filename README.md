@@ -42,7 +42,11 @@ subprograms/
 │   └── anagram.js          # Anagram checker module
 └── python-subprograms/     # Python subprograms and modules
     ├── main.py             # Main program using modular functions
-    └── prime_checking.py   # Prime number checker module
+    ├── prime_checking.py   # Prime number checker module
+    └── bank_system.py      # Bank system module
+concurrency/
+├── download_threads.py     # Python threading example (parallel file downloads)
+└── async_tasks.js          # JavaScript async/await example (concurrent tasks)
 ```
 
 ### 🔍 Concepts Explored
@@ -71,6 +75,11 @@ subprograms/
    - If-else statements: Conditional branching
    - Loops: For and while loop implementations
    - Arithmetic and logical expressions in control flow
+
+6. **Concurrency Models**
+   - Python threading: Running tasks in parallel using threads
+   - JavaScript async/await: Concurrent execution with Promises
+   - Comparison of different concurrency approaches
 
 ### 💭 Reflection
 
@@ -197,6 +206,53 @@ Creating the anagram checker as a separate module from the palindrome function s
 
 **Mark Anthony (Bank System Abstraction):**
 Creating the bank system mini-program helped me understand abstraction in a practical way that goes beyond just theory. Building the BankAccount class with private balance attributes taught me that abstraction isn't just about hiding complexity—it's about protecting data integrity and creating user-friendly interfaces. When I made the __balance private and provided deposit(), withdraw(), and get_balance() methods, I realized this mirrors how real ATMs work: users interact with simple buttons without knowing the complex banking infrastructure behind them. The most valuable lesson was understanding that good abstraction makes complex systems accessible to users while keeping the underlying operations safe and organized. Adding detailed comments to explain each abstraction concept also reinforced my learning, showing me that effective abstraction should be both functional and explainable. This experience demonstrated that abstraction is fundamental to software engineering because it enables us to build complex systems that remain usable and maintainable.
+
+---
+
+## ⚡ Concurrency and Parallel Execution
+
+This section explores concurrent programming models in different languages, demonstrating how multiple tasks can be executed simultaneously to improve program performance and responsiveness.
+
+### 🔍 Concurrency Models Used
+
+#### **Python Threading Model**
+The Python example (`download_threads.py`) uses the `threading` module to create multiple threads that execute concurrently. Each thread simulates downloading a file, and all threads run in parallel, reducing the total execution time compared to sequential processing.
+
+**Key Components:**
+- `threading.Thread`: Creates a new thread of execution
+- `start()`: Begins thread execution
+- `join()`: Waits for thread completion before continuing
+
+#### **JavaScript Async/Await Model**
+The JavaScript example (`async_tasks.js`) uses async/await with Promises to handle concurrent operations. The `Promise.all()` method allows multiple asynchronous tasks to run concurrently without blocking the main thread.
+
+**Key Components:**
+- `async/await`: Syntactic sugar for working with Promises
+- `Promise.all()`: Executes multiple promises concurrently
+- `setTimeout`: Simulates asynchronous operations
+
+### 💭 Concurrency Reflection
+
+#### **Explanation of Concurrency Models:**
+
+**Concurrency** is the ability of a program to handle multiple tasks at the same time, making programs more efficient and responsive. The two main approaches demonstrated are:
+
+1. **Thread-based Concurrency (Python)**: Multiple threads share the same memory space and can run simultaneously on multi-core processors. Python's Global Interpreter Lock (GIL) means threads are better for I/O-bound tasks rather than CPU-intensive operations.
+
+2. **Asynchronous Concurrency (JavaScript)**: Uses an event loop and non-blocking I/O to handle multiple operations concurrently within a single thread. This model is ideal for I/O-bound tasks like network requests or file operations.
+
+#### **Challenges Faced When Implementing Concurrency:**
+
+**Common Challenges:**
+- **Race Conditions**: When multiple threads access shared data simultaneously, leading to unpredictable results
+- **Deadlocks**: Threads waiting for each other to release resources, causing the program to freeze
+- **Synchronization**: Coordinating threads to ensure data consistency
+- **Debugging Complexity**: Concurrent programs are harder to debug due to non-deterministic execution order
+
+#### **Individual Reflections:**
+
+**Larie (JavaScript Async/Await):**
+Implementing concurrent tasks using JavaScript's async/await was both enlightening and challenging. The concept itself is straightforward—using Promises to handle asynchronous operations—but understanding when tasks truly run concurrently versus sequentially took practice. I learned that Promise.all() is key to achieving true concurrency; without it, awaiting promises one after another makes them sequential. The biggest challenge was debugging timing issues and understanding the event loop's role in managing concurrent operations. What fascinated me most was how JavaScript achieves concurrency with a single thread through non-blocking I/O, unlike Python's multi-threading approach. This experience taught me that concurrency isn't just about running things simultaneously—it's about efficiently managing resources and understanding the trade-offs between different concurrency models. The async/await syntax makes asynchronous code look synchronous, which is elegant but can hide the underlying complexity of concurrent execution.
 
 ---
 
