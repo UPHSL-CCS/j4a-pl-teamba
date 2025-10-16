@@ -45,6 +45,7 @@ subprograms/
     ├── prime_checking.py   # Prime number checker module
     └── bank_system.py      # Bank system module
 concurrency/
+├── add_multiply.py         # Python threading example (add and multiply)
 ├── download_threads.py     # Python threading example (parallel file downloads)
 └── async_tasks.js          # JavaScript async/await example (concurrent tasks)
 ```
@@ -253,6 +254,10 @@ The JavaScript example (`async_tasks.js`) uses async/await with Promises to hand
 
 **Larie (JavaScript Async/Await):**
 Implementing concurrent tasks using JavaScript's async/await was both enlightening and challenging. The concept itself is straightforward—using Promises to handle asynchronous operations—but understanding when tasks truly run concurrently versus sequentially took practice. I learned that Promise.all() is key to achieving true concurrency; without it, awaiting promises one after another makes them sequential. The biggest challenge was debugging timing issues and understanding the event loop's role in managing concurrent operations. What fascinated me most was how JavaScript achieves concurrency with a single thread through non-blocking I/O, unlike Python's multi-threading approach. This experience taught me that concurrency isn't just about running things simultaneously—it's about efficiently managing resources and understanding the trade-offs between different concurrency models. The async/await syntax makes asynchronous code look synchronous, which is elegant but can hide the underlying complexity of concurrent execution.
+
+**Agatha (Python Threading):**
+In this program, I used Python’s threading module to demonstrate concurrency by running two arithmetic operations, addition and multiplication, simultaneously on separate threads. The threads share the same memory space which allows both tasks to overlap in execution time and improve efficiency for time-based operations. The main challenge I encountered was understanding the difference between concurrency and parallelism as I initially got confused between multiprocessing, asyncio and threading. Through this, I learned that threading represents concurrency where tasks make progress together rather than running in separate processors.
+
 
 ---
 
