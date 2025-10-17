@@ -258,6 +258,9 @@ Implementing concurrent tasks using JavaScript's async/await was both enlighteni
 **Agatha (Python Threading):**
 In this program, I used Python’s threading module to demonstrate concurrency by running two arithmetic operations, addition and multiplication, simultaneously on separate threads. The threads share the same memory space which allows both tasks to overlap in execution time and improve efficiency for time-based operations. The main challenge I encountered was understanding the difference between concurrency and parallelism as I initially got confused between multiprocessing, asyncio and threading. Through this, I learned that threading represents concurrency where tasks make progress together rather than running in separate processors.
 
+**Al Jorome (Python Threading)** 
+Working on this activity helped me understand how Python’s threading module can be used to run multiple tasks at the same time, which is really useful for things like downloading files concurrently. By writing and testing the code, I saw how each thread operates independently and how the program waits for all downloads to finish before exiting. This hands-on experience made the concept of concurrency much clearer to me, and I realized how important it is for improving the efficiency of programs that handle multiple operations. Overall, I found the activity engaging and it gave me practical skills that I can use in future programming projects.
+
 
 ---
 
