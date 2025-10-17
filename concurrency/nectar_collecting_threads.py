@@ -1,13 +1,4 @@
 import threading
-"""Development notes: thread setup and task creation demo
-
-This file contains small helper functions to demonstrate:
-- task creation: `download_file`
-- thread setup: `create_threads` and `get_thread_count`
-
-Commit message should reflect these development steps.
-"""
-
 import time
 import random
 import os
@@ -31,7 +22,16 @@ def display_hive():
     print("\nPress Ctrl + C to stop simulation.\n")
 
 
+# ========================================
+# TASK CREATION
+# ========================================
+# Define the task that each thread (bee) will execute
 def bee_worker(bee_name):
+    """
+    Task function for each bee thread
+    - Each bee collects nectar independently
+    - Uses locks for thread-safe access to shared resource
+    """
     global nectar_collected
 
     while True:
@@ -61,7 +61,7 @@ def bee_worker(bee_name):
         time.sleep(random.uniform(1, 2))
 
 
-# Dictionary to track each bee’s activity
+# Dictionary to track each bee's activity
 bee_status = {
     "Bee 1": "😴 Resting...",
     "Bee 2": "😴 Resting...",
@@ -69,14 +69,21 @@ bee_status = {
     "Bee 4": "😴 Resting..."
 }
 
-# Create and start threads for each bee
+# ========================================
+# THREAD SETUP
+# ========================================
+# Create threads for each bee worker
 threads = []
 for bee in bee_status.keys():
+    # Create a new thread:
+    # - target: the function to execute
+    # - args: arguments to pass to the function
+    # - daemon: allows program to exit even if threads are running
     t = threading.Thread(target=bee_worker, args=(bee,), daemon=True)
     threads.append(t)
-    t.start()
+    t.start()  # Start the thread execution
 
-# Keep simulation running
+# Keep main thread running to allow worker threads to continue
 try:
     while True:
         time.sleep(0.1)
