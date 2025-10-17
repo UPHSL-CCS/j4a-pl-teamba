@@ -47,6 +47,7 @@ subprograms/
 concurrency/
 ├── add_multiply.py         # Python threading example (add and multiply)
 ├── download_threads.py     # Python threading example (parallel file downloads)
+├── thread_race.py          # Python threading example (thread race simulation)
 └── async_tasks.js          # JavaScript async/await example (concurrent tasks)
 ```
 
@@ -217,12 +218,16 @@ This section explores concurrent programming models in different languages, demo
 ### 🔍 Concurrency Models Used
 
 #### **Python Threading Model**
-The Python example (`download_threads.py`) uses the `threading` module to create multiple threads that execute concurrently. Each thread simulates downloading a file, and all threads run in parallel, reducing the total execution time compared to sequential processing.
+The Python examples (`download_threads.py`, `add_multiply.py`, and `thread_race.py`) use the `threading` module to create multiple threads that execute concurrently. Each example demonstrates different aspects of concurrent execution:
+- `download_threads.py`: Simulates parallel file downloads
+- `add_multiply.py`: Performs arithmetic operations concurrently  
+- `thread_race.py`: Demonstrates thread racing with synchronization
 
 **Key Components:**
 - `threading.Thread`: Creates a new thread of execution
 - `start()`: Begins thread execution
 - `join()`: Waits for thread completion before continuing
+- `threading.Lock`: Provides thread-safe access to shared resources
 
 #### **JavaScript Async/Await Model**
 The JavaScript example (`async_tasks.js`) uses async/await with Promises to handle concurrent operations. The `Promise.all()` method allows multiple asynchronous tasks to run concurrently without blocking the main thread.
@@ -242,13 +247,38 @@ The JavaScript example (`async_tasks.js`) uses async/await with Promises to hand
 
 2. **Asynchronous Concurrency (JavaScript)**: Uses an event loop and non-blocking I/O to handle multiple operations concurrently within a single thread. This model is ideal for I/O-bound tasks like network requests or file operations.
 
+#### **Thread Race Demonstrations**
+
+**Visual Thread Race (`thread_race.py`)**
+An interactive, visual thread racing program that showcases advanced threading concepts:
+- **Live Progress Tracking**: Real-time visual progress bars showing each thread's advancement
+- **Dynamic Display**: Screen clearing and continuous updates every 300ms for smooth animation
+- **Thread Synchronization**: Multiple locks (`position_lock`, `result_lock`) for safe shared resource access
+- **Interactive Experience**: User input controls and animated countdowns
+- **Visual Elements**: Different emojis for each racer (⚡💨🚀⭐💫) and progress visualization
+
+**Simple Thread Race (`simple_thread_race.py`)**  
+A streamlined version focusing on core threading concepts:
+- **Basic Concurrency**: Multiple threads executing simultaneously with minimal overhead
+- **Clean Output**: Simple text-based race results without complex animations
+- **Educational Focus**: Clear demonstration of thread creation, starting, and joining
+- **Quick Testing**: Faster execution for understanding basic threading principles
+
+**Common Race Features:**
+- Multiple threads compete to complete tasks first
+- Random completion times simulate real-world variability  
+- Thread-safe result recording and winner determination
+- Demonstrates race conditions and thread management patterns
+
 #### **Challenges Faced When Implementing Concurrency:**
 
 **Common Challenges:**
-- **Race Conditions**: When multiple threads access shared data simultaneously, leading to unpredictable results
+- **Race Conditions**: When multiple threads access shared data simultaneously, leading to unpredictable results (solved in thread_race.py using locks)
 - **Deadlocks**: Threads waiting for each other to release resources, causing the program to freeze
-- **Synchronization**: Coordinating threads to ensure data consistency
+- **Synchronization**: Coordinating threads to ensure data consistency (demonstrated in thread race with result_lock)
 - **Debugging Complexity**: Concurrent programs are harder to debug due to non-deterministic execution order
+- **Resource Contention**: Threads competing for the same resources can cause performance bottlenecks
+- **Data Integrity**: Ensuring shared data remains consistent when accessed by multiple threads simultaneously
 
 #### **Individual Reflections:**
 
@@ -259,7 +289,10 @@ Implementing concurrent tasks using JavaScript's async/await was both enlighteni
 In this program, I used Python’s threading module to demonstrate concurrency by running two arithmetic operations, addition and multiplication, simultaneously on separate threads. The threads share the same memory space which allows both tasks to overlap in execution time and improve efficiency for time-based operations. The main challenge I encountered was understanding the difference between concurrency and parallelism as I initially got confused between multiprocessing, asyncio and threading. Through this, I learned that threading represents concurrency where tasks make progress together rather than running in separate processors.
 
 **Al Jorome (Python Threading)** 
-Working on this activity helped me understand how Python’s threading module can be used to run multiple tasks at the same time, which is really useful for things like downloading files concurrently. By writing and testing the code, I saw how each thread operates independently and how the program waits for all downloads to finish before exiting. This hands-on experience made the concept of concurrency much clearer to me, and I realized how important it is for improving the efficiency of programs that handle multiple operations. Overall, I found the activity engaging and it gave me practical skills that I can use in future programming projects.
+Working on this activity helped me understand how Python's threading module can be used to run multiple tasks at the same time, which is really useful for things like downloading files concurrently. By writing and testing the code, I saw how each thread operates independently and how the program waits for all downloads to finish before exiting. This hands-on experience made the concept of concurrency much clearer to me, and I realized how important it is for improving the efficiency of programs that handle multiple operations. Overall, I found the activity engaging and it gave me practical skills that I can use in future programming projects.
+
+**Mark Anthony Hernandez (Thread Race Implementation):**
+Implementing the visual thread race program was an exciting challenge that deepened my understanding of concurrent programming and thread synchronization. Creating the live progress tracking system taught me how to manage shared resources safely using multiple locks - the `position_lock` for updating racer positions and `result_lock` for recording final results. The most fascinating aspect was seeing how threads can run unpredictably; each race produces different winners despite using the same code, which perfectly demonstrates the non-deterministic nature of concurrent execution. Building the real-time visualization with progress bars updating every 300ms showed me how threading can be used for interactive applications, not just background processing. The biggest challenge was preventing race conditions when multiple threads tried to update the display simultaneously, which I solved using proper synchronization techniques. This project made me realize that effective concurrency programming isn't just about making threads run in parallel - it's about carefully orchestrating their interactions to create predictable, safe, and engaging user experiences. The visual feedback also made abstract threading concepts much more tangible and easier to understand.
 
 
 ---
