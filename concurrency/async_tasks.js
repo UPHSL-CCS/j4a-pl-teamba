@@ -10,26 +10,36 @@
  * 2. File upload simulation
  */
 
-// Simulate a data processing task
+// Simulate a data processing task with error handling
 async function processData(dataId) {
     console.log(`🔄 Starting data processing: ${dataId}`);
     
-    // Simulate processing time using Promise with setTimeout
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log(`✅ Completed data processing: ${dataId}`);
-    return `Processed data from ${dataId}`;
+    try {
+        // Simulate processing time using Promise with setTimeout
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        console.log(`✅ Completed data processing: ${dataId}`);
+        return `Processed data from ${dataId}`;
+    } catch (error) {
+        console.error(`❌ Error processing ${dataId}:`, error.message);
+        throw error;
+    }
 }
 
-// Simulate a file upload task
+// Simulate a file upload task with error handling
 async function uploadFile(fileName) {
     console.log(`⬆️  Starting file upload: ${fileName}`);
     
-    // Simulate upload time using Promise with setTimeout
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    console.log(`✅ Completed file upload: ${fileName}`);
-    return `Uploaded ${fileName}`;
+    try {
+        // Simulate upload time using Promise with setTimeout
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        console.log(`✅ Completed file upload: ${fileName}`);
+        return `Uploaded ${fileName}`;
+    } catch (error) {
+        console.error(`❌ Error uploading ${fileName}:`, error.message);
+        throw error;
+    }
 }
 
 // Main function to run tasks concurrently
