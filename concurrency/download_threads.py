@@ -25,4 +25,28 @@ def get_thread_count(files):
     return len(files)
 
 
+# --- Run / test (start and join threads) ---
+def run_downloads(files):
+    """Start all threads and wait for them to finish (testing/demo)."""
+    import time as _time
+
+    threads = create_threads(files)
+    start = _time.time()
+    for t in threads:
+        t.start()
+
+    for t in threads:
+        t.join()
+    elapsed = _time.time() - start
+    # Testing/demo summary
+    print(f"All downloads completed in {elapsed:.2f}s. ({get_thread_count(files)} threads)")
+
+
+if __name__ == "__main__":
+    # Small demo list; change to two files if you want only two tasks
+    files = ["file1.mp3", "file2.mp3", "file3.mp3"]
+    run_downloads(files)
+
+
+
     
