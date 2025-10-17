@@ -69,12 +69,19 @@ bee_status = {
     "Bee 4": "😴 Resting..."
 }
 
-# Create and start threads for each bee
+# ========================================
+# THREAD SETUP
+# ========================================
+# Create threads for each bee worker
 threads = []
 for bee in bee_status.keys():
+    # Create a new thread:
+    # - target: the function to execute
+    # - args: arguments to pass to the function
+    # - daemon: allows program to exit even if threads are running
     t = threading.Thread(target=bee_worker, args=(bee,), daemon=True)
     threads.append(t)
-    t.start()
+    t.start()  # Start the thread execution
 
 # Keep simulation running
 try:
