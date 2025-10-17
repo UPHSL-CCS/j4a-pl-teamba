@@ -42,9 +42,11 @@ async function uploadFile(fileName) {
     }
 }
 
-// Main function to run tasks concurrently
+// Main function to run tasks concurrently with progress tracking
 async function runConcurrentTasks() {
     console.log("=== Starting Concurrent Tasks ===\n");
+    console.log("Running 4 tasks concurrently...");
+    console.log("Note: Tasks will complete at different times based on their duration\n");
     
     const startTime = Date.now();
     
@@ -56,6 +58,8 @@ async function runConcurrentTasks() {
         uploadFile("image.png")
     ];
     
+    console.log(`Started ${tasks.length} concurrent tasks at ${new Date(startTime).toLocaleTimeString()}\n`);
+    
     // Wait for all tasks to complete
     const results = await Promise.all(tasks);
     
@@ -63,11 +67,20 @@ async function runConcurrentTasks() {
     const totalTime = ((endTime - startTime) / 1000).toFixed(2);
     
     console.log("\n=== All Tasks Completed ===");
+    console.log(`Finished at: ${new Date(endTime).toLocaleTimeString()}`);
     console.log(`Total execution time: ${totalTime} seconds`);
-    console.log("\nResults:");
+    console.log(`Average time per task: ${(totalTime / tasks.length).toFixed(2)} seconds`);
+    console.log("\n📊 Results Summary:");
     results.forEach((result, index) => {
         console.log(`  ${index + 1}. ${result}`);
     });
+    
+    // Compare with sequential execution time
+    const sequentialTime = (2 + 2 + 3 + 3); // Sum of all task durations
+    console.log(`\n⚡ Performance Benefit:`);
+    console.log(`  Sequential execution would take: ~${sequentialTime} seconds`);
+    console.log(`  Concurrent execution took: ${totalTime} seconds`);
+    console.log(`  Time saved: ~${(sequentialTime - parseFloat(totalTime)).toFixed(2)} seconds (${((sequentialTime - parseFloat(totalTime)) / sequentialTime * 100).toFixed(1)}% faster)`);
 }
 
 // Execute the concurrent tasks
