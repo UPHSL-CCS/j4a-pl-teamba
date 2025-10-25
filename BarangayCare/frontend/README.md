@@ -53,8 +53,6 @@ Update `app_config.dart` with your Firebase credentials from Firebase Console:
 - `firebaseMessagingSenderId`
 - `firebaseAppId`
 
-⚠️ **IMPORTANT**: `app_config.dart` is gitignored and should NEVER be committed!
-
 ### 4. Firebase Configuration
 
 #### For Android:
