@@ -38,16 +38,22 @@ cd frontend
 flutter pub get
 ```
 
-### 3. Configure Environment Variables
+### 3. Configure App Settings
 
-Copy `.env.example` to `.env`:
+Copy the example config file:
 
 ```bash
-cp .env.example .env
+cd lib/config
+cp app_config.example.dart app_config.dart
 ```
 
-The `.env` file is already configured for development, but you may need to update:
-- `FIREBASE_APP_ID`: Get this from Firebase Console
+Update `app_config.dart` with your Firebase credentials from Firebase Console:
+- `firebaseApiKey`
+- `firebaseProjectId`
+- `firebaseMessagingSenderId`
+- `firebaseAppId`
+
+⚠️ **IMPORTANT**: `app_config.dart` is gitignored and should NEVER be committed!
 
 ### 4. Firebase Configuration
 

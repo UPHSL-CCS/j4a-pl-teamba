@@ -48,6 +48,9 @@ app.*.map.json
 .env.local
 .env.*.local
 
+# App configuration with sensitive data
+lib/config/app_config.dart
+
 # Firebase
 google-services.json
 GoogleService-Info.plist
