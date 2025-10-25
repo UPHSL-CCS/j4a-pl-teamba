@@ -1,0 +1,29 @@
+{
+  "name": "barangaycare-backend",
+  "version": "1.0.0",
+  "description": "Backend API for BarangayCare using Hono.js",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "barangay",
+    "healthcare",
+    "hono"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@hono/node-server": "^1.8.0",
+    "mongodb": "^6.3.0",
+    "firebase-admin": "^12.0.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0"
+  }
+}
+
