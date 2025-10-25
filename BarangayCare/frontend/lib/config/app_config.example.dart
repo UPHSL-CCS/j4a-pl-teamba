@@ -1,11 +1,11 @@
 /// Application configuration EXAMPLE
 ///
-/// INSTRUCTIONS:
-/// 1. Copy this file to app_config.dart
-/// 2. Replace all placeholder values with your actual credentials
-/// 3. NEVER commit app_config.dart to version control
+/// Copy this file to app_config.dart and update with your Firebase project settings
 ///
-/// For production, use environment-specific configurations
+/// Steps to set up:
+/// 1. Copy this file: cp app_config.example.dart app_config.dart
+/// 2. Run: flutterfire configure --project=your-firebase-project
+/// 3. Update API base URL if needed
 class AppConfig {
   // App Info
   static const String appName = 'BarangayCare';
@@ -15,12 +15,11 @@ class AppConfig {
   // Use 10.0.2.2 for Android Emulator, localhost for iOS Simulator
   static const String apiBaseUrl = 'http://localhost:3000/api';
 
-  // Firebase Configuration
-  // Get these from Firebase Console > Project Settings
-  static const String firebaseApiKey = 'your_firebase_api_key_here';
-  static const String firebaseProjectId = 'your_firebase_project_id';
-  static const String firebaseMessagingSenderId = 'your_sender_id';
-  static const String firebaseAppId = 'your_firebase_app_id';
+  // Firebase Configuration - REPLACE WITH YOUR PROJECT SETTINGS
+  static const String firebaseApiKey = 'YOUR_FIREBASE_API_KEY';
+  static const String firebaseProjectId = 'your-firebase-project-id';
+  static const String firebaseMessagingSenderId = 'YOUR_MESSAGING_SENDER_ID';
+  static const String firebaseAppId = 'YOUR_FIREBASE_APP_ID';
 
   // Feature Flags
   static const bool enableDoctorBooking = true;

@@ -10,6 +10,8 @@ yarn.lock
 
 # Firebase service account (contains private key)
 firebase-service-account.json
+firebase-service-account.json.backup
+*firebase-adminsdk-*.json
 
 # Any files with actual credentials
 **/credentials.json
