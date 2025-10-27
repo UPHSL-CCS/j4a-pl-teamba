@@ -64,9 +64,11 @@ Development progress tracking for the 3-day project timeline.
 - [x] Frontend: Login UI
 - [x] Frontend: Auth provider
 - [x] Frontend: Complete profile screen
+- [x] Frontend: My Profile screen (view/edit)
 - [x] Profile existence check after login
 - [x] Redirect logic (profile exists → home, missing → complete profile)
 - [x] Philippine mobile number validation
+- [ ] Backend: Update profile endpoint
 - [ ] Test complete registration flow
 - [ ] Validate form inputs
 - [ ] Error handling & messages
