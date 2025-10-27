@@ -1,12 +1,12 @@
 import { ObjectId } from 'mongodb';
-import { collections } from '../config/database.js';
+import { collections, getDB } from '../config/database.js';
 
 /**
  * Get all medicines
  */
 export async function getAllMedicines() {
   return await collections.medicineInventory()
-    .find({ stock_qty: { $gt: 0 } })
+    .find({})
     .toArray();
 }
 
@@ -80,7 +80,7 @@ export async function requestMedicine(firebaseUid, data) {
     created_at: new Date()
   };
   
-  await collections.medicineInventory().collection('medicine_requests').insertOne(request);
+  await getDB().collection('medicine_requests').insertOne(request);
   
   // Get updated stock
   const updatedMedicine = await collections.medicineInventory().findOne({
