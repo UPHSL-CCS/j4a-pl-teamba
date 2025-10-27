@@ -47,11 +47,71 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
 
   Future<void> _requestMedicine(Map<String, dynamic> medicine) async {
     final quantityController = TextEditingController(text: '1');
+    final bool requiresPrescription = medicine['is_prescription_required'] ?? false;
+
+    // Check if prescription is required and show warning dialog
+    if (requiresPrescription) {
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.warning_amber, color: Colors.orange),
+              SizedBox(width: 8),
+              Flexible(
+                child: Text('Prescription Required'),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${medicine['med_name']} requires a prescription.',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'You must complete a consultation with a doctor first before requesting this medicine.',
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 20, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Book a consultation from the home screen.',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return; // Exit without requesting
+    }
 
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Request ${medicine['name']}'),
+        title: Text('Request ${medicine['med_name']}'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,32 +121,10 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
-            if (medicine['requires_prescription'] == true)
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.orange),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.warning, size: 16, color: Colors.orange),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Requires prescription',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            const SizedBox(height: 16),
             Text(
-              'Available Stock: ${medicine['stock']}',
+              'Available Stock: ${medicine['stock_qty']}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: medicine['stock'] > 0 ? Colors.green : Colors.red,
+                    color: medicine['stock_qty'] > 0 ? Colors.green : Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -117,7 +155,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
 
     if (result == true) {
       await _submitRequest(
-        medicine['_id'],
+        medicine['_id'].toString(),
         int.tryParse(quantityController.text) ?? 1,
       );
     }
@@ -275,8 +313,8 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
   }
 
   Widget _buildMedicineCard(Map<String, dynamic> medicine) {
-    final bool inStock = medicine['stock'] > 0;
-    final bool requiresPrescription = medicine['requires_prescription'] ?? false;
+    final bool inStock = medicine['stock_qty'] > 0;
+    final bool requiresPrescription = medicine['is_prescription_required'] ?? false;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -308,7 +346,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          medicine['name'] ?? 'Unknown Medicine',
+                          medicine['med_name'] ?? 'Unknown Medicine',
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -342,7 +380,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Stock: ${medicine['stock']}',
+                        'Stock: ${medicine['stock_qty']}',
                         style: TextStyle(
                           color: inStock ? Colors.green : Colors.red,
                           fontWeight: FontWeight.bold,
