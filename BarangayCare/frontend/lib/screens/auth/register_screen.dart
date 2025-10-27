@@ -55,12 +55,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // Step 2: Register patient profile in backend
     try {
       final token = await authProvider.getIdToken();
-      final apiService = ApiService(token);
 
-      await apiService.registerPatient(
+      await ApiService.registerPatient(
         name: _nameController.text.trim(),
         barangay: _barangayController.text.trim(),
         contact: _contactController.text.trim(),
+        token: token!,
       );
 
       if (!mounted) return;
