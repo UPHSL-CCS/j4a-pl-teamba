@@ -3,21 +3,18 @@ import 'package:http/http.dart' as http;
 import '../config/api_config.dart';
 
 class ApiService {
-  final String? _token;
-
-  ApiService(this._token);
-
-  Map<String, String> get _headers => {
+  // Static methods that accept token as parameter
+  static Map<String, String> _headers(String? token) => {
         'Content-Type': 'application/json',
-        if (_token != null) 'Authorization': 'Bearer $_token',
+        if (token != null) 'Authorization': 'Bearer $token',
       };
 
   // Generic GET request
-  Future<Map<String, dynamic>> get(String url) async {
+  static Future<Map<String, dynamic>> get(String url, {String? token}) async {
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: _headers,
+        headers: _headers(token),
       );
 
       if (response.statusCode == 200) {
@@ -32,12 +29,12 @@ class ApiService {
   }
 
   // Generic POST request
-  Future<Map<String, dynamic>> post(
-      String url, Map<String, dynamic> body) async {
+  static Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body,
+      {String? token}) async {
     try {
       final response = await http.post(
         Uri.parse(url),
-        headers: _headers,
+        headers: _headers(token),
         body: json.encode(body),
       );
 
@@ -53,12 +50,12 @@ class ApiService {
   }
 
   // Generic PATCH request
-  Future<Map<String, dynamic>> patch(
-      String url, Map<String, dynamic> body) async {
+  static Future<Map<String, dynamic>> patch(String url, Map<String, dynamic> body,
+      {String? token}) async {
     try {
       final response = await http.patch(
         Uri.parse(url),
-        headers: _headers,
+        headers: _headers(token),
         body: json.encode(body),
       );
 
@@ -74,76 +71,80 @@ class ApiService {
   }
 
   // Auth Services
-  Future<Map<String, dynamic>> registerPatient({
+  static Future<Map<String, dynamic>> registerPatient({
     required String name,
     required String barangay,
     required String contact,
+    required String token,
   }) async {
     return await post(ApiConfig.registerPatient, {
       'name': name,
       'barangay': barangay,
       'contact': contact,
-    });
+    }, token: token);
   }
 
-  Future<Map<String, dynamic>> getProfile() async {
-    return await get(ApiConfig.profile);
+  static Future<Map<String, dynamic>> getProfile(String token) async {
+    return await get(ApiConfig.profile, token: token);
   }
 
   // Doctor Services
-  Future<List<dynamic>> getDoctors() async {
-    final response = await get(ApiConfig.doctors);
+  static Future<List<dynamic>> getDoctors({String? token}) async {
+    final response = await get(ApiConfig.doctors, token: token);
     return response['doctors'] as List<dynamic>;
   }
 
-  Future<Map<String, dynamic>> getDoctorById(String id) async {
-    return await get(ApiConfig.doctorById(id));
+  static Future<Map<String, dynamic>> getDoctorById(String id, {String? token}) async {
+    return await get(ApiConfig.doctorById(id), token: token);
   }
 
-  Future<Map<String, dynamic>> checkDoctorAvailability(
+  static Future<Map<String, dynamic>> checkDoctorAvailability(
     String doctorId,
-    String date,
-  ) async {
-    return await get(ApiConfig.doctorAvailability(doctorId, date));
+    String date, {
+    String? token,
+  }) async {
+    return await get(ApiConfig.doctorAvailability(doctorId, date), token: token);
   }
 
   // Appointment Services
-  Future<Map<String, dynamic>> bookAppointment({
+  static Future<Map<String, dynamic>> bookAppointment({
     required String doctorId,
     required String date,
     required String time,
     Map<String, dynamic>? preScreening,
+    required String token,
   }) async {
     return await post(ApiConfig.bookAppointment, {
       'doctor_id': doctorId,
       'date': date,
       'time': time,
       'pre_screening': preScreening ?? {},
-    });
+    }, token: token);
   }
 
-  Future<List<dynamic>> getMyAppointments() async {
-    final response = await get(ApiConfig.myAppointments);
+  static Future<List<dynamic>> getMyAppointments(String token) async {
+    final response = await get(ApiConfig.myAppointments, token: token);
     return response['appointments'] as List<dynamic>;
   }
 
-  Future<Map<String, dynamic>> cancelAppointment(String id) async {
-    return await patch(ApiConfig.cancelAppointment(id), {});
+  static Future<Map<String, dynamic>> cancelAppointment(String id, String token) async {
+    return await patch(ApiConfig.cancelAppointment(id), {}, token: token);
   }
 
   // Medicine Services
-  Future<List<dynamic>> getMedicines() async {
-    final response = await get(ApiConfig.medicines);
+  static Future<List<dynamic>> getMedicines({String? token}) async {
+    final response = await get(ApiConfig.medicines, token: token);
     return response['medicines'] as List<dynamic>;
   }
 
-  Future<Map<String, dynamic>> requestMedicine({
+  static Future<Map<String, dynamic>> requestMedicine({
     required String medicineId,
     required int quantity,
+    required String token,
   }) async {
     return await post(ApiConfig.requestMedicine, {
       'medicine_id': medicineId,
       'quantity': quantity,
-    });
+    }, token: token);
   }
 }
