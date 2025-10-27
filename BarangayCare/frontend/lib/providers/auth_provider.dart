@@ -34,11 +34,28 @@ class AuthProvider with ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       _isLoading = false;
       notifyListeners();
-      return e.message ?? 'An error occurred during sign in';
+      
+      // Handle specific Firebase Auth errors
+      switch (e.code) {
+        case 'network-request-failed':
+          return 'Network error. Please check your internet connection and try again.';
+        case 'user-not-found':
+          return 'No account found with this email.';
+        case 'wrong-password':
+          return 'Incorrect password.';
+        case 'invalid-email':
+          return 'Invalid email address.';
+        case 'user-disabled':
+          return 'This account has been disabled.';
+        case 'too-many-requests':
+          return 'Too many failed attempts. Please try again later.';
+        default:
+          return e.message ?? 'An error occurred during sign in';
+      }
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      return 'An unexpected error occurred';
+      return 'An unexpected error occurred: ${e.toString()}';
     }
   }
 
