@@ -6,82 +6,82 @@ dotenv.config();
 
 const sampleMedicines = [
   {
-    name: 'Paracetamol 500mg',
+    med_name: 'Paracetamol 500mg',
     description: 'Pain reliever and fever reducer',
-    stock: 100,
-    requires_prescription: false,
+    stock_qty: 100,
+    is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Amoxicillin 500mg',
+    med_name: 'Amoxicillin 500mg',
     description: 'Antibiotic for bacterial infections',
-    stock: 50,
-    requires_prescription: true,
+    stock_qty: 50,
+    is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Ibuprofen 400mg',
+    med_name: 'Ibuprofen 400mg',
     description: 'Anti-inflammatory pain reliever',
-    stock: 75,
-    requires_prescription: false,
+    stock_qty: 75,
+    is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Cetirizine 10mg',
+    med_name: 'Cetirizine 10mg',
     description: 'Antihistamine for allergies',
-    stock: 60,
-    requires_prescription: false,
+    stock_qty: 60,
+    is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Omeprazole 20mg',
+    med_name: 'Omeprazole 20mg',
     description: 'Proton pump inhibitor for stomach acid',
-    stock: 40,
-    requires_prescription: true,
+    stock_qty: 40,
+    is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Vitamin C 500mg',
+    med_name: 'Vitamin C 500mg',
     description: 'Immune system support',
-    stock: 150,
-    requires_prescription: false,
+    stock_qty: 150,
+    is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Multivitamins',
+    med_name: 'Multivitamins',
     description: 'Daily vitamin supplement',
-    stock: 80,
-    requires_prescription: false,
+    stock_qty: 80,
+    is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Losartan 50mg',
+    med_name: 'Losartan 50mg',
     description: 'Blood pressure medication',
-    stock: 30,
-    requires_prescription: true,
+    stock_qty: 30,
+    is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Metformin 500mg',
+    med_name: 'Metformin 500mg',
     description: 'Diabetes medication',
-    stock: 45,
-    requires_prescription: true,
+    stock_qty: 45,
+    is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
   },
   {
-    name: 'Salbutamol Inhaler',
+    med_name: 'Salbutamol Inhaler',
     description: 'Asthma relief inhaler',
-    stock: 20,
-    requires_prescription: true,
+    stock_qty: 20,
+    is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
   }
@@ -106,7 +106,7 @@ async function seedMedicines() {
     const medicines = await collections.medicineInventory().find({}).toArray();
     console.log('\n📦 Seeded Medicines:');
     medicines.forEach((med, index) => {
-      console.log(`${index + 1}. ${med.name} - Stock: ${med.stock} ${med.requires_prescription ? '(Rx Required)' : ''}`);
+      console.log(`${index + 1}. ${med.med_name} - Stock: ${med.stock_qty} ${med.is_prescription_required ? '(Rx Required)' : ''}`);
     });
     
     console.log('\n✨ Seeding completed successfully!');
