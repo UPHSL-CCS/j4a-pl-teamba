@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../services/api_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,11 +36,35 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (error == null) {
-      Navigator.of(context).pushReplacementNamed('/home');
+      // Check if patient profile exists
+      await _checkProfileAndNavigate();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error), backgroundColor: Colors.red),
       );
+    }
+  }
+
+  Future<void> _checkProfileAndNavigate() async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final token = await authProvider.user?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Failed to get authentication token');
+      }
+
+      // Try to get profile
+      await ApiService.getProfile(token);
+      
+      // Profile exists, navigate to home
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('/home');
+    } catch (e) {
+      // Profile doesn't exist (404) or error occurred
+      // Navigate to complete profile screen
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('/complete-profile');
     }
   }
 
