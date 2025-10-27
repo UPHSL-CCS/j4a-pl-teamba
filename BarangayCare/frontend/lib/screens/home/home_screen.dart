@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../appointments/my_appointments_screen.dart';
+import '../medicine/medicine_list_screen.dart';
 import '../profile/my_profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -69,9 +70,11 @@ class HomeScreen extends StatelessWidget {
                     subtitle: 'Order from inventory',
                     color: Colors.green,
                     onTap: () {
-                      // TODO: Navigate to medicine screen
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Coming soon!')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MedicineListScreen(),
+                        ),
                       );
                     },
                   ),
