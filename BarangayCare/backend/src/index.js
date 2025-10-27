@@ -64,13 +64,17 @@ const PORT = process.env.PORT || 3000;
     await connectDB();
     console.log('✅ MongoDB connected');
 
-    // Start server
+    // Start server - listen on all network interfaces (0.0.0.0)
+    // This allows connections from physical devices on the same network
     serve({
       fetch: app.fetch,
       port: PORT,
+      hostname: '0.0.0.0',
     });
 
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`🚀 Server is running on http://0.0.0.0:${PORT}`);
+    console.log(`📱 Physical devices can connect to: http://192.168.68.100:${PORT}`);
+    console.log(`💻 Local access: http://localhost:${PORT}`);
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);
