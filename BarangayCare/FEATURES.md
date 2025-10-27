@@ -20,10 +20,14 @@ Development progress tracking for the 3-day project timeline.
 - [x] CORS middleware
 - [x] Error handling
 - [x] .gitignore configuration
-- [ ] Install npm packages (`npm install`)
-- [ ] Test server startup
-- [ ] Verify MongoDB connection
-- [ ] Add Firebase service account JSON
+- [x] Install npm packages (`npm install`)
+- [x] Test server startup
+- [x] Verify MongoDB connection
+- [x] Add Firebase service account JSON
+- [x] Configure server to listen on 0.0.0.0 (all network interfaces)
+- [x] Add PC's local IP to CORS allowed origins
+- [x] Update NDK version to 27.0.12077973
+- [x] Update minSdkVersion to 23
 
 ### Frontend Setup
 - [x] pubspec.yaml with dependencies
@@ -33,10 +37,12 @@ Development progress tracking for the 3-day project timeline.
 - [x] API service structure
 - [x] Basic screen templates
 - [x] .gitignore configuration
-- [ ] Run `flutter pub get`
-- [ ] Add Firebase configuration files (google-services.json, GoogleService-Info.plist)
-- [ ] Update Firebase App ID in app_config.dart
-- [ ] Test app compilation
+- [x] Run `flutter pub get`
+- [x] Add Firebase configuration files (google-services.json, GoogleService-Info.plist)
+- [x] Update Firebase App ID in app_config.dart
+- [x] Update API base URL to PC's local IP (192.168.68.100)
+- [x] Test app compilation
+- [x] Successfully run app on physical device
 
 ## 🔐 Day 1: Authentication & Foundation
 
@@ -45,6 +51,8 @@ Development progress tracking for the 3-day project timeline.
 - [x] Firebase Auth enabled
 - [x] Frontend Firebase integration
 - [x] Backend Firebase Admin setup
+- [x] Internet permissions added to AndroidManifest.xml
+- [x] Improved error handling for network issues
 - [ ] Email/password authentication testing
 - [ ] Token verification testing
 - [ ] Auto-login on app restart
@@ -65,6 +73,7 @@ Development progress tracking for the 3-day project timeline.
 - [x] Registration screen
 - [x] Home screen skeleton
 - [x] Navigation setup
+- [x] Fixed feature card overflow issues
 - [ ] App theme customization
 - [ ] Loading states
 - [ ] Error states
@@ -112,9 +121,11 @@ Development progress tracking for the 3-day project timeline.
 - [ ] Time slot selection
 - [ ] Pre-screening form
 - [ ] Booking confirmation screen
-- [ ] Appointment list screen
-- [ ] Cancel appointment functionality
-- [ ] Appointment details view
+- [x] Appointment list screen (My Appointments)
+- [x] Cancel appointment functionality
+- [x] Appointment details view (in card)
+- [x] API service methods for appointments
+- [x] Navigation from home to appointments
 
 #### Pre-Screening Form
 - [ ] Symptoms input field
