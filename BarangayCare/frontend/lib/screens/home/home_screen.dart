@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../appointments/my_appointments_screen.dart';
+import '../profile/my_profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -96,9 +97,11 @@ class HomeScreen extends StatelessWidget {
                     subtitle: 'Update info',
                     color: Colors.purple,
                     onTap: () {
-                      // TODO: Navigate to profile screen
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Coming soon!')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyProfileScreen(),
+                        ),
                       );
                     },
                   ),
