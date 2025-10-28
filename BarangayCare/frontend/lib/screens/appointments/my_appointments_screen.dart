@@ -162,17 +162,26 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
 
   Widget _buildAppointmentCard(Map<String, dynamic> appointment) {
     final status = appointment['status'] ?? 'pending';
-    final dateTime = DateTime.parse(appointment['appointmentDate']);
-    final timeSlot = appointment['timeSlot'] ?? 'Not specified';
+    final dateStr = appointment['date'] ?? '';
+    final timeSlot = appointment['time'] ?? 'Not specified';
     final doctor = appointment['doctor'] ?? {};
     final doctorName = doctor['name'] ?? 'Unknown Doctor';
+    final displayName = doctorName.startsWith('Dr.') ? doctorName : 'Dr. $doctorName';
     final expertise = doctor['expertise'] ?? 'General';
+    
+    DateTime? dateTime;
+    try {
+      dateTime = DateTime.parse(dateStr);
+    } catch (e) {
+      dateTime = DateTime.now();
+    }
 
     Color statusColor;
     IconData statusIcon;
 
     switch (status.toLowerCase()) {
       case 'confirmed':
+      case 'booked':
         statusColor = Colors.green;
         statusIcon = Icons.check_circle;
         break;
@@ -205,7 +214,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        doctorName,
+                        displayName,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -284,8 +293,9 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
                 ),
               ],
             ),
-            if (appointment['symptoms'] != null &&
-                appointment['symptoms'].isNotEmpty) ...[
+            if (appointment['pre_screening'] != null &&
+                appointment['pre_screening'] is Map &&
+                (appointment['pre_screening']['symptoms']?.toString().isNotEmpty ?? false)) ...[
               const SizedBox(height: 8),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,7 +308,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      appointment['symptoms'],
+                      'Symptoms: ${appointment['pre_screening']['symptoms']}',
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -307,7 +317,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
                 ],
               ),
             ],
-            if (status.toLowerCase() == 'pending') ...[
+            if (status.toLowerCase() == 'booked' || status.toLowerCase() == 'pending') ...[
               const SizedBox(height: 16),
               Row(
                 children: [
