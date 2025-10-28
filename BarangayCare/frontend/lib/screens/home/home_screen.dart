@@ -4,6 +4,7 @@ import '../../providers/auth_provider.dart';
 import '../appointments/my_appointments_screen.dart';
 import '../medicine/medicine_list_screen.dart';
 import '../profile/my_profile_screen.dart';
+import '../booking/doctor_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -57,9 +58,11 @@ class HomeScreen extends StatelessWidget {
                     subtitle: 'Schedule with a doctor',
                     color: Colors.blue,
                     onTap: () {
-                      // TODO: Navigate to booking screen
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Coming soon!')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DoctorListScreen(),
+                        ),
                       );
                     },
                   ),
