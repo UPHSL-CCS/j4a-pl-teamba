@@ -10,6 +10,12 @@ import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/profile/complete_profile_screen.dart';
+import 'screens/admin/admin_dashboard_screen.dart';
+import 'screens/admin/admin_appointments_screen.dart';
+import 'screens/admin/appointment_detail_screen.dart';
+import 'screens/admin/medicine_inventory_screen.dart';
+import 'screens/admin/medicine_requests_screen.dart';
+import 'screens/admin/admin_reports_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +55,31 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterScreen(),
           '/complete-profile': (context) => const CompleteProfileScreen(),
           '/home': (context) => const HomeScreen(),
+          '/admin/dashboard': (context) => const AdminDashboardScreen(),
+          '/admin/appointments': (context) {
+            final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+            return AdminAppointmentsScreen(
+              initialStatus: args?['status'] as String?,
+            );
+          },
+          '/admin/medicines': (context) {
+            final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+            return MedicineInventoryScreen(
+              filter: args?['filter'] as String?,
+            );
+          },
+          '/admin/medicine-requests': (context) => const AdminMedicineRequestsScreen(),
+          '/admin/reports': (context) => const AdminReportsScreen(),
+        },
+        onGenerateRoute: (settings) {
+          // Handle appointment detail route with arguments
+          if (settings.name == '/admin/appointment-detail') {
+            final appointment = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (context) => AppointmentDetailScreen(appointment: appointment),
+            );
+          }
+          return null;
         },
       ),
     );

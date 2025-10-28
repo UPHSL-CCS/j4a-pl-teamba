@@ -170,4 +170,122 @@ class ApiService {
       return false;
     }
   }
+
+  static Future<Map<String, dynamic>> getAdminDashboardStats(String token) async {
+    return await get(ApiConfig.adminDashboardStats, token: token);
+  }
+
+  static Future<List<dynamic>> getAdminAppointments(
+    String token, {
+    String? status,
+    int page = 1,
+    int limit = 20,
+  }) async {
+    String url = '${ApiConfig.baseUrl}/admin/appointments?page=$page&limit=$limit';
+    if (status != null) {
+      url += '&status=$status';
+    }
+    final response = await get(url, token: token);
+    return response['appointments'] as List<dynamic>;
+  }
+
+  static Future<Map<String, dynamic>> approveAppointment(
+    String token,
+    String appointmentId, {
+    String? notes,
+  }) async {
+    return await ApiService.patch(
+      '${ApiConfig.baseUrl}/admin/appointments/$appointmentId/approve',
+      {'admin_notes': notes ?? ''},
+      token: token,
+    );
+  }
+
+  static Future<Map<String, dynamic>> rejectAppointment(
+    String token,
+    String appointmentId, {
+    required String reason,
+    String? notes,
+  }) async {
+    return await ApiService.patch(
+      '${ApiConfig.baseUrl}/admin/appointments/$appointmentId/reject',
+      {
+        'reason': reason,
+        'admin_notes': notes ?? reason,
+      },
+      token: token,
+    );
+  }
+
+  static Future<List<dynamic>> getLowStockMedicines(String token) async {
+    final response = await get('${ApiConfig.baseUrl}/admin/medicines/low-stock', token: token);
+    return response['medicines'] as List<dynamic>;
+  }
+
+  static Future<Map<String, dynamic>> adjustMedicineStock(
+    String token,
+    String medicineId, {
+    required int quantityChange,
+    required String changeType,
+    required String reason,
+  }) async {
+    return await post(
+      '${ApiConfig.baseUrl}/admin/medicines/$medicineId/adjust',
+      {
+        'quantity_change': quantityChange,
+        'change_type': changeType,
+        'reason': reason,
+      },
+      token: token,
+    );
+  }
+
+  // Medicine Request Services
+  static Future<Map<String, dynamic>> getMedicineRequests({
+    String status = 'all',
+    String? token,
+  }) async {
+    return await get(
+      '${ApiConfig.baseUrl}/admin/medicine-requests?status=$status',
+      token: token,
+    );
+  }
+
+  static Future<Map<String, dynamic>> getMedicineRequestDetail(
+    String requestId, {
+    String? token,
+  }) async {
+    return await get(
+      '${ApiConfig.baseUrl}/admin/medicine-requests/$requestId',
+      token: token,
+    );
+  }
+
+  static Future<Map<String, dynamic>> approveMedicineRequest(
+    String requestId, {
+    String? notes,
+    String? token,
+  }) async {
+    return await patch(
+      '${ApiConfig.baseUrl}/admin/medicine-requests/$requestId/approve',
+      {
+        if (notes != null && notes.isNotEmpty) 'admin_notes': notes,
+      },
+      token: token,
+    );
+  }
+
+  static Future<Map<String, dynamic>> rejectMedicineRequest(
+    String requestId, {
+    required String reason,
+    String? token,
+  }) async {
+    return await patch(
+      '${ApiConfig.baseUrl}/admin/medicine-requests/$requestId/reject',
+      {
+        'rejection_reason': reason,
+      },
+      token: token,
+    );
+  }
 }
