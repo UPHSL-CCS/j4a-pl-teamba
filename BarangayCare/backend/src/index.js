@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/database.js';
 import { initializeFirebase } from './config/firebase.js';
 import { seedMedicinesIfEmpty } from '../scripts/seed-medicines.js';
+import { seedDoctorsIfEmpty } from '../scripts/seed-doctors.js';
 
 // Import routes
 import authRoutes from './routes/auth.route.js';
@@ -67,6 +68,9 @@ const PORT = process.env.PORT || 3000;
 
     // Auto-seed medicine inventory if empty
     await seedMedicinesIfEmpty();
+
+    // Auto-seed doctors if empty
+    await seedDoctorsIfEmpty();
 
     // Start server - listen on all network interfaces (0.0.0.0)
     // This allows connections from physical devices on the same network

@@ -137,6 +137,7 @@ async function seedDoctors() {
 }
 
 // Only run if this file is executed directly (not when imported)
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}`) {
+const isMainModule = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'));
+if (isMainModule || process.argv[1]?.includes('seed-doctors')) {
   seedDoctors();
 }
