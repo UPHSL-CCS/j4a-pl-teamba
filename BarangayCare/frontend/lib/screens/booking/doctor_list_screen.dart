@@ -82,41 +82,27 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
       appBar: AppBar(
         title: const Text('Book Consultation'),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _loadDoctors,
+          ),
+        ],
       ),
       body: Column(
         children: [
           // Search and Filter Section
-          Container(
-            color: Theme.of(context).primaryColor.withOpacity(0.05),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // Search Bar
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search doctors...',
-                    prefixIcon: const Icon(Icons.search),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _searchQuery = value;
-                    });
-                    _filterDoctors();
-                  },
-                ),
-                const SizedBox(height: 12),
-                // Expertise Filter
-                if (_doctors.isNotEmpty)
-                  DropdownButtonFormField<String>(
-                    value: _selectedExpertise ?? 'All',
+          SingleChildScrollView(
+            child: Container(
+              color: Theme.of(context).primaryColor.withOpacity(0.05),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // Search Bar
+                  TextField(
                     decoration: InputDecoration(
-                      labelText: 'Filter by Expertise',
+                      hintText: 'Search doctors...',
+                      prefixIcon: const Icon(Icons.search),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -124,20 +110,64 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                         borderSide: BorderSide.none,
                       ),
                     ),
-                    items: _getExpertiseList().map((expertise) {
-                      return DropdownMenuItem(
-                        value: expertise,
-                        child: Text(expertise),
-                      );
-                    }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        _selectedExpertise = value;
+                        _searchQuery = value;
                       });
                       _filterDoctors();
                     },
                   ),
-              ],
+                  const SizedBox(height: 12),
+                  // Expertise Filter
+                  if (_doctors.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 4, bottom: 8),
+                          child: Text(
+                            'Filter by Expertise',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        DropdownButtonFormField<String>(
+                          value: _selectedExpertise ?? 'All',
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                          ),
+                          items: _getExpertiseList().map((expertise) {
+                            return DropdownMenuItem(
+                              value: expertise,
+                              child: Text(
+                                expertise,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedExpertise = value;
+                            });
+                            _filterDoctors();
+                          },
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
 
