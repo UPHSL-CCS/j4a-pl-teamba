@@ -47,5 +47,8 @@ export const collections = {
   doctors: () => getDB().collection('doctors'),
   appointments: () => getDB().collection('appointments'),
   medicineInventory: () => getDB().collection('medicine_inventory'),
+  admins: () => getDB().collection('admins'),
+  medicineRequests: () => getDB().collection('medicine_requests'),
+  stockHistory: () => getDB().collection('stock_history'),
 };
 

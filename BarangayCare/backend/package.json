@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "seed:medicines": "node scripts/seed-medicines.js",
+    "seed:doctors": "node scripts/seed-doctors.js",
+    "seed:admin": "node scripts/seed-admin.js",
+    "update:admin-uid": "node scripts/update-admin-uid.js"
   },
   "keywords": [
     "barangay",
