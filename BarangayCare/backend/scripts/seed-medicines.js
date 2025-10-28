@@ -87,6 +87,31 @@ const sampleMedicines = [
   }
 ];
 
+// Exportable function that only seeds if collection is empty
+export async function seedMedicinesIfEmpty() {
+  try {
+    // Check if medicines already exist
+    const count = await collections.medicineInventory().countDocuments();
+    
+    if (count > 0) {
+      console.log('💊 Medicine inventory already contains data. Skipping seed.');
+      return { skipped: true, count };
+    }
+
+    console.log('🌱 Medicine inventory is empty. Starting seed...');
+    
+    // Insert sample medicines
+    const result = await collections.medicineInventory().insertMany(sampleMedicines);
+    console.log(`✅ Successfully seeded ${result.insertedCount} medicines`);
+    
+    return { seeded: true, count: result.insertedCount };
+  } catch (error) {
+    console.error('❌ Error seeding medicines:', error);
+    throw error;
+  }
+}
+
+// Script execution (only when run directly)
 async function seedMedicines() {
   try {
     console.log('🌱 Starting medicine seeding...');
@@ -117,4 +142,7 @@ async function seedMedicines() {
   }
 }
 
-seedMedicines();
+// Only run if this file is executed directly (not when imported)
+if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}`) {
+  seedMedicines();
+}

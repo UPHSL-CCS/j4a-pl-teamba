@@ -4,6 +4,7 @@ import { cors } from 'hono/cors';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database.js';
 import { initializeFirebase } from './config/firebase.js';
+import { seedMedicinesIfEmpty } from '../scripts/seed-medicines.js';
 
 // Import routes
 import authRoutes from './routes/auth.route.js';
@@ -63,6 +64,9 @@ const PORT = process.env.PORT || 3000;
     // Connect to MongoDB
     await connectDB();
     console.log('✅ MongoDB connected');
+
+    // Auto-seed medicine inventory if empty
+    await seedMedicinesIfEmpty();
 
     // Start server - listen on all network interfaces (0.0.0.0)
     // This allows connections from physical devices on the same network
