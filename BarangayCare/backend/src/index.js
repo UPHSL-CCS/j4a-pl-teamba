@@ -7,6 +7,7 @@ import { initializeFirebase } from './config/firebase.js';
 import { seedMedicinesIfEmpty } from '../scripts/seed-medicines.js';
 import { seedDoctorsIfEmpty } from '../scripts/seed-doctors.js';
 import { seedAdminIfEmpty } from '../scripts/seed-admin.js';
+import { seedAppointmentsIfEmpty } from '../scripts/seed-appointments.js';
 
 // Import routes
 import authRoutes from './routes/auth.route.js';
@@ -84,6 +85,9 @@ const PORT = process.env.PORT || 3000;
 
     // Auto-seed admin account if empty
     await seedAdminIfEmpty();
+
+    // Auto-seed appointments with sample patients if empty
+    await seedAppointmentsIfEmpty();
 
     // Start server - listen on all network interfaces (0.0.0.0)
     // This allows connections from physical devices on the same network

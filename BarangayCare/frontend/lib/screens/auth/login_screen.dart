@@ -62,17 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (isAdmin) {
           print('✅ Admin user detected, navigating to admin dashboard');
           if (!mounted) return;
-          // TODO: Create admin dashboard route
-          // For now, show a message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Admin login successful! Admin dashboard coming soon.'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 3),
-            ),
-          );
-          // Navigate to home for now until admin dashboard is built
-          Navigator.of(context).pushReplacementNamed('/home');
+          Navigator.of(context).pushReplacementNamed('/admin/dashboard');
           return;
         }
       } catch (adminCheckError) {
