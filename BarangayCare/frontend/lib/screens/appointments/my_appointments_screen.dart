@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/api_service.dart';
+import '../booking/doctor_list_screen.dart';
 
 class MyAppointmentsScreen extends StatefulWidget {
   const MyAppointmentsScreen({super.key});
@@ -137,7 +138,12 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).pop();
-                // TODO: Navigate to booking screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DoctorListScreen(),
+                  ),
+                );
               },
               icon: const Icon(Icons.add),
               label: const Text('Book Consultation'),
