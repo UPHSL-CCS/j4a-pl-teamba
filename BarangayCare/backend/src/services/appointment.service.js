@@ -49,7 +49,7 @@ export async function bookAppointment(firebaseUid, data) {
     doctor_id: new ObjectId(doctor_id),
     date,
     time,
-    status: 'booked',
+    status: 'pending',  // Requires admin approval
     pre_screening: pre_screening || {},
     created_at: new Date(),
     updated_at: new Date(),
