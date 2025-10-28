@@ -2,10 +2,10 @@ import { ObjectId } from 'mongodb';
 import { collections } from '../config/database.js';
 
 /**
- * Get all doctors
+ * Get all active doctors
  */
 export async function getAllDoctors() {
-  return await collections.doctors().find({}).toArray();
+  return await collections.doctors().find({ is_active: true }).toArray();
 }
 
 /**

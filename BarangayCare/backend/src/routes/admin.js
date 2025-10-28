@@ -20,10 +20,7 @@ admin.get('/dashboard/stats', async (c) => {
       collections.appointments().countDocuments({ status: 'pending' }),
       collections.appointments().countDocuments({ 
         status: { $in: ['pending', 'approved'] },
-        appointment_date: {
-          $gte: new Date(new Date().setHours(0, 0, 0, 0)),
-          $lt: new Date(new Date().setHours(23, 59, 59, 999))
-        }
+        date: new Date().toISOString().split('T')[0] // Match today's date string (YYYY-MM-DD)
       }),
       collections.medicineRequests().countDocuments({ status: 'pending' }),
       collections.medicineInventory().countDocuments({ 
@@ -65,7 +62,7 @@ admin.get('/appointments', async (c) => {
     const [appointments, total] = await Promise.all([
       collections.appointments()
         .find(filter)
-        .sort({ appointment_date: -1, created_at: -1 })
+        .sort({ date: -1, time: -1, created_at: -1 })
         .skip(skip)
         .limit(limit)
         .toArray(),
@@ -82,10 +79,10 @@ admin.get('/appointments', async (c) => {
 
         return {
           ...apt,
-          patient_name: patient ? `${patient.first_name} ${patient.last_name}` : 'Unknown',
-          patient_contact: patient?.contact_number,
-          doctor_name: doctor?.doctor_name,
-          doctor_specialization: doctor?.specialization
+          patient_name: patient?.name || 'Unknown',
+          patient_contact: patient?.contact || patient?.contact_number || 'N/A',
+          doctor_name: doctor?.name || 'Unknown',
+          doctor_specialization: doctor?.expertise || 'N/A'
         };
       })
     );
@@ -339,6 +336,242 @@ admin.delete('/medicines/:id', async (c) => {
   } catch (error) {
     console.error('Error deleting medicine:', error);
     return c.json({ error: 'Failed to delete medicine' }, 500);
+  }
+});
+
+/**
+ * Get all medicine requests with filters
+ */
+admin.get('/medicine-requests', async (c) => {
+  try {
+    const status = c.req.query('status');
+    const page = parseInt(c.req.query('page') || '1');
+    const limit = parseInt(c.req.query('limit') || '20');
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+    if (status && status !== 'all') {
+      filter.status = status;
+    }
+
+    const [requests, total] = await Promise.all([
+      collections.medicineRequests()
+        .find(filter)
+        .sort({ created_at: -1 })
+        .skip(skip)
+        .limit(limit)
+        .toArray(),
+      collections.medicineRequests().countDocuments(filter)
+    ]);
+
+    // Populate patient and medicine info
+    const enrichedRequests = await Promise.all(
+      requests.map(async (req) => {
+        const [patient, medicine] = await Promise.all([
+          collections.patients().findOne({ _id: new ObjectId(req.patient_id) }),
+          collections.medicineInventory().findOne({ _id: new ObjectId(req.medicine_id) })
+        ]);
+
+        return {
+          ...req,
+          patient_name: patient?.name || 'Unknown Patient',
+          patient_contact: patient?.contact || patient?.contact_number || 'N/A',
+          medicine_name: medicine?.med_name || req.medicine_name || 'Unknown Medicine',
+          current_stock: medicine?.stock_qty || 0
+        };
+      })
+    );
+
+    return c.json({
+      requests: enrichedRequests,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    });
+  } catch (error) {
+    console.error('Error fetching medicine requests:', error);
+    return c.json({ error: 'Failed to fetch medicine requests' }, 500);
+  }
+});
+
+/**
+ * Get single medicine request detail
+ */
+admin.get('/medicine-requests/:id', async (c) => {
+  try {
+    const requestId = c.req.param('id');
+    
+    const request = await collections.medicineRequests().findOne({
+      _id: new ObjectId(requestId)
+    });
+
+    if (!request) {
+      return c.json({ error: 'Medicine request not found' }, 404);
+    }
+
+    // Populate patient and medicine info
+    const [patient, medicine] = await Promise.all([
+      collections.patients().findOne({ _id: new ObjectId(request.patient_id) }),
+      collections.medicineInventory().findOne({ _id: new ObjectId(request.medicine_id) })
+    ]);
+
+    const enrichedRequest = {
+      ...request,
+      patient_name: patient?.name || 'Unknown Patient',
+      patient_contact: patient?.contact || patient?.contact_number || 'N/A',
+      medicine_name: medicine?.med_name || request.medicine_name || 'Unknown Medicine',
+      current_stock: medicine?.stock_qty || 0
+    };
+
+    return c.json(enrichedRequest);
+  } catch (error) {
+    console.error('Error fetching medicine request detail:', error);
+    return c.json({ error: 'Failed to fetch medicine request detail' }, 500);
+  }
+});
+
+/**
+ * Approve medicine request
+ */
+admin.patch('/medicine-requests/:id/approve', async (c) => {
+  try {
+    const requestId = c.req.param('id');
+    const body = await c.req.json().catch(() => ({}));
+    const { admin_notes } = body;
+
+    // Get the request
+    const request = await collections.medicineRequests().findOne({
+      _id: new ObjectId(requestId)
+    });
+
+    if (!request) {
+      return c.json({ error: 'Medicine request not found' }, 404);
+    }
+
+    if (request.status !== 'pending') {
+      return c.json({ error: 'Only pending requests can be approved' }, 400);
+    }
+
+    // Check if medicine has enough stock
+    const medicine = await collections.medicineInventory().findOne({
+      _id: new ObjectId(request.medicine_id)
+    });
+
+    if (!medicine) {
+      return c.json({ error: 'Medicine not found in inventory' }, 404);
+    }
+
+    if (medicine.stock_qty < request.quantity) {
+      return c.json({ 
+        error: 'Insufficient stock',
+        available: medicine.stock_qty,
+        requested: request.quantity
+      }, 400);
+    }
+
+    // Deduct stock atomically
+    const stockUpdate = await collections.medicineInventory().updateOne(
+      {
+        _id: new ObjectId(request.medicine_id),
+        stock_qty: { $gte: request.quantity }
+      },
+      {
+        $inc: { stock_qty: -request.quantity },
+        $set: { updated_at: new Date() }
+      }
+    );
+
+    if (stockUpdate.matchedCount === 0) {
+      return c.json({ error: 'Failed to update stock. Insufficient quantity.' }, 400);
+    }
+
+    // Record stock history
+    await collections.stockHistory().insertOne({
+      medicine_id: request.medicine_id,
+      change_type: 'dispense',
+      quantity_change: -request.quantity,
+      previous_stock: medicine.stock_qty,
+      new_stock: medicine.stock_qty - request.quantity,
+      reason: `Medicine request approved for patient ${request.patient_id}`,
+      request_id: request._id,
+      timestamp: new Date()
+    });
+
+    // Update request status
+    const result = await collections.medicineRequests().updateOne(
+      { _id: new ObjectId(requestId) },
+      {
+        $set: {
+          status: 'approved',
+          approved_at: new Date(),
+          admin_notes: admin_notes || null,
+          updated_at: new Date()
+        }
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return c.json({ error: 'Failed to update request status' }, 500);
+    }
+
+    return c.json({ 
+      message: 'Medicine request approved successfully',
+      remaining_stock: medicine.stock_qty - request.quantity
+    });
+  } catch (error) {
+    console.error('Error approving medicine request:', error);
+    return c.json({ error: 'Failed to approve medicine request' }, 500);
+  }
+});
+
+/**
+ * Reject medicine request
+ */
+admin.patch('/medicine-requests/:id/reject', async (c) => {
+  try {
+    const requestId = c.req.param('id');
+    const body = await c.req.json();
+    const { reason } = body;
+
+    if (!reason || reason.trim().length === 0) {
+      return c.json({ error: 'Rejection reason is required' }, 400);
+    }
+
+    // Get the request
+    const request = await collections.medicineRequests().findOne({
+      _id: new ObjectId(requestId)
+    });
+
+    if (!request) {
+      return c.json({ error: 'Medicine request not found' }, 404);
+    }
+
+    if (request.status !== 'pending') {
+      return c.json({ error: 'Only pending requests can be rejected' }, 400);
+    }
+
+    // Update request status
+    const result = await collections.medicineRequests().updateOne(
+      { _id: new ObjectId(requestId) },
+      {
+        $set: {
+          status: 'rejected',
+          rejection_reason: reason,
+          rejected_at: new Date(),
+          updated_at: new Date()
+        }
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return c.json({ error: 'Medicine request not found' }, 404);
+    }
+
+    return c.json({ message: 'Medicine request rejected successfully' });
+  } catch (error) {
+    console.error('Error rejecting medicine request:', error);
+    return c.json({ error: 'Failed to reject medicine request' }, 500);
   }
 });
 

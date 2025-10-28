@@ -54,44 +54,31 @@ export async function requestMedicine(firebaseUid, data) {
     }
   }
   
-  // Atomic stock update with concurrency safety
-  // This prevents stock from going negative even with simultaneous requests
-  const updateResult = await collections.medicineInventory().updateOne(
-    {
-      _id: new ObjectId(medicine_id),
-      stock_qty: { $gte: quantity }
-    },
-    {
-      $inc: { stock_qty: -quantity }
-    }
-  );
-  
-  if (updateResult.matchedCount === 0) {
+  // Check if sufficient stock is available (without deducting yet)
+  if (medicine.stock_qty < quantity) {
     throw new Error('Out of stock or insufficient quantity available');
   }
   
-  // Record the medicine request
+  // Record the medicine request with 'pending' status for admin approval
+  // Stock will only be deducted when admin approves the request
   const request = {
     patient_id: patient._id,
     medicine_id: new ObjectId(medicine_id),
     medicine_name: medicine.med_name,
     quantity,
-    status: 'fulfilled',
-    created_at: new Date()
+    status: 'pending', // Requires admin approval
+    created_at: new Date(),
+    updated_at: new Date()
   };
   
-  await getDB().collection('medicine_requests').insertOne(request);
-  
-  // Get updated stock
-  const updatedMedicine = await collections.medicineInventory().findOne({
-    _id: new ObjectId(medicine_id)
-  });
+  const result = await getDB().collection('medicine_requests').insertOne(request);
   
   return {
-    message: 'Medicine request successful',
+    message: 'Medicine request submitted successfully. Waiting for admin approval.',
+    request_id: result.insertedId,
     medicine_name: medicine.med_name,
     quantity_requested: quantity,
-    remaining_stock: updatedMedicine.stock_qty
+    status: 'pending'
   };
 }
 
