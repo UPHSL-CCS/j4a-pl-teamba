@@ -9,6 +9,7 @@ const sampleDoctors = [
     name: 'Maria Santos',
     expertise: 'General Practice',
     license_number: 'PRC-GP-2015-001234',
+    is_active: true,
     schedule: [
       { day: 'Mon', start: '08:00', end: '17:00' },
       { day: 'Wed', start: '08:00', end: '17:00' },
@@ -21,6 +22,7 @@ const sampleDoctors = [
     name: 'Juan Dela Cruz',
     expertise: 'Pediatrics',
     license_number: 'PRC-PD-2016-005678',
+    is_active: true,
     schedule: [
       { day: 'Tue', start: '09:00', end: '16:00' },
       { day: 'Thu', start: '09:00', end: '16:00' },
@@ -33,6 +35,7 @@ const sampleDoctors = [
     name: 'Ana Reyes',
     expertise: 'Internal Medicine',
     license_number: 'PRC-IM-2017-009012',
+    is_active: true,
     schedule: [
       { day: 'Mon', start: '10:00', end: '18:00' },
       { day: 'Tue', start: '10:00', end: '18:00' },
@@ -45,6 +48,7 @@ const sampleDoctors = [
     name: 'Roberto Garcia',
     expertise: 'Family Medicine',
     license_number: 'PRC-FM-2018-003456',
+    is_active: true,
     schedule: [
       { day: 'Mon', start: '08:00', end: '16:00' },
       { day: 'Wed', start: '08:00', end: '16:00' },
@@ -58,6 +62,7 @@ const sampleDoctors = [
     name: 'Carmen Lopez',
     expertise: 'Obstetrics and Gynecology',
     license_number: 'PRC-OB-2019-007890',
+    is_active: true,
     schedule: [
       { day: 'Tue', start: '13:00', end: '19:00' },
       { day: 'Thu', start: '13:00', end: '19:00' },
@@ -70,6 +75,7 @@ const sampleDoctors = [
     name: 'Pedro Martinez',
     expertise: 'Cardiology',
     license_number: 'PRC-CD-2014-002345',
+    is_active: true,
     schedule: [
       { day: 'Wed', start: '14:00', end: '18:00' },
       { day: 'Fri', start: '14:00', end: '18:00' }

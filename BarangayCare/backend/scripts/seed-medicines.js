@@ -9,6 +9,7 @@ const sampleMedicines = [
     med_name: 'Paracetamol 500mg',
     description: 'Pain reliever and fever reducer',
     stock_qty: 100,
+    reorder_level: 20,
     is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
@@ -17,6 +18,7 @@ const sampleMedicines = [
     med_name: 'Amoxicillin 500mg',
     description: 'Antibiotic for bacterial infections',
     stock_qty: 50,
+    reorder_level: 20,
     is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
@@ -25,6 +27,7 @@ const sampleMedicines = [
     med_name: 'Ibuprofen 400mg',
     description: 'Anti-inflammatory pain reliever',
     stock_qty: 75,
+    reorder_level: 20,
     is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
@@ -33,6 +36,7 @@ const sampleMedicines = [
     med_name: 'Cetirizine 10mg',
     description: 'Antihistamine for allergies',
     stock_qty: 60,
+    reorder_level: 20,
     is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
@@ -41,6 +45,7 @@ const sampleMedicines = [
     med_name: 'Omeprazole 20mg',
     description: 'Proton pump inhibitor for stomach acid',
     stock_qty: 40,
+    reorder_level: 20,
     is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
@@ -49,6 +54,7 @@ const sampleMedicines = [
     med_name: 'Vitamin C 500mg',
     description: 'Immune system support',
     stock_qty: 150,
+    reorder_level: 30,
     is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
@@ -57,6 +63,7 @@ const sampleMedicines = [
     med_name: 'Multivitamins',
     description: 'Daily vitamin supplement',
     stock_qty: 80,
+    reorder_level: 25,
     is_prescription_required: false,
     created_at: new Date(),
     updated_at: new Date()
@@ -65,6 +72,7 @@ const sampleMedicines = [
     med_name: 'Losartan 50mg',
     description: 'Blood pressure medication',
     stock_qty: 30,
+    reorder_level: 15,
     is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
@@ -73,6 +81,7 @@ const sampleMedicines = [
     med_name: 'Metformin 500mg',
     description: 'Diabetes medication',
     stock_qty: 45,
+    reorder_level: 20,
     is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
@@ -81,6 +90,7 @@ const sampleMedicines = [
     med_name: 'Salbutamol Inhaler',
     description: 'Asthma relief inhaler',
     stock_qty: 20,
+    reorder_level: 10,
     is_prescription_required: true,
     created_at: new Date(),
     updated_at: new Date()
