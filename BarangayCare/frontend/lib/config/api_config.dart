@@ -22,4 +22,7 @@ class ApiConfig {
   // Medicine endpoints
   static String get medicines => '$baseUrl/medicine';
   static String get requestMedicine => '$baseUrl/medicine/request';
+
+  // Admin endpoints
+  static String get adminDashboardStats => '$baseUrl/admin/dashboard/stats';
 }

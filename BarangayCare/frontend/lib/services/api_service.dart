@@ -15,6 +15,11 @@ class ApiService {
       final response = await http.get(
         Uri.parse(url),
         headers: _headers(token),
+      ).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw Exception('Request timeout - please check your connection');
+        },
       );
 
       if (response.statusCode == 200) {
@@ -146,5 +151,23 @@ class ApiService {
       'medicine_id': medicineId,
       'quantity': quantity,
     }, token: token);
+  }
+
+  // Admin Services
+  static Future<bool> isAdmin(String token) async {
+    try {
+      print('🔐 Checking admin status...');
+      print('📡 URL: ${ApiConfig.adminDashboardStats}');
+      
+      // Try to access admin dashboard stats endpoint
+      // If successful, user is an admin
+      final result = await get(ApiConfig.adminDashboardStats, token: token);
+      print('✅ Admin check successful: $result');
+      return true;
+    } catch (e) {
+      print('⚠️  Admin check failed: $e');
+      // If 403 or any error, user is not an admin
+      return false;
+    }
   }
 }

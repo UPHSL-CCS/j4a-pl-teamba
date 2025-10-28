@@ -54,17 +54,65 @@ class _LoginScreenState extends State<LoginScreen> {
         throw Exception('Failed to get authentication token');
       }
 
-      // Try to get profile
+      print('🔍 Checking user type...');
+      
+      // First, check if user is an admin
+      try {
+        final isAdmin = await ApiService.isAdmin(token);
+        if (isAdmin) {
+          print('✅ Admin user detected, navigating to admin dashboard');
+          if (!mounted) return;
+          // TODO: Create admin dashboard route
+          // For now, show a message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Admin login successful! Admin dashboard coming soon.'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 3),
+            ),
+          );
+          // Navigate to home for now until admin dashboard is built
+          Navigator.of(context).pushReplacementNamed('/home');
+          return;
+        }
+      } catch (adminCheckError) {
+        print('ℹ️ Not an admin, checking patient profile...');
+      }
+      
+      // Not an admin, try to get patient profile
+      print('📋 Fetching patient profile...');
+      
+      // Try to get patient profile
       await ApiService.getProfile(token);
+      
+      print('✅ Profile exists, navigating to home');
       
       // Profile exists, navigate to home
       if (!mounted) return;
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
-      // Profile doesn't exist (404) or error occurred
-      // Navigate to complete profile screen
+      print('❌ Error during profile check: $e');
+      
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      
+      // Profile doesn't exist - could be admin or new patient
+      // For now, navigate to complete profile screen
+      // (Admin dashboard will be added later)
       if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed('/complete-profile');
+      
+      // Check if error indicates no profile found (404)
+      if (e.toString().contains('404') || e.toString().contains('not found')) {
+        Navigator.of(context).pushReplacementNamed('/complete-profile');
+      } else {
+        // Other error - show message and stay on login
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        await authProvider.signOut();
+      }
     }
   }
 
