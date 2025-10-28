@@ -26,7 +26,7 @@ android {
         applicationId = "com.uphsl.barangaycare.barangaycare"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 23  // Required by Firebase Auth 23.2.1
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
