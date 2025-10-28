@@ -140,15 +140,27 @@ npm run dev
 
 Backend will start at `http://localhost:3000`
 
-#### 3. Setup Frontend
+**For physical device testing:**
+- Update `API_BASE_URL` in `frontend/lib/config/app_config.dart` to your PC's local IP (e.g., `http://192.168.254.192:3000`)
+- Ensure backend is running with `0.0.0.0` binding (configured in server)
+
+#### 3. Seed Sample Data
+```bash
+cd backend
+node scripts/seed-medicines.js
+```
+
+This will populate the database with 10 sample medicines.
+
+#### 4. Setup Frontend
 ```bash
 cd frontend
 flutter pub get
 
-# Update Firebase App ID in lib/config/app_config.dart
+# Update Firebase App ID in lib/config/app_config.dart if needed
 # Add google-services.json (Android) and GoogleService-Info.plist (iOS)
 
-flutter run
+flutter run -d <device-id>
 ```
 
 See detailed setup instructions in:
@@ -227,8 +239,24 @@ Located in `frontend/lib/config/app_config.dart`:
 {
   _id: ObjectId,
   med_name: String,
+  description: String,
   stock_qty: Number,
-  is_prescription_required: Boolean
+  is_prescription_required: Boolean,
+  created_at: Date,
+  updated_at: Date
+}
+```
+
+#### medicine_requests
+```javascript
+{
+  _id: ObjectId,
+  patient_id: ObjectId,
+  medicine_id: ObjectId,
+  medicine_name: String,
+  quantity: Number,
+  status: String,  // "fulfilled"
+  created_at: Date
 }
 ```
 
@@ -261,24 +289,28 @@ Authorization: Bearer <firebase_id_token>
 
 This project is designed to be completed in **3 days**:
 
-### Day 1: Foundation & Authentication
+### Day 1: Foundation & Authentication ✅
 - [x] Project structure setup
-- [x] Firebase authentication
+- [x] Firebase authentication (updated to v5.7.0)
 - [x] Basic UI screens
-- [ ] Backend API setup
-- [ ] Database connection
+- [x] Backend API setup
+- [x] Database connection
 
-### Day 2: Core Features
+### Day 2: Core Features 🔄
+- [x] Medicine inventory system
+- [x] Medicine request feature with UI
+- [x] Data seeding for medicines
+- [x] Prescription validation
 - [ ] Doctor scheduling system
 - [ ] Appointment booking logic
-- [ ] Medicine inventory system
-- [ ] API integration
 
-### Day 3: Polish & Testing
-- [ ] UI improvements
-- [ ] Error handling
-- [ ] Testing
-- [ ] Documentation
+### Day 3: Polish & Testing 🔄
+- [x] UI improvements for medicine feature
+- [x] Error handling for medicine requests
+- [x] Stock management and concurrency
+- [x] Documentation updates
+- [ ] Complete appointment booking
+- [ ] Comprehensive testing
 - [ ] Demo preparation
 
 ## 🧪 Testing
@@ -297,11 +329,24 @@ flutter test
 
 ## 🐛 Known Issues & Limitations
 
-- Firebase App ID needs to be updated in frontend config
-- Desktop platform not configured
+### Resolved Issues ✅
+- ✅ Firebase Auth type casting error (fixed by updating to v5.7.0)
+- ✅ Backend connectivity on physical devices (configured for LAN access)
+- ✅ Medicine field name mismatches (standardized naming)
+
+### Current Limitations ⚠️
+- Firebase App ID configuration required for new deployments
+- Desktop platform not configured (mobile-focused)
 - Push notifications not implemented
 - Admin dashboard not included
 - Payment integration not included
+- Book Consultation UI in progress (assigned to teammates)
+
+### Future Enhancements 🚀
+- Real-time notifications for appointment confirmations
+- Admin panel for managing inventory and appointments
+- SMS notifications for appointment reminders
+- Integration with health insurance systems
 
 ## 📖 Documentation
 
