@@ -6,7 +6,7 @@ dotenv.config();
 
 const sampleDoctors = [
   {
-    name: 'Dr. Maria Santos',
+    name: 'Maria Santos',
     expertise: 'General Practice',
     license_number: 'PRC-GP-2015-001234',
     image: 'assets/images/girl 1.jpg',
@@ -20,7 +20,7 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Dr. Juan Dela Cruz',
+    name: 'Juan Dela Cruz',
     expertise: 'Pediatrics',
     license_number: 'PRC-PD-2016-005678',
     image: 'assets/images/male 1.jpg',
@@ -34,7 +34,7 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Dr. Ana Reyes',
+    name: 'Ana Reyes',
     expertise: 'Internal Medicine',
     license_number: 'PRC-IM-2017-009012',
     image: 'assets/images/girl 2.jpeg',
@@ -48,7 +48,7 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Dr. Roberto Garcia',
+    name: 'Roberto Garcia',
     expertise: 'Family Medicine',
     license_number: 'PRC-FM-2018-003456',
     image: 'assets/images/male 2.jpg',
@@ -63,7 +63,7 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Dr. Carmen Lopez',
+    name: 'Carmen Lopez',
     expertise: 'Obstetrics and Gynecology',
     license_number: 'PRC-OB-2019-007890',
     image: 'assets/images/girl 3.jpg',
@@ -77,7 +77,7 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Dr. Pedro Martinez',
+    name: 'Pedro Martinez',
     expertise: 'Cardiology',
     license_number: 'PRC-CD-2014-002345',
     image: 'assets/images/male 3.jpg',

@@ -252,7 +252,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.doctor.name,
+                            'Dr. ${widget.doctor.name}',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
