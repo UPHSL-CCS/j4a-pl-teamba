@@ -265,6 +265,7 @@ Located in `frontend/lib/config/app_config.dart`:
 ### Authentication
 - `POST /api/auth/register-patient` - Register patient profile
 - `GET /api/auth/profile` - Get current user profile
+- `PUT /api/auth/profile` - Update patient profile (name, barangay, contact)
 
 ### Doctors
 - `GET /api/doctors` - List all doctors

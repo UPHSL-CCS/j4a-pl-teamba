@@ -86,6 +86,7 @@ backend/
 ### Authentication
 - `POST /api/auth/register-patient` - Register patient profile after Firebase auth
 - `GET /api/auth/profile` - Get current patient profile
+- `PUT /api/auth/profile` - Update patient profile (name, barangay, contact number)
 
 ### Doctors
 - `GET /api/doctors` - Get all doctors

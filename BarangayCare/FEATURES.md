@@ -6,7 +6,7 @@ Development progress tracking for the 3-day project timeline.
 
 ### ✅ Completed Features (Merged to main)
 - **Authentication & Authorization**: Firebase Auth + MongoDB profiles
-- **Patient Profile Management**: Complete profile screen + My Profile screen
+- **Patient Profile Management**: Complete profile screen + My Profile screen + Profile Update ✨
 - **My Appointments**: View and cancel appointments
 - **Request Medicine**: Medicine list, request flow, prescription validation, stock management
 - **Book Consultation**: Doctor list, doctor details, date/time selection, pre-screening form, booking confirmation
@@ -17,10 +17,12 @@ Development progress tracking for the 3-day project timeline.
 ### 🔴 Pending Features
 None - All core features complete! ✨
 
+**Latest Update (Oct 29, 2025)**: Profile Update endpoint added - patients can now edit their name, barangay, and contact number!
+
 ### 📊 Progress
 - Backend API: **100% Complete** (all endpoints ready and tested)
 - Authentication: **100% Complete**
-- Profile Management: **90% Complete** (needs update endpoint)
+- Profile Management: **100% Complete** ✅
 - Appointments: **100% Complete**
 - Doctor Booking UI: **100% Complete** ✅
 - Medicine Request UI: **100% Complete** ✅
@@ -93,7 +95,7 @@ None - All core features complete! ✨
 - [x] Profile existence check after login
 - [x] Redirect logic (profile exists → home, missing → complete profile)
 - [x] Philippine mobile number validation
-- [ ] Backend: Update profile endpoint
+- [x] Backend: Update profile endpoint
 - [ ] Test complete registration flow
 - [ ] Validate form inputs
 - [ ] Error handling & messages
