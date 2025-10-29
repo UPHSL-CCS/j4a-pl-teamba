@@ -12,10 +12,12 @@ class ApiService {
   // Generic GET request
   static Future<Map<String, dynamic>> get(String url, {String? token}) async {
     try {
-      final response = await http.get(
+      final response = await http
+          .get(
         Uri.parse(url),
         headers: _headers(token),
-      ).timeout(
+      )
+          .timeout(
         const Duration(seconds: 10),
         onTimeout: () {
           throw Exception('Request timeout - please check your connection');
@@ -34,7 +36,8 @@ class ApiService {
   }
 
   // Generic POST request
-  static Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body,
+  static Future<Map<String, dynamic>> post(
+      String url, Map<String, dynamic> body,
       {String? token}) async {
     try {
       final response = await http.post(
@@ -55,7 +58,8 @@ class ApiService {
   }
 
   // Generic PATCH request
-  static Future<Map<String, dynamic>> patch(String url, Map<String, dynamic> body,
+  static Future<Map<String, dynamic>> patch(
+      String url, Map<String, dynamic> body,
       {String? token}) async {
     try {
       final response = await http.patch(
@@ -82,15 +86,46 @@ class ApiService {
     required String contact,
     required String token,
   }) async {
-    return await post(ApiConfig.registerPatient, {
-      'name': name,
-      'barangay': barangay,
-      'contact': contact,
-    }, token: token);
+    return await post(
+        ApiConfig.registerPatient,
+        {
+          'name': name,
+          'barangay': barangay,
+          'contact': contact,
+        },
+        token: token);
   }
 
   static Future<Map<String, dynamic>> getProfile(String token) async {
     return await get(ApiConfig.profile, token: token);
+  }
+
+  static Future<Map<String, dynamic>> updateProfile({
+    required String name,
+    required String barangay,
+    required String contact,
+    required String token,
+  }) async {
+    try {
+      final response = await http.put(
+        Uri.parse(ApiConfig.profile),
+        headers: _headers(token),
+        body: json.encode({
+          'name': name,
+          'barangay': barangay,
+          'contact': contact,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception(
+            json.decode(response.body)['error'] ?? 'Failed to update profile');
+      }
+    } catch (e) {
+      throw Exception('Network error: $e');
+    }
   }
 
   // Doctor Services
@@ -99,7 +134,8 @@ class ApiService {
     return response['doctors'] as List<dynamic>;
   }
 
-  static Future<Map<String, dynamic>> getDoctorById(String id, {String? token}) async {
+  static Future<Map<String, dynamic>> getDoctorById(String id,
+      {String? token}) async {
     return await get(ApiConfig.doctorById(id), token: token);
   }
 
@@ -108,7 +144,8 @@ class ApiService {
     String date, {
     String? token,
   }) async {
-    return await get(ApiConfig.doctorAvailability(doctorId, date), token: token);
+    return await get(ApiConfig.doctorAvailability(doctorId, date),
+        token: token);
   }
 
   // Appointment Services
@@ -119,12 +156,15 @@ class ApiService {
     Map<String, dynamic>? preScreening,
     required String token,
   }) async {
-    return await post(ApiConfig.bookAppointment, {
-      'doctor_id': doctorId,
-      'date': date,
-      'time': time,
-      'pre_screening': preScreening ?? {},
-    }, token: token);
+    return await post(
+        ApiConfig.bookAppointment,
+        {
+          'doctor_id': doctorId,
+          'date': date,
+          'time': time,
+          'pre_screening': preScreening ?? {},
+        },
+        token: token);
   }
 
   static Future<List<dynamic>> getMyAppointments(String token) async {
@@ -132,7 +172,8 @@ class ApiService {
     return response['appointments'] as List<dynamic>;
   }
 
-  static Future<Map<String, dynamic>> cancelAppointment(String id, String token) async {
+  static Future<Map<String, dynamic>> cancelAppointment(
+      String id, String token) async {
     return await patch(ApiConfig.cancelAppointment(id), {}, token: token);
   }
 
@@ -147,10 +188,13 @@ class ApiService {
     required int quantity,
     required String token,
   }) async {
-    return await post(ApiConfig.requestMedicine, {
-      'medicine_id': medicineId,
-      'quantity': quantity,
-    }, token: token);
+    return await post(
+        ApiConfig.requestMedicine,
+        {
+          'medicine_id': medicineId,
+          'quantity': quantity,
+        },
+        token: token);
   }
 
   // Admin Services
@@ -158,7 +202,7 @@ class ApiService {
     try {
       print('🔐 Checking admin status...');
       print('📡 URL: ${ApiConfig.adminDashboardStats}');
-      
+
       // Try to access admin dashboard stats endpoint
       // If successful, user is an admin
       final result = await get(ApiConfig.adminDashboardStats, token: token);
@@ -171,7 +215,8 @@ class ApiService {
     }
   }
 
-  static Future<Map<String, dynamic>> getAdminDashboardStats(String token) async {
+  static Future<Map<String, dynamic>> getAdminDashboardStats(
+      String token) async {
     return await get(ApiConfig.adminDashboardStats, token: token);
   }
 
@@ -181,7 +226,8 @@ class ApiService {
     int page = 1,
     int limit = 20,
   }) async {
-    String url = '${ApiConfig.baseUrl}/admin/appointments?page=$page&limit=$limit';
+    String url =
+        '${ApiConfig.baseUrl}/admin/appointments?page=$page&limit=$limit';
     if (status != null) {
       url += '&status=$status';
     }
@@ -218,7 +264,8 @@ class ApiService {
   }
 
   static Future<List<dynamic>> getLowStockMedicines(String token) async {
-    final response = await get('${ApiConfig.baseUrl}/admin/medicines/low-stock', token: token);
+    final response = await get('${ApiConfig.baseUrl}/admin/medicines/low-stock',
+        token: token);
     return response['medicines'] as List<dynamic>;
   }
 
