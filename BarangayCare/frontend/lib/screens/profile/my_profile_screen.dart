@@ -15,7 +15,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final _nameController = TextEditingController();
   final _barangayController = TextEditingController();
   final _contactController = TextEditingController();
-  
+
   bool _isLoading = true;
   bool _isEditing = false;
   bool _isSaving = false;
@@ -81,23 +81,30 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         throw Exception('Not authenticated');
       }
 
-      // TODO: Add update profile endpoint to backend
-      // For now, we'll just show a message
-      await Future.delayed(const Duration(seconds: 1));
+      // Call the update profile API
+      final response = await ApiService.updateProfile(
+        name: _nameController.text.trim(),
+        barangay: _barangayController.text.trim(),
+        contact: _contactController.text.trim(),
+        token: token,
+      );
+
+      // Update local profile data
+      setState(() {
+        _profileData = response['patient'];
+        _isEditing = false;
+        _isSaving = false;
+      });
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Profile update coming soon!'),
-          backgroundColor: Colors.orange,
+          content: Text('Profile updated successfully!'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
         ),
       );
-
-      setState(() {
-        _isEditing = false;
-        _isSaving = false;
-      });
     } catch (e) {
       if (!mounted) return;
 
@@ -105,6 +112,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         SnackBar(
           content: Text('Failed to update profile: ${e.toString()}'),
           backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
         ),
       );
 
@@ -331,7 +339,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               const SizedBox(height: 16),
               OutlinedButton.icon(
                 onPressed: () async {
-                  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                  final authProvider =
+                      Provider.of<AuthProvider>(context, listen: false);
                   await authProvider.signOut();
                   if (!mounted) return;
                   Navigator.of(context).pushReplacementNamed('/login');
