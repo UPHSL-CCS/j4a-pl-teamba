@@ -101,7 +101,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(availability['message'] ?? 'Doctor not available on this day'),
+              content: Text(availability['message'] ??
+                  'Doctor not available on this day'),
               backgroundColor: Colors.orange,
             ),
           );
@@ -235,10 +236,15 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                       radius: 28,
                       backgroundColor:
                           Theme.of(context).primaryColor.withOpacity(0.1),
-                      child: Icon(
-                        Icons.person,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      backgroundImage: widget.doctor.image != null
+                          ? AssetImage(widget.doctor.image!)
+                          : null,
+                      child: widget.doctor.image == null
+                          ? Icon(
+                              Icons.person,
+                              color: Theme.of(context).primaryColor,
+                            )
+                          : null,
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -246,7 +252,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Dr. ${widget.doctor.name}',
+                            widget.doctor.name,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -293,7 +299,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                     Text(
                       _selectedDate == null
                           ? 'Choose a date'
-                          : DateFormat('EEEE, MMMM d, y').format(_selectedDate!),
+                          : DateFormat('EEEE, MMMM d, y')
+                              .format(_selectedDate!),
                       style: TextStyle(
                         fontSize: 16,
                         color: _selectedDate == null

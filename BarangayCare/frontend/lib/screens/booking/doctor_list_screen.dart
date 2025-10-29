@@ -273,12 +273,17 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
               // Avatar
               CircleAvatar(
                 radius: 32,
-                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                child: Icon(
-                  Icons.person,
-                  size: 32,
-                  color: Theme.of(context).primaryColor,
-                ),
+                backgroundColor:
+                    Theme.of(context).primaryColor.withOpacity(0.1),
+                backgroundImage:
+                    doctor.image != null ? AssetImage(doctor.image!) : null,
+                child: doctor.image == null
+                    ? Icon(
+                        Icons.person,
+                        size: 32,
+                        color: Theme.of(context).primaryColor,
+                      )
+                    : null,
               ),
               const SizedBox(width: 16),
               // Doctor Info
@@ -287,7 +292,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Dr. ${doctor.name}',
+                      doctor.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -316,9 +321,11 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                             schedule.day,
                             style: const TextStyle(fontSize: 11),
                           ),
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           padding: EdgeInsets.zero,
-                          labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                          labelPadding:
+                              const EdgeInsets.symmetric(horizontal: 8),
                         );
                       }).toList(),
                     ),

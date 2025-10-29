@@ -28,16 +28,21 @@ class DoctorDetailScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 48,
-                    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
-                    child: Icon(
-                      Icons.person,
-                      size: 48,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                    backgroundColor:
+                        Theme.of(context).primaryColor.withOpacity(0.2),
+                    backgroundImage:
+                        doctor.image != null ? AssetImage(doctor.image!) : null,
+                    child: doctor.image == null
+                        ? Icon(
+                            Icons.person,
+                            size: 48,
+                            color: Theme.of(context).primaryColor,
+                          )
+                        : null,
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Dr. ${doctor.name}',
+                    doctor.name,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
