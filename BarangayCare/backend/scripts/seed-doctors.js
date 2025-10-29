@@ -6,9 +6,10 @@ dotenv.config();
 
 const sampleDoctors = [
   {
-    name: 'Maria Santos',
+    name: 'Dr. Maria Santos',
     expertise: 'General Practice',
     license_number: 'PRC-GP-2015-001234',
+    image: 'assets/images/girl 1.jpg',
     is_active: true,
     schedule: [
       { day: 'Mon', start: '08:00', end: '17:00' },
@@ -19,9 +20,10 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Juan Dela Cruz',
+    name: 'Dr. Juan Dela Cruz',
     expertise: 'Pediatrics',
     license_number: 'PRC-PD-2016-005678',
+    image: 'assets/images/male 1.jpg',
     is_active: true,
     schedule: [
       { day: 'Tue', start: '09:00', end: '16:00' },
@@ -32,9 +34,10 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Ana Reyes',
+    name: 'Dr. Ana Reyes',
     expertise: 'Internal Medicine',
     license_number: 'PRC-IM-2017-009012',
+    image: 'assets/images/girl 2.jpeg',
     is_active: true,
     schedule: [
       { day: 'Mon', start: '10:00', end: '18:00' },
@@ -45,9 +48,10 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Roberto Garcia',
+    name: 'Dr. Roberto Garcia',
     expertise: 'Family Medicine',
     license_number: 'PRC-FM-2018-003456',
+    image: 'assets/images/male 2.jpg',
     is_active: true,
     schedule: [
       { day: 'Mon', start: '08:00', end: '16:00' },
@@ -59,9 +63,10 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Carmen Lopez',
+    name: 'Dr. Carmen Lopez',
     expertise: 'Obstetrics and Gynecology',
     license_number: 'PRC-OB-2019-007890',
+    image: 'assets/images/girl 3.jpg',
     is_active: true,
     schedule: [
       { day: 'Tue', start: '13:00', end: '19:00' },
@@ -72,9 +77,10 @@ const sampleDoctors = [
     updated_at: new Date()
   },
   {
-    name: 'Pedro Martinez',
+    name: 'Dr. Pedro Martinez',
     expertise: 'Cardiology',
     license_number: 'PRC-CD-2014-002345',
+    image: 'assets/images/male 3.jpg',
     is_active: true,
     schedule: [
       { day: 'Wed', start: '14:00', end: '18:00' },
