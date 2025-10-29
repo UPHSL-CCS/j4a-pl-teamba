@@ -3,6 +3,7 @@ class Doctor {
   final String name;
   final String expertise;
   final String licenseNumber;
+  final String? image; // Optional image path
   final List<Schedule> schedule;
 
   Doctor({
@@ -10,6 +11,7 @@ class Doctor {
     required this.name,
     required this.expertise,
     required this.licenseNumber,
+    this.image,
     required this.schedule,
   });
 
@@ -19,6 +21,7 @@ class Doctor {
       name: json['name'] ?? '',
       expertise: json['expertise'] ?? '',
       licenseNumber: json['license_number'] ?? '',
+      image: json['image'],
       schedule: (json['schedule'] as List<dynamic>?)
               ?.map((s) => Schedule.fromJson(s))
               .toList() ??
@@ -32,6 +35,7 @@ class Doctor {
       'name': name,
       'expertise': expertise,
       'license_number': licenseNumber,
+      if (image != null) 'image': image,
       'schedule': schedule.map((s) => s.toJson()).toList(),
     };
   }
