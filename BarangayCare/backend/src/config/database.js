@@ -50,5 +50,8 @@ export const collections = {
   admins: () => getDB().collection('admins'),
   medicineRequests: () => getDB().collection('medicine_requests'),
   stockHistory: () => getDB().collection('stock_history'),
+  chatMessages: () => getDB().collection('chat_messages'),
+  faqDatabase: () => getDB().collection('faq_database'),
+  symptomDatabase: () => getDB().collection('symptom_database'),
 };
 
