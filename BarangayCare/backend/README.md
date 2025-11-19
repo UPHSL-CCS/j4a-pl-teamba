@@ -26,13 +26,21 @@ npm install
 
 ### 2. Configure Environment Variables
 
-Copy `.env.example` to `.env`:
+Copy `env.example` to `.env`:
 
 ```bash
-cp .env.example .env
+cp env.example .env
 ```
 
-Update the `.env` file with your credentials (already configured for development).
+Update the `.env` file with your credentials (already configured for development).  
+Make sure to include:
+
+| Variable | Description |
+| --- | --- |
+| `MONGODB_URI` | MongoDB connection string |
+| `FIREBASE_PROJECT_ID` | Firebase project identifier |
+| `GEMINI_API_KEY` | Google Gemini API key used by the chatbot |
+| `ALLOWED_ORIGINS` | Comma-separated list of allowed frontend origins |
 
 ### 3. Firebase Admin SDK Setup
 

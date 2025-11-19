@@ -10,6 +10,8 @@
     "seed:medicines": "node scripts/seed-medicines.js",
     "seed:doctors": "node scripts/seed-doctors.js",
     "seed:admin": "node scripts/seed-admin.js",
+    "seed:faq": "node scripts/seed-faq.js",
+    "seed:symptoms": "node scripts/seed-symptoms.js",
     "update:admin-uid": "node scripts/update-admin-uid.js"
   },
   "keywords": [
@@ -20,14 +22,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "hono": "^4.0.0",
+    "@google/generative-ai": "^0.24.1",
     "@hono/node-server": "^1.8.0",
-    "mongodb": "^6.3.0",
+    "dotenv": "^16.4.0",
     "firebase-admin": "^12.0.0",
-    "dotenv": "^16.4.0"
+    "hono": "^4.0.0",
+    "mongodb": "^6.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0"
   }
 }
-
