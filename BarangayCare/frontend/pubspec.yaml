@@ -30,6 +30,20 @@ dependencies:
   # Date & Time
   intl: ^0.18.0
   table_calendar: ^3.0.9
+  
+  # File & Media
+  image_picker: ^1.1.2
+  file_picker: ^8.1.2
+  
+  # Utilities
+  url_launcher: ^6.3.1
+  geolocator: ^10.1.0
+  google_maps_flutter: ^2.5.0
+  
+  # Charts & Reports
+  fl_chart: ^0.69.0
+  pdf: ^3.11.1
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:
