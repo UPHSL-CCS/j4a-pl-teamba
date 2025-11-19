@@ -6,6 +6,7 @@ import '../medicine/medicine_list_screen.dart';
 import '../profile/my_profile_screen.dart';
 import '../booking/doctor_list_screen.dart';
 import '../chatbot/chatbot_screen.dart';
+import '../health_records/health_records_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -115,6 +116,21 @@ class HomeScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => const MyProfileScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.folder_shared,
+                        title: 'Health Records',
+                        subtitle: 'View records & vitals',
+                        color: Colors.indigo,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HealthRecordsScreen(),
                             ),
                           );
                         },
