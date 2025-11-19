@@ -25,4 +25,9 @@ class ApiConfig {
 
   // Admin endpoints
   static String get adminDashboardStats => '$baseUrl/admin/dashboard/stats';
+
+  // Chatbot endpoints
+  static String get chatbotMessage => '$baseUrl/chatbot/message';
+  static String get chatbotHistory => '$baseUrl/chatbot/history';
+  static String get chatbotFaq => '$baseUrl/chatbot/faq';
 }

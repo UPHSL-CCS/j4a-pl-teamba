@@ -79,6 +79,29 @@ class ApiService {
     }
   }
 
+  // Generic DELETE request
+  static Future<Map<String, dynamic>> delete(String url,
+      {String? token}) async {
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: _headers(token),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        if (response.body.isEmpty) {
+          return {'success': true};
+        }
+        return json.decode(response.body);
+      } else {
+        throw Exception(
+            json.decode(response.body)['error'] ?? 'Request failed');
+      }
+    } catch (e) {
+      throw Exception('Network error: $e');
+    }
+  }
+
   // Auth Services
   static Future<Map<String, dynamic>> registerPatient({
     required String name,
