@@ -39,21 +39,30 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
         throw Exception('Not authenticated');
       }
 
+      print('🔍 Loading prescriptions...');
+      
       // Get patient profile to get patient_id
       final profile = await ApiService.getProfile(token);
+      print('📋 Profile: $profile');
       final patientId = profile['_id'];
+      print('👤 Patient ID: $patientId');
 
       // Get prescriptions
       final prescriptions = await _prescriptionService.getPatientPrescriptions(
         patientId: patientId,
         status: _filter == 'active' ? 'active' : null,
       );
+      
+      print('📦 Received ${prescriptions.length} prescriptions');
+      print('📦 Raw data: $prescriptions');
 
       setState(() {
         _prescriptions = prescriptions;
         _isLoading = false;
       });
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('❌ Error loading prescriptions: $e');
+      print('📍 Stack trace: $stackTrace');
       setState(() {
         _error = e.toString();
         _isLoading = false;
@@ -273,7 +282,20 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
         padding: const EdgeInsets.all(16),
         itemCount: _prescriptions.length,
         itemBuilder: (context, index) {
-          return _buildPrescriptionCard(_prescriptions[index]);
+          try {
+            return _buildPrescriptionCard(_prescriptions[index]);
+          } catch (e, stackTrace) {
+            print('❌ Error building prescription card $index: $e');
+            print('📦 Prescription data: ${_prescriptions[index]}');
+            print('📍 Stack trace: $stackTrace');
+            return Card(
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text('Error loading prescription: $e'),
+              ),
+            );
+          }
         },
       ),
     );
