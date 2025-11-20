@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../services/api_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../config/api_config.dart';
+import '../../services/prescription_management_service.dart';
 
 class MedicineRequestDetailScreen extends StatefulWidget {
   final String requestId;
@@ -20,6 +21,7 @@ class MedicineRequestDetailScreen extends StatefulWidget {
 
 class _MedicineRequestDetailScreenState extends State<MedicineRequestDetailScreen> {
   Map<String, dynamic>? _request;
+  Map<String, dynamic>? _prescription;
   bool _isLoading = true;
   bool _isProcessing = false;
   final TextEditingController _notesController = TextEditingController();
@@ -52,10 +54,28 @@ class _MedicineRequestDetailScreenState extends State<MedicineRequestDetailScree
         widget.requestId,
         token: token,
       );
+      
       setState(() {
         _request = response;
-        _isLoading = false;
       });
+
+      // If request has prescription_id, fetch prescription details
+      if (response['prescription_id'] != null) {
+        try {
+          final prescriptionService = PrescriptionService();
+          final prescriptionData = await prescriptionService.getPrescriptionById(
+            response['prescription_id'],
+          );
+          setState(() {
+            _prescription = prescriptionData;
+          });
+        } catch (e) {
+          print('⚠️ Error loading prescription: $e');
+          // Continue even if prescription fails to load
+        }
+      }
+      
+      setState(() => _isLoading = false);
     } catch (e) {
       print('❌ Error loading request details: $e');
       setState(() => _isLoading = false);
@@ -365,10 +385,73 @@ class _MedicineRequestDetailScreenState extends State<MedicineRequestDetailScree
                       ),
                       const SizedBox(height: 16),
 
-                      // Prescription Card (if uploaded)
+                      // Prescription Details Card (if linked to prescription)
+                      if (_prescription != null) ...[
+                        _buildInfoCard(
+                          title: 'Prescription Details',
+                          icon: Icons.medical_information,
+                          children: [
+                            // Verification Badge
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: Colors.green[50],
+                                border: Border.all(color: Colors.green),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.verified, size: 16, color: Colors.green[700]),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Verified Prescription',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green[700],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildInfoRow('Doctor', _prescription!['doctor_name'] ?? 'Unknown'),
+                            _buildInfoRow('Diagnosis', _prescription!['diagnosis'] ?? 'N/A'),
+                            if (_prescription!['notes'] != null && _prescription!['notes'].toString().isNotEmpty)
+                              _buildInfoRow('Doctor Notes', _prescription!['notes']),
+                            _buildInfoRow(
+                              'Issued Date',
+                              _prescription!['issued_date'] != null
+                                  ? _formatDateTime(DateTime.parse(_prescription!['issued_date']))
+                                  : 'N/A',
+                            ),
+                            _buildInfoRow(
+                              'Expiry Date',
+                              _prescription!['expiry_date'] != null
+                                  ? _formatDateTime(DateTime.parse(_prescription!['expiry_date']))
+                                  : 'N/A',
+                            ),
+                            const Divider(height: 24),
+                            // Prescribed Medicine Details
+                            const Text(
+                              'Prescribed Medicine Details:',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            ..._buildPrescribedMedicineDetails(),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                      
+                      // Prescription Upload Card (if uploaded image)
                       if (_request!['prescription_url'] != null) ...[
                         _buildInfoCard(
-                          title: 'Prescription',
+                          title: 'Uploaded Prescription',
                           icon: Icons.upload_file,
                           children: [
                             ElevatedButton.icon(
@@ -611,5 +694,154 @@ class _MedicineRequestDetailScreenState extends State<MedicineRequestDetailScree
   String _formatDateTime(DateTime dt) {
     return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
         '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  }
+
+  List<Widget> _buildPrescribedMedicineDetails() {
+    if (_prescription == null || _prescription!['medicines'] == null) {
+      return [const Text('No medicine details available', style: TextStyle(fontSize: 12, color: Colors.grey))];
+    }
+
+    final medicines = _prescription!['medicines'] as List;
+    final requestedMedicineId = _request!['medicine_id'];
+    final requestedQuantity = _request!['quantity_requested'] ?? _request!['quantity'];
+
+    // Find the matching medicine in prescription
+    final prescribedMedicine = medicines.firstWhere(
+      (med) => med['medicine_id'] == requestedMedicineId,
+      orElse: () => null,
+    );
+
+    if (prescribedMedicine == null) {
+      return [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.orange[50],
+            border: Border.all(color: Colors.orange),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.warning, size: 16, color: Colors.orange[700]),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  'Warning: Requested medicine not found in prescription',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ];
+    }
+
+    final prescribedQuantity = prescribedMedicine['quantity'] ?? 0;
+    final isQuantityValid = requestedQuantity <= prescribedQuantity;
+
+    return [
+      Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.grey[50],
+          border: Border.all(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildInfoRow('Medicine', prescribedMedicine['medicine_name'] ?? 'Unknown'),
+            _buildInfoRow('Dosage', prescribedMedicine['dosage'] ?? 'N/A'),
+            _buildInfoRow('Frequency', prescribedMedicine['frequency'] ?? 'N/A'),
+            if (prescribedMedicine['instructions'] != null && prescribedMedicine['instructions'].toString().isNotEmpty)
+              _buildInfoRow('Instructions', prescribedMedicine['instructions']),
+            const Divider(height: 16),
+            // Quantity Comparison
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Prescribed Qty',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Text(
+                        '$prescribedQuantity',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.arrow_forward, color: Colors.grey),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Requested Qty',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Text(
+                        '$requestedQuantity',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: isQuantityValid ? Colors.green : Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            // Validation Badge
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: isQuantityValid ? Colors.green[50] : Colors.red[50],
+                border: Border.all(
+                  color: isQuantityValid ? Colors.green : Colors.red,
+                ),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    isQuantityValid ? Icons.check_circle : Icons.error,
+                    size: 14,
+                    color: isQuantityValid ? Colors.green[700] : Colors.red[700],
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    isQuantityValid
+                        ? 'Quantity within prescribed limit'
+                        : 'Quantity exceeds prescribed amount',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: isQuantityValid ? Colors.green[700] : Colors.red[700],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
   }
 }
