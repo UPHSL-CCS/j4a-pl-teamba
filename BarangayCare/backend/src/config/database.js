@@ -53,5 +53,10 @@ export const collections = {
   chatMessages: () => getDB().collection('chat_messages'),
   faqDatabase: () => getDB().collection('faq_database'),
   symptomDatabase: () => getDB().collection('symptom_database'),
+  // Health Records collections
+  consultationNotes: () => getDB().collection('consultation_notes'),
+  vitalSigns: () => getDB().collection('vital_signs'),
+  medicalDocuments: () => getDB().collection('medical_documents'),
+  patientConditions: () => getDB().collection('patient_conditions'),
 };
 

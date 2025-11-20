@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/api_service.dart';
+import '../../services/health_records_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -62,6 +63,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         contact: _contactController.text.trim(),
         token: token!,
       );
+
+      // Step 3: Create health profile for the new user
+      try {
+        await HealthRecordsService.createHealthProfile(token, {
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'contact_number': _contactController.text.trim(),
+        });
+      } catch (e) {
+        // Health profile creation is optional - don't block registration if it fails
+        print('Note: Health profile creation failed, user can create it later: $e');
+      }
 
       if (!mounted) return;
 
