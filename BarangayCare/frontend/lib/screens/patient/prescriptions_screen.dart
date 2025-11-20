@@ -86,9 +86,10 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Prescribed: ${medicine['quantity']} ${medicine['dosage']}'),
+              Text('Prescribed: ${medicine['quantity'] ?? 0} ${medicine['dosage'] ?? 'N/A'}'),
               const SizedBox(height: 8),
-              Text('Instructions: ${medicine['instructions']}'),
+              if (medicine['instructions'] != null && medicine['instructions'].toString().isNotEmpty)
+                Text('Instructions: ${medicine['instructions']}'),
               const SizedBox(height: 16),
               TextField(
                 controller: quantityController,
@@ -345,7 +346,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Dr. ${prescription['doctor_name']}',
+                  'Dr. ${prescription['doctor_name'] ?? 'Unknown'}',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -434,7 +435,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  medicine['medicine_name'],
+                  medicine['medicine_name'] ?? 'Unknown Medicine',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -444,11 +445,12 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          _buildMedicineDetail('Dosage', medicine['dosage']),
-          _buildMedicineDetail('Quantity', '${medicine['quantity']}'),
-          if (medicine['frequency'] != null && medicine['frequency'].isNotEmpty)
+          _buildMedicineDetail('Dosage', medicine['dosage'] ?? 'N/A'),
+          _buildMedicineDetail('Quantity', '${medicine['quantity'] ?? 0}'),
+          if (medicine['frequency'] != null && medicine['frequency'].toString().isNotEmpty)
             _buildMedicineDetail('Frequency', medicine['frequency']),
-          _buildMedicineDetail('Instructions', medicine['instructions']),
+          if (medicine['instructions'] != null && medicine['instructions'].toString().isNotEmpty)
+            _buildMedicineDetail('Instructions', medicine['instructions']),
           
           if (canRequest) ...[
             const SizedBox(height: 12),
