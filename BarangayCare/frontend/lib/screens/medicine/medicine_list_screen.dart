@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/api_service.dart';
+import '../prescription/upload_prescription_screen.dart';
 
 class MedicineListScreen extends StatefulWidget {
   const MedicineListScreen({super.key});
@@ -47,66 +48,6 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
 
   Future<void> _requestMedicine(Map<String, dynamic> medicine) async {
     final quantityController = TextEditingController(text: '1');
-    final bool requiresPrescription = medicine['is_prescription_required'] ?? false;
-
-    // Check if prescription is required and show warning dialog
-    if (requiresPrescription) {
-      await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Row(
-            children: [
-              Icon(Icons.warning_amber, color: Colors.orange),
-              SizedBox(width: 8),
-              Flexible(
-                child: Text('Prescription Required'),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${medicine['med_name']} requires a prescription.',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'You must complete a consultation with a doctor first before requesting this medicine.',
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.info_outline, size: 20, color: Colors.blue),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Book a consultation from the home screen.',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-      return; // Exit without requesting
-    }
 
     final result = await showDialog<bool>(
       context: context,
@@ -155,13 +96,20 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
 
     if (result == true) {
       await _submitRequest(
-        medicine['_id'].toString(),
-        int.tryParse(quantityController.text) ?? 1,
+        medicineId: medicine['_id'].toString(),
+        medicineName: medicine['med_name']?.toString() ?? 'Unknown Medicine',
+        quantity: int.tryParse(quantityController.text) ?? 1,
+        requiresPrescription: medicine['is_prescription_required'] ?? false,
       );
     }
   }
 
-  Future<void> _submitRequest(String medicineId, int quantity) async {
+  Future<void> _submitRequest({
+    required String medicineId,
+    required String medicineName,
+    required int quantity,
+    required bool requiresPrescription,
+  }) async {
     try {
       // Show loading
       if (!mounted) return;
@@ -180,7 +128,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
         throw Exception('Not authenticated');
       }
 
-      await ApiService.requestMedicine(
+      final response = await ApiService.requestMedicine(
         medicineId: medicineId,
         quantity: quantity,
         token: token,
@@ -189,12 +137,37 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
       if (!mounted) return;
       Navigator.of(context).pop(); // Close loading
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Medicine request submitted successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      // Extract request ID from response
+      final requestId = response['data']?['_id']?.toString();
+
+      // If prescription required and request created successfully, navigate to upload screen
+      if (requiresPrescription && requestId != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Request created! Please upload your prescription.'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate to upload prescription screen
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UploadPrescriptionScreen(
+              requestId: requestId,
+              medicineName: medicineName,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Medicine request submitted successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
 
       // Reload medicines to update stock
       _loadMedicines();
@@ -202,12 +175,72 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
       if (!mounted) return;
       Navigator.of(context).pop(); // Close loading
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to request medicine: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      // Check if error is about missing consultation
+      final errorMessage = e.toString();
+      if (errorMessage.contains('complete a consultation first') ||
+          errorMessage.contains('Prescription required')) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Row(
+              children: [
+                Icon(Icons.warning_amber, color: Colors.orange),
+                SizedBox(width: 8),
+                Flexible(
+                  child: Text('Prescription Required'),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'This medicine requires a prescription.',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'You must complete a consultation with a doctor first before requesting this medicine.',
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 20, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Book a consultation from the home screen.',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to request medicine: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
