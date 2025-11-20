@@ -1,5 +1,5 @@
-const multer = require('multer');
-const path = require('path');
+import multer from 'multer';
+import path from 'path';
 
 // Configure storage
 const storage = multer.diskStorage({
@@ -36,4 +36,4 @@ const upload = multer({
 });
 
 // Export middleware for prescription upload
-exports.uploadPrescription = upload.single('prescription');
+export const uploadPrescription = upload.single('prescription');

@@ -1,8 +1,8 @@
-const { Hono } = require('hono');
-const { uploadPrescription } = require('../middleware/upload');
-const { collections } = require('../config/database');
-const { ObjectId } = require('mongodb');
-const { authenticate } = require('../middleware/auth');
+import { Hono } from 'hono';
+import { uploadPrescription } from '../middleware/upload.js';
+import { collections } from '../config/database.js';
+import { ObjectId } from 'mongodb';
+import { authMiddleware as authenticate } from '../middleware/auth.middleware.js';
 
 const prescription = new Hono();
 
@@ -118,4 +118,4 @@ prescription.get('/:requestId', authenticate, async (c) => {
   }
 });
 
-module.exports = prescription;
+export default prescription;
