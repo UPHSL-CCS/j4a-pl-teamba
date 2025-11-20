@@ -11,6 +11,7 @@ import { seedAppointmentsIfEmpty } from '../scripts/seed-appointments.js';
 import { seedFaqIfEmpty } from '../scripts/seed-faq.js';
 import { seedSymptomsIfEmpty } from '../scripts/seed-symptoms.js';
 import { seedSampleRecordsIfEmpty } from '../scripts/seed-sample-records.js';
+import { seedEmergencyContactsIfEmpty } from '../scripts/seed-emergency-contacts.js';
 
 // Import routes
 import authRoutes from './routes/auth.route.js';
@@ -21,6 +22,7 @@ import adminRoutes from './routes/admin.js';
 import chatbotRoutes from './routes/chatbot.route.js';
 import prescriptionRoutes from './routes/prescription.route.js';
 import healthRecordsRoutes from './routes/healthRecords.route.js';
+import emergencyRoutes from './routes/emergency.route.js';
 
 // Import middleware
 import { authMiddleware as authenticate } from './middleware/auth.middleware.js';
@@ -53,6 +55,7 @@ app.route('/api/doctors', doctorsRoutes);
 app.route('/api/medicine', medicineRoutes);
 app.route('/api/chatbot', chatbotRoutes);
 app.route('/api/health-records', healthRecordsRoutes);
+app.route('/api/emergency', emergencyRoutes);
 
 // Prescription routes - protected by authentication
 app.use('/api/prescriptions/*', authenticate);
@@ -113,6 +116,9 @@ const PORT = process.env.PORT || 3000;
 
     // Auto-seed sample health records
     await seedSampleRecordsIfEmpty();
+
+    // Auto-seed emergency contacts if empty
+    await seedEmergencyContactsIfEmpty();
 
     // Start server - listen on all network interfaces (0.0.0.0)
     // This allows connections from physical devices on the same network

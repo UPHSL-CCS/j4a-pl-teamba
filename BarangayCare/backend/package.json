@@ -13,6 +13,7 @@
     "seed:faq": "node scripts/seed-faq.js",
     "seed:symptoms": "node scripts/seed-symptoms.js",
     "seed:health-records": "node scripts/seed-sample-records.js",
+    "seed:emergency-contacts": "node scripts/seed-emergency-contacts.js",
     "update:admin-uid": "node scripts/update-admin-uid.js"
   },
   "keywords": [
