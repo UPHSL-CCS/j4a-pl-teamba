@@ -141,7 +141,7 @@ prescriptions.get('/patient/:patient_id', authMiddleware, async (c) => {
     }
 
     // Check if user is accessing their own prescriptions
-    if (patient.user_id !== userId && !c.get('isAdmin')) {
+    if (patient.firebase_uid !== userId && !c.get('isAdmin')) {
       return c.json({ error: 'Unauthorized access' }, 403);
     }
 
@@ -208,7 +208,7 @@ prescriptions.get('/:id', authMiddleware, async (c) => {
       _id: prescriptionData.patient_id
     });
 
-    if (patient && patient.user_id !== userId && !c.get('isAdmin')) {
+    if (patient && patient.firebase_uid !== userId && !c.get('isAdmin')) {
       return c.json({ error: 'Unauthorized access' }, 403);
     }
 
