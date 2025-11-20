@@ -4,6 +4,7 @@ import '../../providers/auth_provider.dart';
 import '../../services/api_service.dart';
 import '../prescription/upload_prescription_screen.dart';
 import '../booking/doctor_list_screen.dart';
+import '../patient/prescriptions_screen.dart';
 
 class MedicineListScreen extends StatefulWidget {
   const MedicineListScreen({super.key});
@@ -86,6 +87,20 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Close'),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigate to prescriptions screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PrescriptionsScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.receipt_long),
+              label: const Text('View Prescriptions'),
             ),
             ElevatedButton.icon(
               onPressed: () {

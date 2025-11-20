@@ -8,6 +8,7 @@ import '../booking/doctor_list_screen.dart';
 import '../chatbot/chatbot_screen.dart';
 import '../health_records/health_records_screen.dart';
 import '../emergency/emergency_contacts_screen.dart';
+import '../patient/prescriptions_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -86,6 +87,21 @@ class HomeScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => const MedicineListScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.receipt_long,
+                        title: 'My Prescriptions',
+                        subtitle: 'View & request medicines',
+                        color: Colors.cyan,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrescriptionsScreen(),
                             ),
                           );
                         },
