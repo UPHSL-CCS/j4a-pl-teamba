@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/api_service.dart';
+import '../../services/prescription_management_service.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentDetailScreen extends StatefulWidget {
@@ -185,14 +186,39 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Appointment marked as completed'),
-          backgroundColor: Colors.blue,
+      // Ask if admin wants to create prescription
+      final createPrescription = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Appointment Completed'),
+          content: const Text('Would you like to create a prescription for this patient?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Not Now'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Create Prescription'),
+            ),
+          ],
         ),
       );
 
-      Navigator.of(context).pop(true);
+      if (!mounted) return;
+
+      if (createPrescription == true) {
+        // Navigate to prescription creation screen
+        await _showCreatePrescriptionDialog();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Appointment marked as completed'),
+            backgroundColor: Colors.blue,
+          ),
+        );
+        Navigator.of(context).pop(true);
+      }
     } catch (e) {
       if (!mounted) return;
 
@@ -207,6 +233,294 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         setState(() => _processing = false);
       }
     }
+  }
+
+  Future<void> _showCreatePrescriptionDialog() async {
+    final prescriptionService = PrescriptionService();
+    final diagnosisController = TextEditingController();
+    final notesController = TextEditingController();
+    int validDays = 30;
+    List<Map<String, dynamic>> prescribedMedicines = [];
+
+    // Fetch available medicines
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final token = await authProvider.user?.getIdToken();
+    
+    if (token == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Not authenticated'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    List<Map<String, dynamic>> availableMedicines = [];
+    try {
+      final medicinesData = await ApiService.getMedicines(token: token);
+      availableMedicines = List<Map<String, dynamic>>.from(medicinesData);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load medicines: $e'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Create Prescription'),
+          content: SingleChildScrollView(
+            child: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Diagnosis field
+                  TextField(
+                    controller: diagnosisController,
+                    decoration: const InputDecoration(
+                      labelText: 'Diagnosis *',
+                      border: OutlineInputBorder(),
+                      hintText: 'e.g., Common Cold, Hypertension',
+                    ),
+                    maxLines: 2,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Notes field
+                  TextField(
+                    controller: notesController,
+                    decoration: const InputDecoration(
+                      labelText: 'Doctor Notes',
+                      border: OutlineInputBorder(),
+                      hintText: 'Additional instructions or observations',
+                    ),
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Valid days dropdown
+                  DropdownButtonFormField<int>(
+                    value: validDays,
+                    decoration: const InputDecoration(
+                      labelText: 'Prescription Validity',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: [7, 14, 30, 60, 90].map((days) {
+                      return DropdownMenuItem(
+                        value: days,
+                        child: Text('$days days'),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setDialogState(() {
+                        validDays = value ?? 30;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Medicines section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Prescribed Medicines',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle, color: Colors.blue),
+                        onPressed: () {
+                          setDialogState(() {
+                            prescribedMedicines.add({
+                              'medicine_id': '',
+                              'medicine_name': '',
+                              'dosage': '',
+                              'quantity': 1,
+                              'instructions': 'Take as directed',
+                              'frequency': '',
+                            });
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Medicine list
+                  if (prescribedMedicines.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Center(
+                        child: Text('No medicines added yet. Click + to add.'),
+                      ),
+                    ),
+
+                  ...prescribedMedicines.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final medicine = entry.value;
+                    
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Medicine ${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                                  onPressed: () {
+                                    setDialogState(() {
+                                      prescribedMedicines.removeAt(index);
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            DropdownButtonFormField<String>(
+                              value: medicine['medicine_id']?.isEmpty ?? true ? null : medicine['medicine_id'],
+                              decoration: const InputDecoration(
+                                labelText: 'Select Medicine',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                              items: availableMedicines.map((med) {
+                                return DropdownMenuItem<String>(
+                                  value: med['_id'].toString(),
+                                  child: Text(med['med_name']),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setDialogState(() {
+                                  final selectedMed = availableMedicines.firstWhere(
+                                    (m) => m['_id'].toString() == value,
+                                  );
+                                  prescribedMedicines[index]['medicine_id'] = value;
+                                  prescribedMedicines[index]['medicine_name'] = selectedMed['med_name'];
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              decoration: const InputDecoration(
+                                labelText: 'Dosage (e.g., 500mg, 10ml)',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                              onChanged: (value) {
+                                prescribedMedicines[index]['dosage'] = value;
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Quantity',
+                                      border: OutlineInputBorder(),
+                                      isDense: true,
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      prescribedMedicines[index]['quantity'] = int.tryParse(value) ?? 1;
+                                    },
+                                    controller: TextEditingController(text: '1'),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Frequency',
+                                      border: OutlineInputBorder(),
+                                      isDense: true,
+                                      hintText: '2x daily',
+                                    ),
+                                    onChanged: (value) {
+                                      prescribedMedicines[index]['frequency'] = value;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              decoration: const InputDecoration(
+                                labelText: 'Instructions',
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                              onChanged: (value) {
+                                prescribedMedicines[index]['instructions'] = value;
+                              },
+                              controller: TextEditingController(text: 'Take as directed'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: prescribedMedicines.isEmpty || diagnosisController.text.trim().isEmpty
+                  ? null
+                  : () async {
+                      // Create prescription
+                      try {
+                        await prescriptionService.createPrescription(
+                          appointmentId: widget.appointment['_id'],
+                          patientId: widget.appointment['patient_id'],
+                          medicines: prescribedMedicines,
+                          diagnosis: diagnosisController.text.trim(),
+                          notes: notesController.text.trim(),
+                          validDays: validDays,
+                        );
+
+                        if (!context.mounted) return;
+
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Prescription created successfully!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Navigator.of(context).pop(true);
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Error creating prescription: $e'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+              child: const Text('Create Prescription'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override

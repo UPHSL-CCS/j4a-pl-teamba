@@ -210,13 +210,20 @@ class ApiService {
     required String medicineId,
     required int quantity,
     required String token,
+    String? prescriptionId,
   }) async {
+    final body = {
+      'medicine_id': medicineId,
+      'quantity': quantity,
+    };
+    
+    if (prescriptionId != null) {
+      body['prescription_id'] = prescriptionId;
+    }
+    
     return await post(
         ApiConfig.requestMedicine,
-        {
-          'medicine_id': medicineId,
-          'quantity': quantity,
-        },
+        body,
         token: token);
   }
 
