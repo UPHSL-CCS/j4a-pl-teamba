@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/api_service.dart';
 import '../prescription/upload_prescription_screen.dart';
+import '../booking/doctor_list_screen.dart';
 
 class MedicineListScreen extends StatefulWidget {
   const MedicineListScreen({super.key});
@@ -89,8 +90,13 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Navigate to appointments/consultations screen
-                // You can add navigation here if needed
+                // Navigate to doctor list screen to book consultation
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DoctorListScreen(),
+                  ),
+                );
               },
               icon: const Icon(Icons.calendar_today),
               label: const Text('Book Consultation'),
