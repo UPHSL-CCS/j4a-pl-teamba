@@ -21,9 +21,9 @@
 - Database: emergency_contacts, emergency_logs collections
 
 **Your Tasks:**
-- [ ] Week 1: Backend API + seeding sample contacts
-- [ ] Week 2: Frontend UI + call/SMS integration
-- [ ] Week 3: Location services + maps + testing
+- [x] Week 1: Backend API + seeding sample contacts *(see `backend/src/routes/emergency.route.js`, `scripts/seed-emergency-contacts.js` - 12 contacts with geospatial search)*
+- [x] Week 2: Frontend UI + call/SMS integration *(see `frontend/lib/screens/emergency/emergency_contacts_screen.dart`, `lib/services/emergency_service.dart` - quick dial + url_launcher)*
+- [x] Week 3: Location services + maps + testing *(geolocator integration, nearest finder with 10km radius, emergency action logging complete)*
 
 ---
 
@@ -65,9 +65,9 @@
 - Database: Updated medicine_requests, prescription_files
 
 **Your Tasks:**
-- [ ] Week 1: Backend file upload + approval logic
-- [ ] Week 2: Frontend upload UI + patient tracking
-- [ ] Week 3: Admin dashboard + review system + testing
+- [x] Week 1: Backend file upload + approval logic *(see `backend/src/routes/prescription.route.js`, `middleware/upload.js` - multer with 5MB limit, image validation)*
+- [x] Week 2: Frontend upload UI + patient tracking *(see `frontend/lib/screens/prescription/upload_prescription_screen.dart`, `lib/services/prescription_service.dart` - camera/gallery picker)*
+- [x] Week 3: Admin dashboard + review system + testing *(admin view integrated in `medicine_request_detail_screen.dart` - prescription viewer with zoom/pan, tested on emulator)*
 
 ---
 
@@ -107,10 +107,10 @@
 | Agatha | Create health records collections, service module, consultation notes, vitals API |
 
 **Week 1 Deliverables:**
-- [ ] All database schemas created
-- [ ] All API endpoints working
-- [ ] Sample data seeded
-- [ ] Postman/API testing complete
+- [x] All database schemas created
+- [x] All API endpoints working
+- [x] Sample data seeded
+- [x] Postman/API testing complete
 
 ---
 
@@ -125,10 +125,10 @@
 | Agatha | Health records screen, consultation history, vital signs input form |
 
 **Week 2 Deliverables:**
-- [ ] All screens designed and functional
-- [ ] API integration complete
-- [ ] Basic error handling
-- [ ] Navigation working
+- [x] All screens designed and functional
+- [x] API integration complete
+- [x] Basic error handling
+- [x] Navigation working
 
 ---
 
@@ -143,10 +143,10 @@
 | Agatha | Health trends charts, PDF report generation, analytics dashboard |
 
 **Week 3 Deliverables:**
-- [ ] Advanced features complete
-- [ ] Admin features working
-- [ ] Charts and visualizations
-- [ ] PDF generation
+- [x] Advanced features complete (Jorome & Larie)
+- [x] Admin features working (Larie's prescription review)
+- [ ] Charts and visualizations (Agatha pending)
+- [ ] PDF generation (Agatha pending)
 
 ---
 
