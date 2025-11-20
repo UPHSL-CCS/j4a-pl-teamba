@@ -58,5 +58,8 @@ export const collections = {
   vitalSigns: () => getDB().collection('vital_signs'),
   medicalDocuments: () => getDB().collection('medical_documents'),
   patientConditions: () => getDB().collection('patient_conditions'),
+  // Emergency contacts collections
+  emergencyContacts: () => getDB().collection('emergency_contacts'),
+  emergencyLogs: () => getDB().collection('emergency_logs'),
 };
 
