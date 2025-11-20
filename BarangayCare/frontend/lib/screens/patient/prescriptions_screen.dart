@@ -44,7 +44,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       // Get patient profile to get patient_id
       final profile = await ApiService.getProfile(token);
       print('📋 Profile: $profile');
-      final patientId = profile['_id'];
+      final patientId = profile['patient']['_id'];
       print('👤 Patient ID: $patientId');
 
       // Get prescriptions
