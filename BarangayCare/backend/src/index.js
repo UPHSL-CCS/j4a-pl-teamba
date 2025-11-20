@@ -18,6 +18,7 @@ import doctorsRoutes from './routes/doctors.route.js';
 import medicineRoutes from './routes/medicine.route.js';
 import adminRoutes from './routes/admin.js';
 import chatbotRoutes from './routes/chatbot.route.js';
+import prescriptionRoutes from './routes/prescription.route.js';
 
 // Import middleware
 import { authMiddleware as authenticate } from './middleware/auth.middleware.js';
@@ -50,9 +51,19 @@ app.route('/api/doctors', doctorsRoutes);
 app.route('/api/medicine', medicineRoutes);
 app.route('/api/chatbot', chatbotRoutes);
 
+// Prescription routes - protected by authentication
+app.use('/api/prescriptions/*', authenticate);
+app.route('/api/prescriptions', prescriptionRoutes);
+
 // Admin routes - protected by authentication and admin middleware
 app.use('/api/admin/*', authenticate, adminOnly);
 app.route('/api/admin', adminRoutes);
+
+// Serve uploaded files (static file serving)
+app.use('/uploads/*', async (c) => {
+  const path = c.req.path.replace('/uploads/', '');
+  return c.json({ error: 'Static file serving not yet implemented. Use absolute file paths for now.' }, 501);
+});
 
 // Error handling
 app.onError((err, c) => {
