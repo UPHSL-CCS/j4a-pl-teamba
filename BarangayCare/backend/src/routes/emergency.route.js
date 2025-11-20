@@ -19,7 +19,7 @@ emergency.get('/contacts', authenticate, async (c) => {
       query.category = category;
     }
 
-    const contacts = await collections.emergency_contacts
+    const contacts = await collections.emergencyContacts()
       .find(query)
       .sort({ priority: 1, name: 1 })
       .toArray();
@@ -80,7 +80,7 @@ emergency.get('/nearest', authenticate, async (c) => {
       query.category = category;
     }
 
-    const nearestContacts = await collections.emergency_contacts
+    const nearestContacts = await collections.emergencyContacts()
       .find(query)
       .limit(limit)
       .toArray();
@@ -141,7 +141,7 @@ emergency.post('/log', authenticate, async (c) => {
       return c.json({ error: 'Invalid contact_id' }, 400);
     }
 
-    const contact = await collections.emergency_contacts.findOne({
+    const contact = await collections.emergencyContacts().findOne({
       _id: new ObjectId(contact_id)
     });
 
@@ -162,7 +162,7 @@ emergency.post('/log', authenticate, async (c) => {
       created_at: new Date()
     };
 
-    const result = await collections.emergency_logs.insertOne(emergencyLog);
+    const result = await collections.emergencyLogs().insertOne(emergencyLog);
 
     return c.json({
       success: true,
@@ -185,7 +185,7 @@ emergency.get('/logs', authenticate, async (c) => {
     const userId = c.get('user').uid;
     const limit = parseInt(c.req.query('limit')) || 50;
 
-    const logs = await collections.emergency_logs
+    const logs = await collections.emergencyLogs()
       .find({ user_id: userId })
       .sort({ timestamp: -1 })
       .limit(limit)
@@ -208,7 +208,7 @@ emergency.get('/logs', authenticate, async (c) => {
  */
 emergency.get('/categories', authenticate, async (c) => {
   try {
-    const categories = await collections.emergency_contacts.aggregate([
+    const categories = await collections.emergencyContacts().aggregate([
       { $match: { is_active: true } },
       {
         $group: {
