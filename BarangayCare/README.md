@@ -46,9 +46,7 @@ BarangayCare/
 │   │   └── middleware/ # Auth middleware
 │   └── README.md
 │
-├── BarangayCare.md   # Original project specification
-├── FEATURES.md       # Feature checklist
-└── README.md         # This file
+└── README.md         # This file (Phase 1 overview)
 ```
 
 ## 🔑 Key Features
@@ -169,7 +167,7 @@ See detailed setup instructions in:
 
 ## 📋 Feature Checklist
 
-See [FEATURES.md](./FEATURES.md) for the complete development checklist and progress tracking.
+Use the sprint tracker in [TEAM_TASK_ASSIGNMENTS.md](./TEAM_TASK_ASSIGNMENTS.md) for the current breakdown of deliverables per member.
 
 ## 🔐 Configuration
 
@@ -343,18 +341,25 @@ flutter test
 - Payment integration not included
 - Book Consultation UI in progress (assigned to teammates)
 
-### Future Enhancements 🚀
-- Real-time notifications for appointment confirmations
-- Admin panel for managing inventory and appointments
-- SMS notifications for appointment reminders
-- Integration with health insurance systems
+### Future Enhancements 🚀 → NOW IN DEVELOPMENT!
+**Phase 2 Enhancement** - NEW features being developed by the team:
+- 🚨 **Emergency Hotlines & Contacts** (Jorome)
+- 🤖 **AI Chatbot Assistant** (Anthony)
+- 💊 **Prescription Upload System** (Larie)
+- 📊 **Health Records & Analytics** (Agatha)
+
+See [Enhancement Documentation](#phase-2-enhancements) below for details.
 
 ## 📖 Documentation
 
-- [Original Project Specification](./BarangayCare.md)
+### Core System Documentation
 - [Backend API Documentation](./backend/README.md)
 - [Frontend App Documentation](./frontend/README.md)
-- [Feature Checklist](./FEATURES.md)
+
+### Phase 2 Enhancements (NEW!)
+- [📋 NEW Features Enhancement Plan](./NEW_FEATURES_ENHANCEMENT.md) - Complete technical specification
+- [👥 Team Task Assignments](./TEAM_TASK_ASSIGNMENTS.md) - Task breakdown per team member
+- [🗺️ Features Roadmap](./FEATURES_ROADMAP.md) - Visual overview & implementation guide
 
 ## 👥 Team
 
@@ -362,6 +367,12 @@ flutter test
 **Institution**: UPHSL (University of Perpetual Help System Laguna)  
 **Course**: Programming Languages (PL)  
 **Team**: Team BA
+
+### Phase 2 Development Team
+- **Jorome** - Emergency Hotlines & Contacts System
+- **Anthony** - AI Chatbot Assistant
+- **Larie** - Prescription Upload & Approval System
+- **Agatha** - Health Records & Analytics
 
 ## 📝 License
 
@@ -381,8 +392,8 @@ This is a class project, but suggestions and feedback are welcome:
 
 For questions or issues:
 - Check the documentation in each folder's README
-- Review the [FEATURES.md](./FEATURES.md) checklist
-- Consult the original specification in [BarangayCare.md](./BarangayCare.md)
+- Review the latest progress in [TEAM_TASK_ASSIGNMENTS.md](./TEAM_TASK_ASSIGNMENTS.md)
+- Consult [NEW_FEATURES_ENHANCEMENT.md](./NEW_FEATURES_ENHANCEMENT.md) for scope details
 
 ---
 

@@ -7,7 +7,6 @@
 
 ### 🚨 Jorome - Emergency Hotlines & Contacts
 **Complexity**: Medium  
-**Estimated Time**: 2-3 weeks
 
 **What You'll Build:**
 - Emergency contact directory
@@ -30,7 +29,6 @@
 
 ### 🤖 Anthony - AI Chatbot for Barangay Health
 **Complexity**: High  
-**Estimated Time**: 3 weeks
 
 **What You'll Build:**
 - Intelligent health chatbot
@@ -45,15 +43,14 @@
 - Database: chat_messages, faq_database, symptom_database
 
 **Your Tasks:**
-- [ ] Week 1: Backend chatbot logic + NLP + FAQ database
-- [ ] Week 2: Frontend chat UI + integration
-- [ ] Week 3: Improve responses + testing + refine
+- [x] Week 1: Backend chatbot logic + NLP + FAQ database *(see `backend/src/services/chatbotService.js`, `services/nlpService.js`, `services/symptomCheckerService.js`, and `scripts/seed-faq.js`)*
+- [x] Week 2: Frontend chat UI + integration *(see `frontend/lib/screens/chatbot/` + `lib/services/chatbot_service.dart`)*
+- [x] Week 3: Improve responses + testing + refine *(intent routing, Gemini fallback, bilingual support, and request queueing implemented; continue real-device testing)*
 
 ---
 
 ### 💊 Larie - Prescription Upload for Medicine Requests
 **Complexity**: High  
-**Estimated Time**: 3 weeks
 
 **What You'll Build:**
 - Upload prescription images/PDFs
@@ -76,7 +73,6 @@
 
 ### 📊 Agatha - Health Records & Appointment History
 **Complexity**: Medium-High  
-**Estimated Time**: 3 weeks
 
 **What You'll Build:**
 - Complete patient health profile
