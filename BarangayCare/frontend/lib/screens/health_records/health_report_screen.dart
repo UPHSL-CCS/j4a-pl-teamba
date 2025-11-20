@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/health_records_service.dart';
@@ -62,6 +63,40 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
     setState(() => _isGeneratingPDF = true);
 
     try {
+      // Request storage permission for Android
+      if (Platform.isAndroid) {
+        // Check Android SDK version
+        var status = await Permission.storage.status;
+        
+        // For Android 13+ (API 33+), use manageExternalStorage permission
+        if (Platform.isAndroid) {
+          // Try to get storage permission first
+          if (!status.isGranted) {
+            status = await Permission.storage.request();
+          }
+          
+          // If storage permission denied, try manageExternalStorage for Android 13+
+          if (!status.isGranted) {
+            var manageStatus = await Permission.manageExternalStorage.status;
+            if (!manageStatus.isGranted) {
+              manageStatus = await Permission.manageExternalStorage.request();
+              if (!manageStatus.isGranted) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Storage permission is required to save PDF reports. Please grant storage access in app settings.'),
+                      backgroundColor: Colors.orange,
+                      duration: Duration(seconds: 5),
+                    ),
+                  );
+                }
+                return;
+              }
+            }
+          }
+        }
+      }
+
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final token = await authProvider.getIdToken();
 
@@ -71,19 +106,37 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
 
       final pdfBytes = await HealthRecordsService.generateHealthReport(token);
 
-      // Save PDF to downloads
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath =
-          '${directory.path}/health_report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      // Save PDF to Downloads folder
+      Directory? directory;
+      if (Platform.isAndroid) {
+        // Use external storage Downloads directory for Android
+        directory = Directory('/storage/emulated/0/Download');
+        
+        // Fallback to external storage directory if Downloads not available
+        if (!await directory.exists()) {
+          directory = await getExternalStorageDirectory();
+        }
+      } else {
+        // Use application documents directory for other platforms
+        directory = await getApplicationDocumentsDirectory();
+      }
+
+      final fileName = 'health_report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final filePath = '${directory!.path}/$fileName';
       final file = File(filePath);
       await file.writeAsBytes(pdfBytes);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Report saved to: $filePath'),
+            content: Text('Report saved successfully: $fileName\nLocation: ${directory.path}'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'OK',
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
           ),
         );
       }
