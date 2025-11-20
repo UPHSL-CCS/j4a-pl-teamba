@@ -21,6 +21,7 @@ import medicineRoutes from './routes/medicine.route.js';
 import adminRoutes from './routes/admin.js';
 import chatbotRoutes from './routes/chatbot.route.js';
 import prescriptionRoutes from './routes/prescription.route.js';
+import prescriptionsRoutes from './routes/prescriptions.route.js';
 import healthRecordsRoutes from './routes/healthRecords.route.js';
 import emergencyRoutes from './routes/emergency.route.js';
 
@@ -59,7 +60,11 @@ app.route('/api/emergency', emergencyRoutes);
 
 // Prescription routes - protected by authentication
 app.use('/api/prescriptions/*', authenticate);
-app.route('/api/prescriptions', prescriptionRoutes);
+app.route('/api/prescriptions', prescriptionsRoutes);
+
+// Prescription upload routes (old prescription image upload)
+app.use('/api/prescription/*', authenticate);
+app.route('/api/prescription', prescriptionRoutes);
 
 // Admin routes - protected by authentication and admin middleware
 app.use('/api/admin/*', authenticate, adminOnly);

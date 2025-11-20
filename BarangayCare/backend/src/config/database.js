@@ -61,5 +61,7 @@ export const collections = {
   // Emergency contacts collections
   emergencyContacts: () => getDB().collection('emergency_contacts'),
   emergencyLogs: () => getDB().collection('emergency_logs'),
+  // Prescriptions collection
+  prescriptions: () => getDB().collection('prescriptions'),
 };
 

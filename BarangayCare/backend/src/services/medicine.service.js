@@ -16,7 +16,7 @@ export async function getAllMedicines() {
  * Handles concurrency: atomic stock update
  */
 export async function requestMedicine(firebaseUid, data) {
-  const { medicine_id, quantity } = data;
+  const { medicine_id, quantity, prescription_id } = data;
   
   // Validate input
   if (!medicine_id || !quantity || quantity <= 0) {
@@ -40,17 +40,53 @@ export async function requestMedicine(firebaseUid, data) {
   
   // Check if prescription is required
   if (medicine.is_prescription_required) {
-    // Check if patient has a completed appointment
-    const latestAppointment = await collections.appointments().findOne(
-      {
+    // If prescription_id is provided, validate it
+    if (prescription_id) {
+      const prescription = await collections.prescriptions().findOne({
+        _id: new ObjectId(prescription_id),
         patient_id: patient._id,
-        status: 'completed'
-      },
-      { sort: { date: -1, time: -1 } }
-    );
-    
-    if (!latestAppointment) {
-      throw new Error('Prescription required: Please complete a consultation first');
+        status: 'active'
+      });
+      
+      if (!prescription) {
+        throw new Error('Invalid or expired prescription');
+      }
+      
+      // Check if prescription has expired
+      if (new Date() > prescription.expiry_date) {
+        await collections.prescriptions().updateOne(
+          { _id: new ObjectId(prescription_id) },
+          { $set: { status: 'expired', updated_at: new Date() } }
+        );
+        throw new Error('Prescription has expired');
+      }
+      
+      // Verify the medicine is in the prescription
+      const prescribedMedicine = prescription.medicines.find(
+        m => m.medicine_id.toString() === medicine_id
+      );
+      
+      if (!prescribedMedicine) {
+        throw new Error('Medicine not found in prescription');
+      }
+      
+      // Validate quantity doesn't exceed prescribed amount
+      if (quantity > prescribedMedicine.quantity) {
+        throw new Error(`Requested quantity exceeds prescribed amount (${prescribedMedicine.quantity})`);
+      }
+    } else {
+      // No prescription provided - check if patient has completed appointment
+      const latestAppointment = await collections.appointments().findOne(
+        {
+          patient_id: patient._id,
+          status: 'completed'
+        },
+        { sort: { date: -1, time: -1 } }
+      );
+      
+      if (!latestAppointment) {
+        throw new Error('Prescription required: Please complete a consultation first');
+      }
     }
   }
   
@@ -63,15 +99,17 @@ export async function requestMedicine(firebaseUid, data) {
   // Stock will only be deducted when admin approves the request
   const request = {
     patient_id: patient._id,
+    patient_uid: firebaseUid,
     medicine_id: new ObjectId(medicine_id),
     medicine_name: medicine.med_name,
     quantity,
+    prescription_id: prescription_id ? new ObjectId(prescription_id) : null,
     status: 'pending', // Requires admin approval
     created_at: new Date(),
     updated_at: new Date()
   };
   
-  const result = await getDB().collection('medicine_requests').insertOne(request);
+  const result = await collections.medicineRequests().insertOne(request);
   
   return {
     message: 'Medicine request submitted successfully. Waiting for admin approval.',
