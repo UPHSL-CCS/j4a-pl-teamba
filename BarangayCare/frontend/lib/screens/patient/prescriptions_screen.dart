@@ -81,7 +81,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Request ${medicine['medicine_name']}'),
+          title: Text('Request ${medicine['medicine_name'] ?? 'Medicine'}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,9 +280,13 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
   }
 
   Widget _buildPrescriptionCard(Map<String, dynamic> prescription) {
-    final issuedDate = DateTime.parse(prescription['issued_date']);
-    final expiryDate = DateTime.parse(prescription['expiry_date']);
-    final status = prescription['status'];
+    final issuedDate = prescription['issued_date'] != null 
+        ? DateTime.parse(prescription['issued_date'])
+        : DateTime.now();
+    final expiryDate = prescription['expiry_date'] != null
+        ? DateTime.parse(prescription['expiry_date'])
+        : DateTime.now().add(const Duration(days: 30));
+    final status = prescription['status'] ?? 'active';
     final isActive = status == 'active';
     final isExpired = DateTime.now().isAfter(expiryDate);
     final daysRemaining = _prescriptionService.getDaysRemaining(prescription);
@@ -378,7 +382,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
                 const SizedBox(height: 4),
                 Text(prescription['diagnosis'] ?? 'Not specified'),
                 
-                if (prescription['notes'] != null && prescription['notes'].isNotEmpty) ...[
+                if (prescription['notes'] != null && prescription['notes'].toString().isNotEmpty) ...[
                   const SizedBox(height: 12),
                   const Text(
                     'Doctor\'s Notes',
