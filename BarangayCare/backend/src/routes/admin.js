@@ -180,6 +180,42 @@ admin.patch('/appointments/:id/reject', async (c) => {
 });
 
 /**
+ * Complete appointment (mark as finished after consultation)
+ */
+admin.patch('/appointments/:id/complete', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const { admin_notes } = await c.req.json();
+    const adminInfo = c.get('admin');
+
+    const result = await collections.appointments().updateOne(
+      { _id: new ObjectId(id), status: 'approved' },
+      { 
+        $set: { 
+          status: 'completed',
+          admin_notes: admin_notes || '',
+          completed_by: adminInfo._id,
+          completed_at: new Date(),
+          updated_at: new Date()
+        } 
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return c.json({ error: 'Appointment not found or not approved' }, 404);
+    }
+
+    return c.json({ 
+      message: 'Appointment marked as completed',
+      appointment_id: id
+    });
+  } catch (error) {
+    console.error('Error completing appointment:', error);
+    return c.json({ error: 'Failed to complete appointment' }, 500);
+  }
+});
+
+/**
  * Get low stock medicines
  */
 admin.get('/medicines/low-stock', async (c) => {

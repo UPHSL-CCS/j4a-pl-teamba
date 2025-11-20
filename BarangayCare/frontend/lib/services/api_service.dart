@@ -286,6 +286,18 @@ class ApiService {
     );
   }
 
+  static Future<Map<String, dynamic>> completeAppointment(
+    String token,
+    String appointmentId, {
+    String? notes,
+  }) async {
+    return await ApiService.patch(
+      '${ApiConfig.baseUrl}/admin/appointments/$appointmentId/complete',
+      {'admin_notes': notes ?? ''},
+      token: token,
+    );
+  }
+
   static Future<List<dynamic>> getLowStockMedicines(String token) async {
     final response = await get('${ApiConfig.baseUrl}/admin/medicines/low-stock',
         token: token);

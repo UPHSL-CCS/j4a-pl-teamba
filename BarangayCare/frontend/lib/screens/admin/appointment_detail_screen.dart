@@ -166,11 +166,55 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     );
   }
 
+  Future<void> _completeAppointment() async {
+    setState(() => _processing = true);
+
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final token = await authProvider.user?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Not authenticated');
+      }
+
+      await ApiService.completeAppointment(
+        token,
+        widget.appointment['_id'],
+        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Appointment marked as completed'),
+          backgroundColor: Colors.blue,
+        ),
+      );
+
+      Navigator.of(context).pop(true);
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _processing = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appointment = widget.appointment;
     final status = appointment['status'] as String;
     final isPending = status.toLowerCase() == 'pending';
+    final isApproved = status.toLowerCase() == 'approved';
 
     return Scaffold(
       appBar: AppBar(
@@ -312,6 +356,23 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                     ),
                   ),
                 ],
+              ),
+            ],
+
+            // Complete button for approved appointments
+            if (isApproved && !_processing) ...[
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _completeAppointment,
+                  icon: const Icon(Icons.done_all),
+                  label: const Text('Mark as Completed'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                ),
               ),
             ],
 
