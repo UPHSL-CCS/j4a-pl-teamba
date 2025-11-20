@@ -46,6 +46,117 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
     }
   }
 
+  void _handleMedicineTap(Map<String, dynamic> medicine, bool requiresPrescription) {
+    if (requiresPrescription) {
+      // Show dialog explaining prescription requirement
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.medical_information, color: Colors.orange),
+              SizedBox(width: 8),
+              Text('Prescription Required'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'This medicine requires a valid prescription. You have two options:',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              _buildOptionRow(
+                '1',
+                'Get a Doctor-Issued Prescription',
+                'Book a consultation with our doctors. After the consultation, the doctor will create a prescription for you.',
+              ),
+              const SizedBox(height: 12),
+              _buildOptionRow(
+                '2',
+                'View Your Prescriptions',
+                'If you already have a prescription from a recent consultation, go to the Prescriptions screen to request medicine.',
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigate to appointments/consultations screen
+                // You can add navigation here if needed
+              },
+              icon: const Icon(Icons.calendar_today),
+              label: const Text('Book Consultation'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Medicine doesn't require prescription, proceed with normal request
+      _requestMedicine(medicine);
+    }
+  }
+
+  Widget _buildOptionRow(String number, String title, String description) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: Colors.green,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              number,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                description,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Future<void> _requestMedicine(Map<String, dynamic> medicine) async {
     final quantityController = TextEditingController(text: '1');
 
@@ -352,7 +463,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
-        onTap: inStock ? () => _requestMedicine(medicine) : null,
+        onTap: inStock ? () => _handleMedicineTap(medicine, requiresPrescription) : null,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
