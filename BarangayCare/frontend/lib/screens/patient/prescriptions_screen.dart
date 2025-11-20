@@ -38,31 +38,22 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       if (token == null) {
         throw Exception('Not authenticated');
       }
-
-      print('🔍 Loading prescriptions...');
       
       // Get patient profile to get patient_id
       final profile = await ApiService.getProfile(token);
-      print('📋 Profile: $profile');
       final patientId = profile['patient']['_id'];
-      print('👤 Patient ID: $patientId');
 
       // Get prescriptions
       final prescriptions = await _prescriptionService.getPatientPrescriptions(
         patientId: patientId,
         status: _filter == 'active' ? 'active' : null,
       );
-      
-      print('📦 Received ${prescriptions.length} prescriptions');
-      print('📦 Raw data: $prescriptions');
 
       setState(() {
         _prescriptions = prescriptions;
         _isLoading = false;
       });
-    } catch (e, stackTrace) {
-      print('❌ Error loading prescriptions: $e');
-      print('📍 Stack trace: $stackTrace');
+    } catch (e) {
       setState(() {
         _error = e.toString();
         _isLoading = false;
@@ -284,10 +275,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
         itemBuilder: (context, index) {
           try {
             return _buildPrescriptionCard(_prescriptions[index]);
-          } catch (e, stackTrace) {
-            print('❌ Error building prescription card $index: $e');
-            print('📦 Prescription data: ${_prescriptions[index]}');
-            print('📍 Stack trace: $stackTrace');
+          } catch (e) {
             return Card(
               margin: const EdgeInsets.only(bottom: 16),
               child: Padding(
@@ -478,7 +466,34 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
           ),
           const SizedBox(height: 8),
           _buildMedicineDetail('Dosage', medicine['dosage'] ?? 'N/A'),
-          _buildMedicineDetail('Quantity', '${medicine['quantity'] ?? 0}'),
+          _buildMedicineDetail('Prescribed Quantity', '${medicine['quantity'] ?? 0}'),
+          
+          // Show dispensed quantity tracking
+          () {
+            final dispensed = medicine['dispensed_quantity'] ?? 0;
+            final total = medicine['quantity'] ?? 0;
+            final remaining = total - dispensed;
+            
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildMedicineDetail('Dispensed', '$dispensed of $total'),
+                if (remaining > 0)
+                  _buildMedicineDetail('Remaining', '$remaining', color: Colors.green[700])
+                else
+                  _buildMedicineDetail('Status', 'Fully Dispensed', color: Colors.orange[700]),
+                const SizedBox(height: 4),
+                LinearProgressIndicator(
+                  value: total > 0 ? dispensed / total : 0,
+                  backgroundColor: Colors.grey[300],
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    remaining > 0 ? Colors.green : Colors.orange,
+                  ),
+                ),
+              ],
+            );
+          }(),
+          
           if (medicine['frequency'] != null && medicine['frequency'].toString().isNotEmpty)
             _buildMedicineDetail('Frequency', medicine['frequency']),
           if (medicine['instructions'] != null && medicine['instructions'].toString().isNotEmpty)
@@ -486,25 +501,35 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
           
           if (canRequest) ...[
             const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => _requestMedicineFromPrescription(prescription, medicine),
-                icon: const Icon(Icons.add_shopping_cart, size: 18),
-                label: const Text('Request Medicine'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  foregroundColor: Colors.white,
+            () {
+              final dispensed = medicine['dispensed_quantity'] ?? 0;
+              final total = medicine['quantity'] ?? 0;
+              final remaining = total - dispensed;
+              final isFullyDispensed = remaining <= 0;
+              
+              return SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: isFullyDispensed ? null : () => _requestMedicineFromPrescription(prescription, medicine),
+                  icon: Icon(
+                    isFullyDispensed ? Icons.check_circle : Icons.add_shopping_cart,
+                    size: 18,
+                  ),
+                  label: Text(isFullyDispensed ? 'Fully Dispensed' : 'Request Medicine'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isFullyDispensed ? Colors.grey : Colors.teal,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
-              ),
-            ),
+              );
+            }(),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildMedicineDetail(String label, String value) {
+  Widget _buildMedicineDetail(String label, String value, {Color? color}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
@@ -523,7 +548,11 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 13),
+              style: TextStyle(
+                fontSize: 13,
+                color: color,
+                fontWeight: color != null ? FontWeight.w600 : null,
+              ),
             ),
           ),
         ],

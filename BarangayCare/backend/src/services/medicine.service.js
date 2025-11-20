@@ -70,9 +70,18 @@ export async function requestMedicine(firebaseUid, data) {
         throw new Error('Medicine not found in prescription');
       }
       
-      // Validate quantity doesn't exceed prescribed amount
-      if (quantity > prescribedMedicine.quantity) {
-        throw new Error(`Requested quantity exceeds prescribed amount (${prescribedMedicine.quantity})`);
+      // Calculate remaining quantity available to dispense
+      const dispensedQuantity = prescribedMedicine.dispensed_quantity || 0;
+      const remainingQuantity = prescribedMedicine.quantity - dispensedQuantity;
+      
+      // Check if there's any quantity left to dispense
+      if (remainingQuantity <= 0) {
+        throw new Error('Prescribed quantity already fully dispensed');
+      }
+      
+      // Validate quantity doesn't exceed remaining prescribed amount
+      if (quantity > remainingQuantity) {
+        throw new Error(`Requested quantity (${quantity}) exceeds remaining prescribed amount (${remainingQuantity} of ${prescribedMedicine.quantity})`);
       }
     }
     // If no prescription_id, the request must include a prescription upload

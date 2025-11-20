@@ -571,13 +571,14 @@ admin.patch('/medicine-requests/:id/approve', async (c) => {
       timestamp: new Date()
     });
 
-    // Update request status
+    // Update request status to fulfilled
     const result = await collections.medicineRequests().updateOne(
       { _id: new ObjectId(requestId) },
       {
         $set: {
-          status: 'approved',
+          status: 'fulfilled',
           approved_at: new Date(),
+          fulfilled_at: new Date(),
           admin_notes: admin_notes || null,
           updated_at: new Date()
         }
@@ -588,8 +589,51 @@ admin.patch('/medicine-requests/:id/approve', async (c) => {
       return c.json({ error: 'Failed to update request status' }, 500);
     }
 
+    // If request is linked to a prescription, track dispensed quantity
+    if (request.prescription_id) {
+      try {
+        // Find the medicine in the prescription
+        const prescription = await collections.prescriptions().findOne({
+          _id: new ObjectId(request.prescription_id)
+        });
+
+        if (prescription) {
+          // Update the dispensed quantity for this medicine
+          const updatedMedicines = prescription.medicines.map(med => {
+            if (med.medicine_id.toString() === request.medicine_id.toString()) {
+              return {
+                ...med,
+                dispensed_quantity: (med.dispensed_quantity || 0) + request.quantity,
+                last_dispensed_at: new Date()
+              };
+            }
+            return med;
+          });
+
+          // Check if all medicines are fully dispensed
+          const allDispensed = updatedMedicines.every(med => 
+            (med.dispensed_quantity || 0) >= med.quantity
+          );
+
+          await collections.prescriptions().updateOne(
+            { _id: new ObjectId(request.prescription_id) },
+            { 
+              $set: { 
+                medicines: updatedMedicines,
+                status: allDispensed ? 'used' : prescription.status,
+                updated_at: new Date()
+              } 
+            }
+          );
+        }
+      } catch (prescriptionError) {
+        console.error('Error updating prescription quantities:', prescriptionError);
+        // Don't fail the request approval if prescription update fails
+      }
+    }
+
     return c.json({ 
-      message: 'Medicine request approved successfully',
+      message: 'Medicine request approved and fulfilled successfully',
       remaining_stock: medicine.stock_qty - request.quantity
     });
   } catch (error) {
