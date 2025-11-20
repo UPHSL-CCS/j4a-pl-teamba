@@ -45,7 +45,6 @@ dependencies:
   pdf: ^3.11.1
   path_provider: ^2.1.4
   permission_handler: ^11.0.0
->>>>>>> 3446f03a6f7dcb0ba6064cc90df3dbd54e480e5f
 
 dev_dependencies:
   flutter_test:
