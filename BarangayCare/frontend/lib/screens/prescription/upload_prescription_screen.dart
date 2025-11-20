@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../services/prescription_service.dart';
+import '../../services/prescription_service.dart';
 
 class UploadPrescriptionScreen extends StatefulWidget {
   final String requestId;
@@ -54,7 +54,7 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
     });
 
     try {
-      final prescriptionUrl = await _prescriptionService.uploadPrescription(
+      await _prescriptionService.uploadPrescription(
         widget.requestId,
         _selectedImage!,
       );
