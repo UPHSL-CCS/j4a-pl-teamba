@@ -77,11 +77,11 @@ prescriptions.post('/create', authMiddleware, adminOnly, async (c) => {
       doctor_name: appointment.doctor_name || 'Barangay Health Worker',
       medicines: medicines.map(med => ({
         medicine_id: new ObjectId(med.medicine_id),
-        medicine_name: med.medicine_name,
-        dosage: med.dosage, // e.g., "500mg"
-        quantity: parseInt(med.quantity),
-        instructions: med.instructions || 'Take as directed', // e.g., "Take 1 tablet twice daily"
-        frequency: med.frequency || '', // e.g., "2x daily"
+        medicine_name: med.medicine_name || '',
+        dosage: med.dosage || '',
+        quantity: parseInt(med.quantity) || 0,
+        instructions: med.instructions || '',
+        frequency: med.frequency || '',
       })),
       diagnosis: diagnosis || '',
       notes: notes || '',

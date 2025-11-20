@@ -403,13 +403,19 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
                 ),
                 const SizedBox(height: 12),
 
-                ...List.generate(
-                  (prescription['medicines'] as List).length,
-                  (index) {
-                    final medicine = prescription['medicines'][index];
-                    return _buildMedicineItem(prescription, medicine, isActive && !isExpired);
-                  },
-                ),
+                if (prescription['medicines'] != null && prescription['medicines'] is List)
+                  ...List.generate(
+                    (prescription['medicines'] as List).length,
+                    (index) {
+                      final medicine = prescription['medicines'][index];
+                      return _buildMedicineItem(prescription, medicine, isActive && !isExpired);
+                    },
+                  )
+                else
+                  const Text(
+                    'No medicines prescribed',
+                    style: TextStyle(color: Colors.grey),
+                  ),
               ],
             ),
           ),
