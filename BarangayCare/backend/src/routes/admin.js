@@ -498,6 +498,43 @@ admin.patch('/medicine-requests/:id/approve', async (c) => {
       return c.json({ error: 'Medicine not found in inventory' }, 404);
     }
 
+    // If medicine requires prescription, verify either prescription_id or prescription_url exists
+    if (medicine.is_prescription_required) {
+      if (!request.prescription_id && !request.prescription_url) {
+        return c.json({ 
+          error: 'Prescription required: This medicine requires either a doctor-issued prescription or an uploaded prescription image',
+          requires_prescription: true
+        }, 400);
+      }
+      
+      // If prescription_id exists, verify it's still valid
+      if (request.prescription_id) {
+        const prescription = await collections.prescriptions().findOne({
+          _id: new ObjectId(request.prescription_id),
+          status: 'active'
+        });
+        
+        if (!prescription) {
+          return c.json({ 
+            error: 'Linked prescription is invalid or has expired',
+            requires_prescription: true
+          }, 400);
+        }
+        
+        // Check expiry
+        if (new Date() > prescription.expiry_date) {
+          await collections.prescriptions().updateOne(
+            { _id: new ObjectId(request.prescription_id) },
+            { $set: { status: 'expired', updated_at: new Date() } }
+          );
+          return c.json({ 
+            error: 'Linked prescription has expired',
+            requires_prescription: true
+          }, 400);
+        }
+      }
+    }
+
     if (medicine.stock_qty < request.quantity) {
       return c.json({ 
         error: 'Insufficient stock',

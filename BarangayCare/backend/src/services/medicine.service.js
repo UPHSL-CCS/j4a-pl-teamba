@@ -74,20 +74,10 @@ export async function requestMedicine(firebaseUid, data) {
       if (quantity > prescribedMedicine.quantity) {
         throw new Error(`Requested quantity exceeds prescribed amount (${prescribedMedicine.quantity})`);
       }
-    } else {
-      // No prescription provided - check if patient has completed appointment
-      const latestAppointment = await collections.appointments().findOne(
-        {
-          patient_id: patient._id,
-          status: 'completed'
-        },
-        { sort: { date: -1, time: -1 } }
-      );
-      
-      if (!latestAppointment) {
-        throw new Error('Prescription required: Please complete a consultation first');
-      }
     }
+    // If no prescription_id, the request must include a prescription upload
+    // The frontend will prompt for upload after creating the request
+    // We allow the request to be created but admin must verify prescription image
   }
   
   // Check if sufficient stock is available (without deducting yet)
