@@ -7,6 +7,7 @@ import '../profile/my_profile_screen.dart';
 import '../booking/doctor_list_screen.dart';
 import '../chatbot/chatbot_screen.dart';
 import '../health_records/health_records_screen.dart';
+import '../emergency/emergency_contacts_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -146,6 +147,21 @@ class HomeScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => const ChatbotScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.phone_in_talk,
+                        title: 'Emergency Hotlines',
+                        subtitle: 'Quick access',
+                        color: Colors.red,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EmergencyContactsScreen(),
                             ),
                           );
                         },
