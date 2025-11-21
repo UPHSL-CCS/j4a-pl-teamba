@@ -66,7 +66,7 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter at least one vital sign measurement'),
-          backgroundColor: Colors.red,
+          backgroundColor: Color(0xFF00897B),
         ),
       );
       return;
@@ -128,7 +128,7 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Vital signs recorded successfully!'),
-            backgroundColor: Colors.green,
+            backgroundColor: Color(0xFF00897B),
           ),
         );
         Navigator.pop(context, true); // Return true to indicate success
@@ -138,7 +138,7 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: const Color(0xFF00897B),
           ),
         );
       }
@@ -152,10 +152,12 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         title: const Text('Add Vital Signs'),
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
       ),
       body: Form(
         key: _formKey,
@@ -236,7 +238,7 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
                 hintText: '72',
                 border: OutlineInputBorder(),
                 suffixText: 'bpm',
-                prefixIcon: Icon(Icons.favorite, color: Colors.red),
+                prefixIcon: Icon(Icons.favorite, color: Color(0xFF00897B)),
               ),
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
@@ -260,7 +262,7 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
                 hintText: '36.5',
                 border: OutlineInputBorder(),
                 suffixText: '°C',
-                prefixIcon: Icon(Icons.thermostat, color: Colors.orange),
+                prefixIcon: Icon(Icons.thermostat, color: Color(0xFF00897B)),
               ),
               validator: (value) {
                 if (value != null && value.isNotEmpty) {
@@ -284,7 +286,7 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
                 hintText: '65',
                 border: OutlineInputBorder(),
                 suffixText: 'kg',
-                prefixIcon: Icon(Icons.monitor_weight, color: Colors.green),
+                prefixIcon: Icon(Icons.monitor_weight, color: Color(0xFF00897B)),
               ),
               onChanged: (_) => _updateBMI(),
               validator: (value) {
@@ -309,7 +311,7 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
                 hintText: '165',
                 border: OutlineInputBorder(),
                 suffixText: 'cm',
-                prefixIcon: Icon(Icons.height, color: Colors.blue),
+                prefixIcon: Icon(Icons.height, color: Color(0xFF00897B)),
               ),
               onChanged: (_) => _updateBMI(),
               validator: (value) {
@@ -413,17 +415,17 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
 
             // Info Card
             Card(
-              color: Colors.blue.shade50,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
+              elevation: 1,
+              child: const Padding(
+                padding: EdgeInsets.all(12),
                 child: Row(
-                  children: const [
-                    Icon(Icons.info_outline, color: Colors.blue),
+                  children: [
+                    Icon(Icons.info_outline, color: Color(0xFF00897B)),
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'Enter at least one vital sign measurement. All fields are optional.',
-                        style: TextStyle(fontSize: 12, color: Colors.blue),
+                        style: TextStyle(fontSize: 12, color: Colors.black87),
                       ),
                     ),
                   ],
