@@ -50,17 +50,6 @@ class ChatBubble extends StatelessWidget {
                     height: 1.4,
                   ),
             ),
-            if (!isUser && message.intent != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: Text(
-                  'Intent: ${message.intent}',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: textColor.withValues(alpha: 0.8),
-                        fontSize: 11,
-                      ),
-                ),
-              ),
             if (!isUser && message.suggestedActions.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -75,8 +64,8 @@ class ChatBubble extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color:
-                              Colors.white.withValues(alpha: isUser ? 0.25 : 0.9),
+                            color: Colors.white
+                                .withValues(alpha: isUser ? 0.25 : 0.9),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(

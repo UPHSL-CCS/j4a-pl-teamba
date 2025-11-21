@@ -21,7 +21,7 @@ const DEFAULT_SUGGESTIONS = [
 
 const geminiClient = process.env.GEMINI_API_KEY
   ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY).getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
     })
   : null;
 
@@ -114,13 +114,13 @@ function classifyIntent(text) {
   return 'general_inquiry';
 }
 
-async function handleChatMessage({ userId, message }) {
+async function handleChatMessage({ userId, message, preferredLanguage }) {
   if (!message || !message.trim()) {
     throw new Error('Message cannot be empty');
   }
 
   const trimmedMessage = message.trim();
-  const detectedLanguage = detectLanguage(trimmedMessage);
+  const detectedLanguage = preferredLanguage || detectLanguage(trimmedMessage);
   const normalizedMessage =
     detectedLanguage === 'fil'
       ? translateToEnglish(trimmedMessage)
@@ -128,6 +128,9 @@ async function handleChatMessage({ userId, message }) {
 
   const keywords = extractKeywords(normalizedMessage);
   let intent = classifyIntent(normalizedMessage);
+
+  // Get conversation history for context
+  const recentHistory = await getRecentConversationHistory(userId, 5);
 
   const {
     response,
@@ -138,9 +141,11 @@ async function handleChatMessage({ userId, message }) {
   } = await generateResponse({
     intent,
     keywords,
-    message: normalizedMessage,
+    message: trimmedMessage,
+    normalizedMessage,
     detectedLanguage,
     userId,
+    conversationHistory: recentHistory,
   });
 
   intent = resolvedIntent ?? intent;
@@ -176,113 +181,220 @@ async function generateResponse({
   intent,
   keywords,
   message,
+  normalizedMessage,
   detectedLanguage,
   userId,
+  conversationHistory = [],
 }) {
   let response = '';
   let suggestedActions = [...DEFAULT_SUGGESTIONS];
   let metadata = {};
-  let confidence = 0.6;
+  let confidence = 0.8;
   let resolvedIntent = intent;
 
-  if (intent === 'symptom_check') {
-    const analysis = analyzeSymptoms(keywords);
-    response = analysis.advice;
-    suggestedActions = analysis.suggestedActions;
-    metadata = { analysis };
-    const symptomRecord = await collections.symptomDatabase().findOne({
-      keywords: { $in: keywords },
-    });
-    if (symptomRecord) {
-      response = symptomRecord.recommendations;
-      metadata = { ...metadata, symptomRecord };
-      suggestedActions =
-        symptomRecord.recommended_actions ?? analysis.suggestedActions;
-    }
-    confidence = analysis.confidence;
-  } else if (intent === 'medicine_info') {
-    const faq = await searchFAQByCategory('medicines', keywords);
-    if (faq) {
-      response = faq.answer;
-      suggestedActions = ['Request Medicine', 'View Medicines'];
-      metadata = { faq };
-      confidence = 0.75;
-    }
-  } else if (intent === 'book_appointment') {
-    response =
-      'I can help you book a consultation. Which doctor or clinic service would you like to schedule?';
-    suggestedActions = ['View Doctors', 'Book Appointment'];
-    confidence = 0.7;
-  } else if (intent === 'emergency') {
-    response =
-      'If this is an emergency, please contact the nearest barangay health center or call your local emergency hotline immediately.';
-    suggestedActions = ['Emergency Contacts', 'Call Hotline'];
-    confidence = 0.9;
-  } else if (intent === 'greeting') {
-    response =
-      'Hello! I am your Barangay Health Assistant. How can I support you today?';
-    suggestedActions = [
-      'Symptom Check',
-      'Book Appointment',
-      'Request Medicine',
-      'FAQ',
-    ];
-    confidence = 0.8;
-  }
+  // Build context from conversation history
+  const contextMessages = conversationHistory
+    .slice(-6) // Last 6 messages (3 exchanges)
+    .map((msg) => {
+      const role = msg.role === 'user' ? 'User' : 'Assistant';
+      return `${role}: ${msg.text}`;
+    })
+    .join('\n');
 
-  if (!response) {
-    const faqResult = await searchFAQByKeywords(keywords, message);
-    if (faqResult) {
-      response = faqResult.answer;
-      suggestedActions = ['View FAQ', 'Book Appointment'];
-      metadata = { faq: faqResult };
+  // Use Gemini as primary response generator with context
+  const aiResponse = await generateGeminiResponse({
+    message,
+    normalizedMessage,
+    detectedLanguage,
+    intent,
+    keywords,
+    contextMessages,
+    userId,
+  });
+
+  if (aiResponse) {
+    response = aiResponse.response;
+    confidence = aiResponse.confidence || 0.8;
+    
+    // Enhance with domain-specific information based on intent
+    if (intent === 'symptom_check') {
+      const analysis = analyzeSymptoms(keywords);
+      const symptomRecord = await collections.symptomDatabase().findOne({
+        keywords: { $in: keywords },
+      });
+      if (symptomRecord) {
+        suggestedActions = symptomRecord.recommended_actions ?? analysis.suggestedActions;
+        metadata = { analysis, symptomRecord };
+      } else {
+        suggestedActions = analysis.suggestedActions;
+        metadata = { analysis };
+      }
+    } else if (intent === 'medicine_info') {
+      const faq = await searchFAQByCategory('medicines', keywords);
+      if (faq) {
+        metadata = { faq };
+        suggestedActions = ['Request Medicine', 'View Medicines'];
+      }
+    } else if (intent === 'book_appointment') {
+      suggestedActions = ['View Doctors', 'Book Appointment'];
+    } else if (intent === 'emergency') {
+      suggestedActions = ['Emergency Contacts', 'Call Hotline'];
+      confidence = 0.95;
+    } else if (intent === 'greeting') {
+      suggestedActions = [
+        'Symptom Check',
+        'Book Appointment',
+        'Request Medicine',
+        'Emergency Contacts',
+      ];
+    } else {
+      // Try FAQ as fallback for general inquiries
+      const faqResult = await searchFAQByKeywords(keywords, normalizedMessage);
+      if (faqResult) {
+        metadata = { faq: faqResult };
+        suggestedActions = ['View FAQ', 'Book Appointment'];
+        resolvedIntent = 'faq';
+      }
+    }
+  } else {
+    // Fallback to rule-based responses if Gemini fails
+    if (intent === 'symptom_check') {
+      const analysis = analyzeSymptoms(keywords);
+      response = analysis.advice;
+      suggestedActions = analysis.suggestedActions;
+      metadata = { analysis };
+      confidence = analysis.confidence;
+    } else if (intent === 'medicine_info') {
+      const faq = await searchFAQByCategory('medicines', keywords);
+      if (faq) {
+        response = faq.answer;
+        suggestedActions = ['Request Medicine', 'View Medicines'];
+        metadata = { faq };
+        confidence = 0.75;
+      }
+    } else if (intent === 'book_appointment') {
+      response =
+        'I can help you book a consultation. Which doctor or clinic service would you like to schedule?';
+      suggestedActions = ['View Doctors', 'Book Appointment'];
       confidence = 0.7;
-      resolvedIntent = 'faq';
+    } else if (intent === 'emergency') {
+      response =
+        'If this is an emergency, please contact the nearest barangay health center or call your local emergency hotline immediately.';
+      suggestedActions = ['Emergency Contacts', 'Call Hotline'];
+      confidence = 0.9;
+    } else if (intent === 'greeting') {
+      response =
+        'Hello! I am your Barangay Health Assistant. How can I support you today?';
+      suggestedActions = [
+        'Symptom Check',
+        'Book Appointment',
+        'Request Medicine',
+        'Emergency Contacts',
+      ];
+      confidence = 0.8;
+    } else {
+      const faqResult = await searchFAQByKeywords(keywords, normalizedMessage);
+      if (faqResult) {
+        response = faqResult.answer;
+        suggestedActions = ['View FAQ', 'Book Appointment'];
+        metadata = { faq: faqResult };
+        confidence = 0.7;
+        resolvedIntent = 'faq';
+      }
     }
-  }
 
-  if (!response) {
-    const aiResponse = await generateGeminiFallback({
-      message,
-      userId,
-      detectedLanguage,
-    });
-    if (aiResponse) {
-      response = aiResponse;
-      confidence = 0.65;
+    if (!response) {
+      response =
+        'I am still learning how to respond to that question. Please try asking in a different way or choose one of the quick actions.';
+      suggestedActions = ['View FAQ', 'Talk to Admin'];
+      confidence = 0.35;
     }
-  }
-
-  if (!response) {
-    response =
-      'I am still learning how to respond to that question. Please try asking in a different way or choose one of the quick actions.';
-    suggestedActions = ['View FAQ', 'Talk to Admin'];
-    confidence = 0.35;
-  }
-
-  if (detectedLanguage === 'fil') {
-    response = translateToFilipino(response);
   }
 
   return { response, suggestedActions, metadata, confidence, resolvedIntent };
 }
 
-async function generateGeminiFallback({ message, detectedLanguage }) {
+async function generateGeminiResponse({
+  message,
+  normalizedMessage,
+  detectedLanguage,
+  intent,
+  keywords,
+  contextMessages,
+  userId,
+}) {
   if (!geminiClient) {
+    console.warn('Gemini client not initialized. Check GEMINI_API_KEY in .env');
     return null;
   }
 
   try {
-    const prompt = `You are BarangayCare, a helpful barangay health chatbot. Respond in ${
-      detectedLanguage === 'fil' ? 'Filipino' : 'English'
-    } using clear and friendly language. Focus on community health guidance and remind patients to consult medical professionals for emergencies.\n\nUser message: ${message}`;
+    const language = detectedLanguage === 'fil' ? 'Filipino' : 'English';
+    const contextSection = contextMessages
+      ? `\n\nPrevious conversation:\n${contextMessages}\n`
+      : '';
 
-    const result = await geminiClient.generateContent([{ text: prompt }]);
+    const systemPrompt = `You are BarangayCare, a helpful and friendly barangay health assistant chatbot. Your role is to provide health guidance, answer questions about appointments, medicines, and symptoms, and help patients navigate the barangay health system.
+
+Guidelines:
+- Respond naturally and conversationally in ${language}
+- Be empathetic, clear, and helpful
+- For medical emergencies, always direct users to contact emergency services immediately
+- When discussing symptoms, remind users to consult with healthcare professionals
+- Keep responses concise but informative (2-4 sentences typically)
+- Use a warm, caring tone appropriate for a community health assistant
+- If asked about booking appointments, guide them to use the "Book Appointment" feature
+- If asked about medicines, mention they can request medicines through the app
+${contextSection}
+Current user message: ${message}
+Detected intent: ${intent}
+Keywords: ${keywords.join(', ') || 'none'}
+
+Respond naturally as if you're having a conversation. Don't mention intents or technical details.`;
+
+    const result = await geminiClient.generateContent([{ text: systemPrompt }]);
     const text = result?.response?.text();
-    return text?.trim() || null;
+    
+    if (!text || !text.trim()) {
+      return null;
+    }
+
+    return {
+      response: text.trim(),
+      confidence: 0.85,
+    };
   } catch (error) {
     console.error('Gemini generation error:', error.message);
     return null;
+  }
+}
+
+async function getRecentConversationHistory(userId, limit = 5) {
+  try {
+    const history = await collections
+      .chatMessages()
+      .find({ user_id: userId })
+      .sort({ timestamp: -1 })
+      .limit(limit * 2) // Get more to account for pairs
+      .toArray();
+
+    // Convert to conversation format
+    const conversations = [];
+    for (const entry of history.reverse()) {
+      conversations.push({
+        role: 'user',
+        text: entry.message,
+      });
+      conversations.push({
+        role: 'assistant',
+        text: entry.response,
+      });
+    }
+
+    return conversations.slice(-limit * 2); // Return last N pairs
+  } catch (error) {
+    console.error('Error fetching conversation history:', error);
+    return [];
   }
 }
 

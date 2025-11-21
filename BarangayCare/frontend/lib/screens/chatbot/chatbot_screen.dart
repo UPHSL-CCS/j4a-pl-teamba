@@ -20,6 +20,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   final List<ChatMessage> _messages = [];
   bool _isLoadingHistory = true;
   bool _isSending = false;
+  String _selectedLanguage = 'en'; // 'en' or 'fil'
 
   final List<QuickAction> _quickActions = const [
     QuickAction(
@@ -114,8 +115,11 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     _scrollToBottom();
 
     try {
-      final botMessage =
-          await ChatbotService.sendMessage(message: trimmed, token: token);
+      final botMessage = await ChatbotService.sendMessage(
+        message: trimmed,
+        token: token,
+        language: _selectedLanguage,
+      );
       setState(() {
         _messages.add(botMessage);
         _isSending = false;
@@ -169,6 +173,40 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       appBar: AppBar(
         title: const Text('Barangay Health Assistant'),
         actions: [
+          // Language selector
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.language),
+            tooltip: 'Select language',
+            onSelected: (value) {
+              setState(() {
+                _selectedLanguage = value;
+              });
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'en',
+                child: Row(
+                  children: [
+                    if (_selectedLanguage == 'en')
+                      const Icon(Icons.check, size: 18),
+                    const SizedBox(width: 8),
+                    const Text('English'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'fil',
+                child: Row(
+                  children: [
+                    if (_selectedLanguage == 'fil')
+                      const Icon(Icons.check, size: 18),
+                    const SizedBox(width: 8),
+                    const Text('Filipino'),
+                  ],
+                ),
+              ),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             tooltip: 'Clear chat history',

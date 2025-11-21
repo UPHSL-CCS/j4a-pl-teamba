@@ -16,6 +16,7 @@ chatbot.post('/message', async (c) => {
     const user = c.get('user');
     const body = await c.req.json();
     const message = body?.message;
+    const preferredLanguage = body?.language; // 'en' or 'fil'
 
     if (!message || !message.trim()) {
       return c.json({ success: false, error: 'Message is required' }, 400);
@@ -24,6 +25,7 @@ chatbot.post('/message', async (c) => {
     const result = await enqueueChatRequest(user.uid, {
       userId: user.uid,
       message,
+      preferredLanguage,
     });
 
     return c.json({ success: true, data: result });

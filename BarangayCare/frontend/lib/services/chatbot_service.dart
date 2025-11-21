@@ -6,10 +6,17 @@ class ChatbotService {
   static Future<ChatMessage> sendMessage({
     required String message,
     required String token,
+    String? language, // 'en' or 'fil'
   }) async {
-    final response = await ApiService.post(
-        ApiConfig.chatbotMessage, {'message': message},
-        token: token);
+    final payload = <String, dynamic>{
+      'message': message,
+    };
+    if (language != null) {
+      payload['language'] = language;
+    }
+
+    final response =
+        await ApiService.post(ApiConfig.chatbotMessage, payload, token: token);
     final data = response['data'] as Map<String, dynamic>? ?? {};
     return ChatMessage.fromResponse(data);
   }
