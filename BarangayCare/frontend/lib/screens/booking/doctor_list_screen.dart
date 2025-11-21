@@ -134,7 +134,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                           ),
                         ),
                         DropdownButtonFormField<String>(
-                          value: _selectedExpertise ?? 'All',
+                          initialValue: _selectedExpertise ?? 'All',
                           isExpanded: true,
                           decoration: InputDecoration(
                             filled: true,

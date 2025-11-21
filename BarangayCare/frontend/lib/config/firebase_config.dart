@@ -19,7 +19,7 @@ class FirebaseConfig {
     }
   }
 
-  static FirebaseOptions web = FirebaseOptions(
+  static FirebaseOptions web = const FirebaseOptions(
     apiKey: AppConfig.firebaseApiKey,
     appId: AppConfig.firebaseAppId,
     messagingSenderId: AppConfig.firebaseMessagingSenderId,
@@ -27,14 +27,14 @@ class FirebaseConfig {
     authDomain: '${AppConfig.firebaseProjectId}.firebaseapp.com',
   );
 
-  static FirebaseOptions android = FirebaseOptions(
+  static FirebaseOptions android = const FirebaseOptions(
     apiKey: AppConfig.firebaseApiKey,
     appId: AppConfig.firebaseAppId,
     messagingSenderId: AppConfig.firebaseMessagingSenderId,
     projectId: AppConfig.firebaseProjectId,
   );
 
-  static FirebaseOptions ios = FirebaseOptions(
+  static FirebaseOptions ios = const FirebaseOptions(
     apiKey: AppConfig.firebaseApiKey,
     appId: AppConfig.firebaseAppId,
     messagingSenderId: AppConfig.firebaseMessagingSenderId,

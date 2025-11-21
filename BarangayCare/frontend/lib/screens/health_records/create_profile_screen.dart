@@ -202,7 +202,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
               // Gender
               DropdownButtonFormField<String>(
-                value: _selectedGender,
+                initialValue: _selectedGender,
                 decoration: const InputDecoration(
                   labelText: 'Gender',
                   border: OutlineInputBorder(),
@@ -224,7 +224,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
               // Blood Type
               DropdownButtonFormField<String>(
-                value: _selectedBloodType,
+                initialValue: _selectedBloodType,
                 decoration: const InputDecoration(
                   labelText: 'Blood Type',
                   border: OutlineInputBorder(),

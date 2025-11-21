@@ -8,10 +8,10 @@ class UploadPrescriptionScreen extends StatefulWidget {
   final String medicineName;
 
   const UploadPrescriptionScreen({
-    Key? key,
+    super.key,
     required this.requestId,
     required this.medicineName,
-  }) : super(key: key);
+  });
 
   @override
   State<UploadPrescriptionScreen> createState() =>

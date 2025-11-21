@@ -306,7 +306,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
                   // Valid days dropdown
                   DropdownButtonFormField<int>(
-                    value: validDays,
+                    initialValue: validDays,
                     decoration: const InputDecoration(
                       labelText: 'Prescription Validity',
                       border: OutlineInputBorder(),
@@ -388,7 +388,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                             ),
                             const SizedBox(height: 8),
                             DropdownButtonFormField<String>(
-                              value: medicine['medicine_id']?.isEmpty ?? true ? null : medicine['medicine_id'],
+                              initialValue: medicine['medicine_id']?.isEmpty ?? true ? null : medicine['medicine_id'],
                               decoration: const InputDecoration(
                                 labelText: 'Select Medicine',
                                 border: OutlineInputBorder(),
@@ -470,7 +470,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),
