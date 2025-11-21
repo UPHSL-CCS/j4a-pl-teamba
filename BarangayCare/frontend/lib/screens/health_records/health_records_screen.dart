@@ -67,10 +67,12 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         title: const Text('Health Records'),
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -80,25 +82,6 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
         ],
       ),
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Navigate to add vitals screen
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddVitalsScreen(),
-            ),
-          );
-
-          // Reload if vitals were added
-          if (result == true) {
-            _loadHealthProfile();
-          }
-        },
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.add, color: Colors.white),
-        tooltip: 'Add Vital Signs',
-      ),
     );
   }
 
@@ -108,7 +91,7 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
     // Control Flow: Loading state
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Colors.teal),
+        child: CircularProgressIndicator(color: Color(0xFF00897B)),
       );
     }
 
@@ -151,10 +134,12 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
               icon: const Icon(Icons.add),
               label: const Text('Create Patient Profile'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
+                backgroundColor: const Color(0xFF00897B),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
@@ -189,8 +174,11 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
+                backgroundColor: const Color(0xFF00897B),
                 foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
@@ -201,7 +189,7 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
     // Control Flow: Success state - display health profile
     return RefreshIndicator(
       onRefresh: _loadHealthProfile,
-      color: Colors.teal,
+      color: const Color(0xFF00897B),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
@@ -228,7 +216,10 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
     final patientInfo = _healthProfile?['patient_info'] ?? {};
 
     return Card(
-      elevation: 2,
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -237,7 +228,7 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.teal,
+                  backgroundColor: const Color(0xFF00897B),
                   radius: 30,
                   child: Text(
                     (patientInfo['name'] ?? 'U')[0].toUpperCase(),
@@ -301,7 +292,10 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
     final summary = _healthProfile?['summary'] ?? {};
 
     return Card(
-      elevation: 2,
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -372,11 +366,14 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
     // Control Flow: Show message if no active conditions
     if (activeConditions.isEmpty) {
       return Card(
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.all(16),
           child: Row(
-            children: const [
+            children: [
               Icon(Icons.check_circle, color: Colors.green, size: 32),
               SizedBox(width: 16),
               Expanded(
@@ -392,7 +389,10 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
     }
 
     return Card(
-      elevation: 2,
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -499,7 +499,7 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
             _buildActionCard(
               'Add Vitals',
               Icons.add_circle,
-              Colors.teal,
+              const Color(0xFF00897B),
               () async {
                 final result = await Navigator.push(
                   context,
@@ -574,10 +574,13 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
   Widget _buildActionCard(
       String title, IconData icon, Color color, VoidCallback onTap) {
     return Card(
-      elevation: 2,
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

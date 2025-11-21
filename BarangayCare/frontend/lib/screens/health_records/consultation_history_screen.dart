@@ -59,10 +59,12 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         title: const Text('Consultation History'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
       ),
       body: _buildBody(),
     );
@@ -74,7 +76,7 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
     // Control Flow: Loading state
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Colors.blue),
+        child: CircularProgressIndicator(color: Color(0xFF00897B)),
       );
     }
 
@@ -105,8 +107,11 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: const Color(0xFF00897B),
                 foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
@@ -116,10 +121,10 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
 
     // Control Flow: Empty state
     if (_consultations.isEmpty) {
-      return Center(
+      return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.medical_services_outlined, size: 64, color: Colors.grey),
             SizedBox(height: 16),
             Text(
@@ -143,7 +148,7 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
     // Success state: Display consultations
     return RefreshIndicator(
       onRefresh: _loadConsultations,
-      color: Colors.blue,
+      color: const Color(0xFF00897B),
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: _consultations.length,
@@ -163,11 +168,14 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      elevation: 2,
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: ExpansionTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.blue,
-          child: const Icon(Icons.medical_services, color: Colors.white),
+        leading: const CircleAvatar(
+          backgroundColor: Color(0xFF00897B),
+          child: Icon(Icons.medical_services, color: Colors.white),
         ),
         title: Text(
           doctorName,
@@ -238,7 +246,7 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
         children: [
           Row(
             children: [
-              Icon(icon, size: 20, color: Colors.blue),
+              Icon(icon, size: 20, color: const Color(0xFF00897B)),
               const SizedBox(width: 8),
               Text(
                 title,
@@ -269,7 +277,7 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
         children: [
           const Row(
             children: [
-              Icon(Icons.medication, size: 20, color: Colors.blue),
+              Icon(Icons.medication, size: 20, color: Color(0xFF00897B)),
               SizedBox(width: 8),
               Text(
                 'Prescription',
@@ -297,7 +305,7 @@ class _ConsultationHistoryScreenState extends State<ConsultationHistoryScreen> {
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
