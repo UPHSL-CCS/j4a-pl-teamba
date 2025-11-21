@@ -329,27 +329,6 @@ class _HealthRecordsScreenState extends State<HealthRecordsScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildSummaryItem(
-                    Icons.folder,
-                    'Documents',
-                    summary['total_documents']?.toString() ?? '0',
-                    Colors.orange,
-                  ),
-                ),
-                Expanded(
-                  child: _buildSummaryItem(
-                    Icons.local_hospital,
-                    'Active Conditions',
-                    summary['active_conditions']?.toString() ?? '0',
-                    Colors.purple,
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
