@@ -16,6 +16,9 @@ export async function authMiddleware(c, next) {
       uid: decodedToken.uid,
       email: decodedToken.email,
     });
+    
+    // Also set firebaseUid for backward compatibility
+    c.set('firebaseUid', decodedToken.uid);
 
     await next();
   } catch (error) {

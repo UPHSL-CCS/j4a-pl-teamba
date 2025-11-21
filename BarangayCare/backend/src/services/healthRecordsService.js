@@ -8,12 +8,27 @@ import { collections } from '../config/database.js';
  */
 
 /**
+ * Helper function to get patient by Firebase UID
+ * Returns the most recently updated patient record to handle duplicates
+ */
+export async function getPatientByFirebaseUid(firebaseUid) {
+  const patient = await collections.patients()
+    .find({ firebase_uid: firebaseUid })
+    .sort({ updated_at: -1 })
+    .limit(1)
+    .toArray()
+    .then(results => results[0]);
+  
+  return patient || null;
+}
+
+/**
  * Get complete health profile for a patient
  * Abstraction: Abstract interface for retrieving all health data
  */
 export async function getHealthProfile(firebaseUid) {
   try {
-    const patient = await collections.patients().findOne({ firebase_uid: firebaseUid });
+    const patient = await getPatientByFirebaseUid(firebaseUid);
     
     if (!patient) {
       return null; // Return null instead of throwing to allow profile creation flow

@@ -185,11 +185,39 @@ admin.patch('/appointments/:id/reject', async (c) => {
 admin.patch('/appointments/:id/complete', async (c) => {
   try {
     const id = c.req.param('id');
-    const { admin_notes } = await c.req.json();
+    const { admin_notes, chief_complaint, diagnosis, treatment_plan, prescription } = await c.req.json();
     const adminInfo = c.get('admin');
 
+    // First, get the appointment details
+    const appointment = await collections.appointments().findOne({ 
+      _id: new ObjectId(id), 
+      status: 'approved' 
+    });
+
+    if (!appointment) {
+      return c.json({ error: 'Appointment not found or not approved' }, 404);
+    }
+
+    // Create a consultation note for this completed appointment
+    const consultationNote = {
+      patient_id: appointment.patient_id,
+      doctor_id: appointment.doctor_id,
+      appointment_id: new ObjectId(id),
+      consultation_date: new Date(),
+      chief_complaint: chief_complaint || appointment.pre_screening?.symptoms || 'Consultation',
+      diagnosis: diagnosis || '',
+      treatment_plan: treatment_plan || '',
+      prescription: prescription || [],
+      notes: admin_notes || '',
+      created_at: new Date(),
+      updated_at: new Date()
+    };
+
+    await collections.consultationNotes().insertOne(consultationNote);
+
+    // Update the appointment status
     const result = await collections.appointments().updateOne(
-      { _id: new ObjectId(id), status: 'approved' },
+      { _id: new ObjectId(id) },
       { 
         $set: { 
           status: 'completed',
@@ -201,13 +229,10 @@ admin.patch('/appointments/:id/complete', async (c) => {
       }
     );
 
-    if (result.matchedCount === 0) {
-      return c.json({ error: 'Appointment not found or not approved' }, 404);
-    }
-
     return c.json({ 
-      message: 'Appointment marked as completed',
-      appointment_id: id
+      message: 'Appointment marked as completed and consultation note created',
+      appointment_id: id,
+      consultation_id: consultationNote._id
     });
   } catch (error) {
     console.error('Error completing appointment:', error);

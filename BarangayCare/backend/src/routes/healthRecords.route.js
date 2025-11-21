@@ -14,7 +14,8 @@ import {
   getPatientConditions,
   addPatientCondition,
   analyzeHealthTrends,
-  getHealthRecordsByDateRange
+  getHealthRecordsByDateRange,
+  getPatientByFirebaseUid
 } from '../services/healthRecordsService.js';
 import { generateHealthReport, generateQuickSummary } from '../services/reportService.js';
 
@@ -85,7 +86,7 @@ healthRecords.get('/consultations', async (c) => {
     const firebaseUid = c.get('firebaseUid');
     const limit = parseInt(c.req.query('limit')) || 50;
 
-    const patient = await collections.patients().findOne({ firebase_uid: firebaseUid });
+    const patient = await getPatientByFirebaseUid(firebaseUid);
     if (!patient) {
       return c.json({
         success: false,
@@ -141,7 +142,7 @@ healthRecords.get('/vital-signs', async (c) => {
     const endDate = c.req.query('endDate');
     const limit = parseInt(c.req.query('limit')) || 100;
 
-    const patient = await collections.patients().findOne({ firebase_uid: firebaseUid });
+    const patient = await getPatientByFirebaseUid(firebaseUid);
     if (!patient) {
       return c.json({
         success: false,
@@ -198,7 +199,7 @@ healthRecords.get('/documents', async (c) => {
     const documentType = c.req.query('type');
     const limit = parseInt(c.req.query('limit')) || 50;
 
-    const patient = await collections.patients().findOne({ firebase_uid: firebaseUid });
+    const patient = await getPatientByFirebaseUid(firebaseUid);
     if (!patient) {
       return c.json({
         success: false,
@@ -277,7 +278,7 @@ healthRecords.get('/conditions', async (c) => {
   try {
     const firebaseUid = c.get('firebaseUid');
 
-    const patient = await collections.patients().findOne({ firebase_uid: firebaseUid });
+    const patient = await getPatientByFirebaseUid(firebaseUid);
     if (!patient) {
       return c.json({
         success: false,
