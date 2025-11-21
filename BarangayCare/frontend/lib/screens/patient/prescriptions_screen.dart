@@ -140,7 +140,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Medicine request submitted successfully!'),
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFF00897B),
         ),
       );
 
@@ -153,7 +153,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: const Color(0xFF00897B),
         ),
       );
     }
@@ -164,8 +164,9 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Prescriptions'),
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -173,21 +174,17 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
           ),
         ],
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Filter tabs
           Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.grey[100],
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Expanded(
-                  child: _buildFilterChip('Active', 'active'),
-                ),
+                _buildFilterChip('Active', 'active'),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: _buildFilterChip('All', 'all'),
-                ),
+                _buildFilterChip('All', 'all'),
               ],
             ),
           ),
@@ -212,7 +209,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
           _loadPrescriptions();
         }
       },
-      selectedColor: Colors.teal,
+      selectedColor: const Color(0xFF00897B),
       checkmarkColor: Colors.white,
       labelStyle: TextStyle(
         color: isSelected ? Colors.white : Colors.black87,
@@ -223,7 +220,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator(color: Color(0xFF00897B)));
     }
 
     if (_error != null) {
@@ -231,12 +228,16 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const Icon(Icons.error_outline, size: 64, color: Color(0xFF00897B)),
             const SizedBox(height: 16),
             Text('Error: $_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadPrescriptions,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF00897B),
+                foregroundColor: Colors.white,
+              ),
               child: const Text('Retry'),
             ),
           ],
@@ -307,19 +308,19 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       statusColor = Colors.grey;
       statusIcon = Icons.access_time;
     } else if (status == 'used') {
-      statusColor = Colors.blue;
+      statusColor = const Color(0xFF00897B);
       statusIcon = Icons.check_circle;
     } else if (status == 'cancelled') {
-      statusColor = Colors.red;
+      statusColor = Colors.grey;
       statusIcon = Icons.cancel;
     } else {
-      statusColor = Colors.green;
+      statusColor = const Color(0xFF00897B);
       statusIcon = Icons.verified;
     }
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      elevation: 3,
+      elevation: 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -353,7 +354,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
                     if (isActive && !isExpired)
                       Chip(
                         label: Text('$daysRemaining days left'),
-                        backgroundColor: daysRemaining < 7 ? Colors.orange : Colors.blue,
+                        backgroundColor: const Color(0xFF00897B),
                         labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
                       ),
                   ],
@@ -451,7 +452,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.medication, color: Colors.teal, size: 20),
+              const Icon(Icons.medication, color: Color(0xFF00897B), size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -479,15 +480,15 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
               children: [
                 _buildMedicineDetail('Dispensed', '$dispensed of $total'),
                 if (remaining > 0)
-                  _buildMedicineDetail('Remaining', '$remaining', color: Colors.green[700])
+                  _buildMedicineDetail('Remaining', '$remaining', color: const Color(0xFF00897B))
                 else
-                  _buildMedicineDetail('Status', 'Fully Dispensed', color: Colors.orange[700]),
+                  _buildMedicineDetail('Status', 'Fully Dispensed', color: Colors.blue),
                 const SizedBox(height: 4),
                 LinearProgressIndicator(
                   value: total > 0 ? dispensed / total : 0,
                   backgroundColor: Colors.grey[300],
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    remaining > 0 ? Colors.green : Colors.orange,
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    Color(0xFF00897B),
                   ),
                 ),
               ],
@@ -517,7 +518,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
                   ),
                   label: Text(isFullyDispensed ? 'Fully Dispensed' : 'Request Medicine'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isFullyDispensed ? Colors.grey : Colors.teal,
+                    backgroundColor: isFullyDispensed ? Colors.grey : const Color(0xFF00897B),
                     foregroundColor: Colors.white,
                   ),
                 ),
