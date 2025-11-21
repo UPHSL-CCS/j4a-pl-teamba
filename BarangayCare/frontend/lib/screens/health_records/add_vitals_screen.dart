@@ -414,9 +414,9 @@ class _AddVitalsScreenState extends State<AddVitalsScreen> {
             const SizedBox(height: 16),
 
             // Info Card
-            Card(
+            const Card(
               elevation: 1,
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.all(12),
                 child: Row(
                   children: [

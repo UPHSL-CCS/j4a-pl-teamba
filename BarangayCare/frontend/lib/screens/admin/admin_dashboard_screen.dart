@@ -36,11 +36,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       }
 
       final stats = await ApiService.getAdminDashboardStats(token);
+
+      if (!mounted) return;
+
       setState(() {
         _stats = stats;
         _loading = false;
       });
     } catch (e) {
+      if (!mounted) return;
+
       setState(() {
         _error = e.toString();
         _loading = false;
@@ -65,9 +70,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
+              final navigator = Navigator.of(context);
               await authProvider.signOut();
               if (!mounted) return;
-              Navigator.of(context).pushReplacementNamed('/login');
+              navigator.pushReplacementNamed('/login');
             },
           ),
         ],
@@ -299,7 +305,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       elevation: 1,
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.teal.withOpacity(0.1),
+          backgroundColor: Colors.teal.withValues(alpha: 0.1),
           child: Icon(icon, color: Colors.teal),
         ),
         title: Text(

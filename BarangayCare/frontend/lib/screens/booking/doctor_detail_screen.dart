@@ -22,14 +22,14 @@ class DoctorDetailScreen extends StatelessWidget {
           children: [
             // Doctor Header
             Container(
-              color: Theme.of(context).primaryColor.withOpacity(0.05),
+              color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
                   CircleAvatar(
                     radius: 48,
                     backgroundColor:
-                        Theme.of(context).primaryColor.withOpacity(0.2),
+                        Theme.of(context).primaryColor.withValues(alpha: 0.2),
                     backgroundImage:
                         doctor.image != null ? AssetImage(doctor.image!) : null,
                     child: doctor.image == null
@@ -96,7 +96,7 @@ class DoctorDetailScreen extends StatelessWidget {
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundColor:
-                                Theme.of(context).primaryColor.withOpacity(0.1),
+                                Theme.of(context).primaryColor.withValues(alpha: 0.1),
                             child: Icon(
                               Icons.calendar_today,
                               color: Theme.of(context).primaryColor,
@@ -116,7 +116,7 @@ class DoctorDetailScreen extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.1),
+                              color: Colors.green.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(

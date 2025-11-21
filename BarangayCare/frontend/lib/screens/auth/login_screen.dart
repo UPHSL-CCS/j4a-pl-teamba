@@ -46,8 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _checkProfileAndNavigate() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final token = await authProvider.user?.getIdToken();
 
       if (token == null) {
@@ -82,9 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
       print('❌ Error during profile check: $e');
-      
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      
+
       // Profile doesn't exist - could be admin or new patient
       // For now, navigate to complete profile screen
       // (Admin dashboard will be added later)

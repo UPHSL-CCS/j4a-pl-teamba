@@ -94,7 +94,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
           // Search and Filter Section
           SingleChildScrollView(
             child: Container(
-              color: Theme.of(context).primaryColor.withOpacity(0.05),
+              color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
@@ -134,7 +134,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                           ),
                         ),
                         DropdownButtonFormField<String>(
-                          initialValue: _selectedExpertise ?? 'All',
+                          value: _selectedExpertise ?? 'All',
                           isExpanded: true,
                           decoration: InputDecoration(
                             filled: true,
@@ -274,7 +274,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
               CircleAvatar(
                 radius: 32,
                 backgroundColor:
-                    Theme.of(context).primaryColor.withOpacity(0.1),
+                    Theme.of(context).primaryColor.withValues(alpha: 0.1),
                 backgroundImage:
                     doctor.image != null ? AssetImage(doctor.image!) : null,
                 child: doctor.image == null

@@ -235,7 +235,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                     CircleAvatar(
                       radius: 28,
                       backgroundColor:
-                          Theme.of(context).primaryColor.withOpacity(0.1),
+                          Theme.of(context).primaryColor.withValues(alpha: 0.1),
                       backgroundImage: widget.doctor.image != null
                           ? AssetImage(widget.doctor.image!)
                           : null,

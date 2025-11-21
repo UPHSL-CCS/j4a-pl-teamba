@@ -338,7 +338,7 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
   Widget _buildVitalChip(String label, Color color) {
     return Chip(
       label: Text(label, style: const TextStyle(fontSize: 12)),
-      backgroundColor: color.withOpacity(0.15),
+      backgroundColor: color.withValues(alpha: 0.15),
       labelStyle: TextStyle(color: color),
       visualDensity: VisualDensity.compact,
     );

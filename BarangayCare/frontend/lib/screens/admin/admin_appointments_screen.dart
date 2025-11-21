@@ -157,7 +157,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
         });
       },
       backgroundColor: Colors.grey[200],
-      selectedColor: Colors.teal.withOpacity(0.3),
+      selectedColor: Colors.teal.withValues(alpha: 0.3),
       checkmarkColor: Colors.teal,
     );
   }
@@ -201,7 +201,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
+                      color: statusColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: statusColor),
                     ),

@@ -243,7 +243,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.1),
+                    color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: statusColor),
                   ),
@@ -369,6 +369,8 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
         ],
       ),
     );
+
+    if (!mounted) return;
 
     if (confirmed != true) return;
 

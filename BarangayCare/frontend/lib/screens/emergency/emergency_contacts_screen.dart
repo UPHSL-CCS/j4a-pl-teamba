@@ -19,7 +19,6 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
   bool _isLoading = false;
   bool _isFindingNearest = false;
   String? _errorMessage;
-  Position? _currentPosition;
 
   @override
   void initState() {
@@ -32,6 +31,8 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
   Future<void> _loadCategories() async {
     try {
       final categories = await _emergencyService.getCategories();
+      if (!mounted) return;
+
       setState(() {
         _categories = categories;
       });
@@ -51,11 +52,15 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
       final contacts = await _emergencyService.getAllContacts(
         category: _selectedCategory,
       );
+      if (!mounted) return;
+
       setState(() {
         _contacts = contacts;
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
+
       setState(() {
         _errorMessage = 'Failed to load emergency contacts';
         _isLoading = false;
@@ -88,10 +93,8 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      
-      setState(() {
-        _currentPosition = position;
-      });
+
+      if (!mounted) return;
 
       // Find nearest contacts
       final nearestContacts = await _emergencyService.getNearestContacts(
@@ -102,12 +105,15 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
         limit: 10,
       );
 
+      if (!mounted) return;
+
       setState(() {
         _contacts = nearestContacts;
         _isFindingNearest = false;
       });
 
       if (nearestContacts.isEmpty) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('No emergency contacts found within 10km'),
@@ -116,11 +122,15 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
+
       setState(() {
         _errorMessage = e.toString().replaceAll('Exception: ', '');
         _isFindingNearest = false;
       });
-      
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(_errorMessage ?? 'Failed to find nearest contacts'),
@@ -142,6 +152,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
         throw Exception('Could not launch phone dialer');
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to make call: $e'),
@@ -163,6 +174,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
         throw Exception('Could not launch SMS');
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to send SMS: $e'),
@@ -431,7 +443,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: _getCategoryColor(category).withOpacity(0.1),
+                      color: _getCategoryColor(category).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(

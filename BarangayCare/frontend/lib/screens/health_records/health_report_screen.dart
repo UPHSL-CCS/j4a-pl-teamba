@@ -63,6 +63,8 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
     setState(() => _isGeneratingPDF = true);
 
     try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
       // Request storage permission for Android
       if (Platform.isAndroid) {
         // Check Android SDK version
@@ -97,7 +99,6 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
         }
       }
 
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final token = await authProvider.getIdToken();
 
       if (token == null) {

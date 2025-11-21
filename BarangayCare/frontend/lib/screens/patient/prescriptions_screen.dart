@@ -49,11 +49,15 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
         status: _filter == 'active' ? 'active' : null,
       );
 
+      if (!mounted) return;
+
       setState(() {
         _prescriptions = prescriptions;
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
+
       setState(() {
         _error = e.toString();
         _isLoading = false;
@@ -72,6 +76,8 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       if (token == null) {
         throw Exception('Not authenticated');
       }
+
+      if (!mounted) return;
 
       // Show quantity dialog
       final quantityController = TextEditingController(
@@ -328,7 +334,7 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
+              color: statusColor.withValues(alpha: 0.1),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),

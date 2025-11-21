@@ -33,7 +33,7 @@ class ChatBubble extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 4,
               offset: const Offset(0, 2),
             )
@@ -56,7 +56,7 @@ class ChatBubble extends StatelessWidget {
                 child: Text(
                   'Intent: ${message.intent}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: textColor.withOpacity(0.8),
+                        color: textColor.withValues(alpha: 0.8),
                         fontSize: 11,
                       ),
                 ),
@@ -76,7 +76,7 @@ class ChatBubble extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color:
-                                Colors.white.withOpacity(isUser ? 0.25 : 0.9),
+                              Colors.white.withValues(alpha: isUser ? 0.25 : 0.9),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(

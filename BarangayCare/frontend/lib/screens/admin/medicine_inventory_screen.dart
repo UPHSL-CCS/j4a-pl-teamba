@@ -75,7 +75,7 @@ class _MedicineInventoryScreenState extends State<MedicineInventoryScreen> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  initialValue: changeType,
+                  value: changeType,
                   decoration: const InputDecoration(
                     labelText: 'Change Type',
                     border: OutlineInputBorder(),

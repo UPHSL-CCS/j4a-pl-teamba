@@ -104,6 +104,8 @@ BarangayCare/
 
 ## 🚦 Getting Started
 
+> 📖 **For detailed step-by-step setup instructions, see [LOCAL_SETUP.md](./LOCAL_SETUP.md)**
+
 ### Prerequisites
 
 #### Backend
