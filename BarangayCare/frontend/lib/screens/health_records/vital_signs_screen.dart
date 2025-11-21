@@ -58,10 +58,12 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         title: const Text('Vital Signs'),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -84,7 +86,7 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
   Widget _buildBody() {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Colors.red),
+        child: CircularProgressIndicator(color: Color(0xFF00897B)),
       );
     }
 
@@ -105,8 +107,11 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFF00897B),
                 foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
@@ -139,7 +144,7 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
               icon: const Icon(Icons.add),
               label: const Text('Add First Record'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFF00897B),
                 foregroundColor: Colors.white,
               ),
             ),
@@ -150,7 +155,7 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
 
     return RefreshIndicator(
       onRefresh: _loadVitalSigns,
-      color: Colors.red,
+      color: const Color(0xFF00897B),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -255,8 +260,8 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
               height: 200,
               child: LineChart(
                 LineChartData(
-                  gridData: FlGridData(show: true),
-                  titlesData: FlTitlesData(
+                  gridData: const FlGridData(show: true),
+                  titlesData: const FlTitlesData(
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(showTitles: true, reservedSize: 40),
                     ),
@@ -282,7 +287,7 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
                       isCurved: true,
                       color: Colors.red,
                       barWidth: 3,
-                      dotData: FlDotData(show: true),
+                      dotData: const FlDotData(show: true),
                     ),
                   ],
                 ),
@@ -295,9 +300,6 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
   }
 
   Widget _buildVitalCard(Map<String, dynamic> vital) {
-    final bpAssessment =
-        HealthRecordsService.assessBloodPressure(vital['blood_pressure']);
-
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
@@ -316,15 +318,15 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
               children: [
                 if (vital['blood_pressure'] != null)
                   _buildVitalChip('BP: ${vital['blood_pressure']}',
-                      _getColorFromString(bpAssessment['color'])),
+                      const Color(0xFF00897B)),
                 if (vital['heart_rate'] != null)
-                  _buildVitalChip('HR: ${vital['heart_rate']} bpm', Colors.blue),
+                  _buildVitalChip('HR: ${vital['heart_rate']} bpm', const Color(0xFF00897B)),
                 if (vital['temperature'] != null)
-                  _buildVitalChip('Temp: ${vital['temperature']}°C', Colors.orange),
+                  _buildVitalChip('Temp: ${vital['temperature']}°C', const Color(0xFF00897B)),
                 if (vital['weight'] != null)
-                  _buildVitalChip('Weight: ${vital['weight']} kg', Colors.green),
+                  _buildVitalChip('Weight: ${vital['weight']} kg', const Color(0xFF00897B)),
                 if (vital['bmi'] != null)
-                  _buildVitalChip('BMI: ${vital['bmi']}', Colors.purple),
+                  _buildVitalChip('BMI: ${vital['bmi']}', const Color(0xFF00897B)),
               ],
             ),
           ],
@@ -336,26 +338,10 @@ class _VitalSignsScreenState extends State<VitalSignsScreen> {
   Widget _buildVitalChip(String label, Color color) {
     return Chip(
       label: Text(label, style: const TextStyle(fontSize: 12)),
-      backgroundColor: color.withOpacity(0.1),
+      backgroundColor: color.withOpacity(0.15),
       labelStyle: TextStyle(color: color),
       visualDensity: VisualDensity.compact,
     );
   }
 
-  Color _getColorFromString(String colorName) {
-    switch (colorName) {
-      case 'red':
-        return Colors.red;
-      case 'orange':
-        return Colors.orange;
-      case 'yellow':
-        return Colors.yellow.shade700;
-      case 'green':
-        return Colors.green;
-      case 'blue':
-        return Colors.blue;
-      default:
-        return Colors.grey;
-    }
-  }
 }
