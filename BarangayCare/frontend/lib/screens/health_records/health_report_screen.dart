@@ -85,7 +85,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Storage permission is required to save PDF reports. Please grant storage access in app settings.'),
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Color(0xFF00897B),
                       duration: Duration(seconds: 5),
                     ),
                   );
@@ -130,7 +130,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Report saved successfully: $fileName\nLocation: ${directory.path}'),
-            backgroundColor: Colors.green,
+            backgroundColor: const Color(0xFF00897B),
             duration: const Duration(seconds: 5),
             action: SnackBarAction(
               label: 'OK',
@@ -145,7 +145,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error generating report: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: const Color(0xFF00897B),
           ),
         );
       }
@@ -159,10 +159,12 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const Text('Health Reports'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        title: const Text('Health Report'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.picture_as_pdf),
@@ -178,7 +180,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
   Widget _buildBody() {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Colors.green),
+        child: CircularProgressIndicator(color: Color(0xFF00897B)),
       );
     }
 
@@ -187,7 +189,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const Icon(Icons.error_outline, size: 64, color: Color(0xFF00897B)),
             const SizedBox(height: 16),
             const Text(
               'Error loading health trends',
@@ -199,7 +201,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: const Color(0xFF00897B),
                 foregroundColor: Colors.white,
               ),
             ),
@@ -230,7 +232,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
 
   Widget _buildPeriodSelector() {
     return Card(
-      elevation: 2,
+      elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -298,15 +300,15 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
     switch (trend) {
       case 'increasing':
         trendIcon = Icons.trending_up;
-        trendColor = Colors.red;
+        trendColor = const Color(0xFF00897B);
         break;
       case 'decreasing':
         trendIcon = Icons.trending_down;
-        trendColor = Colors.blue;
+        trendColor = const Color(0xFF00897B);
         break;
       default:
         trendIcon = Icons.trending_flat;
-        trendColor = Colors.green;
+        trendColor = const Color(0xFF00897B);
     }
 
     return Padding(
@@ -350,8 +352,8 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
               height: 200,
               child: LineChart(
                 LineChartData(
-                  gridData: FlGridData(show: true),
-                  titlesData: FlTitlesData(
+                  gridData: const FlGridData(show: true),
+                  titlesData: const FlTitlesData(
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(showTitles: true, reservedSize: 40),
                     ),
@@ -374,9 +376,9 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                         FlSpot(2, weightData['max'].toDouble()),
                       ],
                       isCurved: true,
-                      color: Colors.green,
+                      color: const Color(0xFF00897B),
                       barWidth: 3,
-                      dotData: FlDotData(show: true),
+                      dotData: const FlDotData(show: true),
                     ),
                   ],
                 ),
@@ -411,9 +413,9 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
               height: 200,
               child: BarChart(
                 BarChartData(
-                  gridData: FlGridData(show: true),
+                  gridData: const FlGridData(show: true),
                   titlesData: FlTitlesData(
-                    leftTitles: AxisTitles(
+                    leftTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: true, reservedSize: 40),
                     ),
                     bottomTitles: AxisTitles(
@@ -433,10 +435,10 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                         },
                       ),
                     ),
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
@@ -447,7 +449,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                       barRods: [
                         BarChartRodData(
                           toY: hrData['min'].toDouble(),
-                          color: Colors.blue,
+                          color: const Color(0xFF00897B),
                         ),
                       ],
                     ),
@@ -456,7 +458,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                       barRods: [
                         BarChartRodData(
                           toY: hrData['average'].toDouble(),
-                          color: Colors.red,
+                          color: const Color(0xFF00897B),
                         ),
                       ],
                     ),
@@ -465,7 +467,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                       barRods: [
                         BarChartRodData(
                           toY: hrData['max'].toDouble(),
-                          color: Colors.orange,
+                          color: const Color(0xFF00897B),
                         ),
                       ],
                     ),
@@ -486,8 +488,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
 
   Widget _buildGenerateReportCard() {
     return Card(
-      elevation: 2,
-      color: Colors.green.shade50,
+      elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -495,12 +496,12 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
           children: [
             const Row(
               children: [
-                Icon(Icons.description, color: Colors.green, size: 32),
+                Icon(Icons.description, color: Color(0xFF00897B), size: 32),
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     'Generate PDF Report',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                 ),
               ],
@@ -508,7 +509,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
             const SizedBox(height: 12),
             const Text(
               'Download a comprehensive PDF report of your health records including consultations, vital signs, and health trends.',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.black54),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -529,7 +530,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                     ? 'Generating...'
                     : 'Download PDF Report'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: const Color(0xFF00897B),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
