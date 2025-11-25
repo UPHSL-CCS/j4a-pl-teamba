@@ -294,7 +294,179 @@ Creating the Bee Colony Simulation helped me deeply understand how concurrency w
 **Mark Anthony Hernandez (Thread Race Implementation):**
 Implementing the visual thread race program was an exciting challenge that deepened my understanding of concurrent programming and thread synchronization. Creating the live progress tracking system taught me how to manage shared resources safely using multiple locks - the `position_lock` for updating racer positions and `result_lock` for recording final results. The most fascinating aspect was seeing how threads can run unpredictably; each race produces different winners despite using the same code, which perfectly demonstrates the non-deterministic nature of concurrent execution. Building the real-time visualization with progress bars updating every 300ms showed me how threading can be used for interactive applications, not just background processing. The biggest challenge was preventing race conditions when multiple threads tried to update the display simultaneously, which I solved using proper synchronization techniques. This project made me realize that effective concurrency programming isn't just about making threads run in parallel - it's about carefully orchestrating their interactions to create predictable, safe, and engaging user experiences. The visual feedback also made abstract threading concepts much more tangible and easier to understand.
 
+---
+
+## 🏥 BarangayCare: Full-Stack Healthcare Application
+
+### Overview
+
+BarangayCare is a comprehensive mobile healthcare application designed for barangay communities in the Philippines. This full-stack project demonstrates the practical application of programming language concepts learned throughout the course in a real-world healthcare management system.
+
+### 📱 Application Features
+
+The application enables patients to:
+- **Register and authenticate** using Firebase authentication
+- **Book doctor consultations** with real-time availability checking
+- **Request medicines** from the barangay health center
+- **Submit pre-screening forms** before consultations
+- **Manage appointments** (view, cancel, track history)
+
+### 🏗️ Technical Architecture
+
+**Frontend:**
+- **Framework**: Flutter (Dart)
+- **State Management**: Provider pattern
+- **Authentication**: Firebase Auth
+- **Platforms**: Android, iOS, Web
+
+**Backend:**
+- **Framework**: Hono.js (Node.js)
+- **Database**: MongoDB (NoSQL)
+- **Authentication**: Firebase Admin SDK
+- **API Design**: RESTful architecture
+
+### 💡 Programming Concepts Applied
+
+This project demonstrates the comprehensive application of course concepts:
+
+#### 1. **Control Flow & Expressions**
+- Complex conditional logic for appointment booking validation
+- Nested if-else statements for medicine prescription checking
+- Boolean expressions combining availability AND conflict checks
+- Guard clauses for early return patterns
+
+#### 2. **Subprograms & Modularity**
+- **Backend Services**: Reusable functions (`checkAvailability`, `bookAppointment`, `requestMedicine`)
+- **Flutter Services**: Separated API logic from UI components
+- **Middleware Architecture**: Centralized authentication logic
+- **Module Organization**: Clear separation of concerns across files
+
+#### 3. **Concurrency & Parallel Execution**
+- **Atomic Database Updates**: MongoDB `$inc` operator prevents race conditions
+- **Double Booking Prevention**: Database-level uniqueness constraints
+- **Stock Management**: Concurrent medicine requests handled safely
+- **Multi-user Support**: Safe operations across simultaneous users
+
+#### 4. **Data Abstraction**
+- **API Layer**: Hides database complexity from frontend
+- **Service Classes**: Abstract business logic from routes
+- **Provider Pattern**: State management abstraction in Flutter
+- **DTOs**: Data Transfer Objects for API contracts
+
+#### 5. **Error Handling**
+- Try-catch blocks for network and database errors
+- Input validation and sanitization
+- User-friendly error messages
+- Graceful degradation strategies
+
+### 🗂️ Project Structure
+
+```
+BarangayCare/
+├── frontend/              # Flutter mobile application
+│   ├── lib/
+│   │   ├── config/       # Firebase & app configuration
+│   │   ├── models/       # Data models
+│   │   ├── providers/    # State management
+│   │   ├── screens/      # UI screens
+│   │   └── services/     # API services
+│   ├── assets/           # Images and icons
+│   └── test/             # Unit tests
+│
+├── backend/              # Hono.js API server
+│   ├── src/
+│   │   ├── config/      # Database & Firebase setup
+│   │   ├── routes/      # API endpoint definitions
+│   │   ├── services/    # Business logic layer
+│   │   └── middleware/  # Authentication middleware
+│   └── scripts/         # Database seeding scripts
+│
+└── Documentation files
+```
+
+### 🚀 Key Technical Features
+
+1. **Firebase Integration**
+   - Email/password authentication
+   - Token-based API security
+   - Real-time auth state management
+
+2. **Database Design**
+   - NoSQL schema with relationships
+   - Optimized queries for performance
+   - Atomic operations for data integrity
+
+3. **API Architecture**
+   - RESTful endpoint design
+   - JWT token validation
+   - Proper HTTP status codes
+   - Request/response validation
+
+4. **Flutter UI/UX**
+   - Material Design components
+   - Responsive layouts
+   - Loading states and error handling
+   - Form validation
+
+### 📊 Phase 2 Enhancements (In Development)
+
+The team is currently developing advanced features:
+
+- **🚨 Emergency Hotlines** (Jorome): Quick access to emergency contacts
+- **🤖 AI Chatbot Assistant** (Anthony): Health advice and navigation help
+- **💊 Prescription Upload** (Larie): Image upload and approval workflow
+- **📈 Health Analytics** (Agatha): Personal health tracking and insights
+
+### 📖 Documentation
+
+Comprehensive documentation available in the BarangayCare folder:
+- [Complete System Documentation](./BarangayCare/README.md)
+- [Local Setup Guide](./BarangayCare/LOCAL_SETUP.md)
+- [Backend API Documentation](./BarangayCare/backend/README.md)
+- [Frontend Documentation](./BarangayCare/frontend/README.md)
+- [Team Task Assignments](./BarangayCare/TEAM_TASK_ASSIGNMENTS.md)
+- [New Features Enhancement Plan](./BarangayCare/NEW_FEATURES_ENHANCEMENT.md)
+- [Features Roadmap](./BarangayCare/FEATURES_ROADMAP.md)
+
+### 🎯 Learning Outcomes
+
+Through developing BarangayCare, the team demonstrated:
+- **Full-stack development** skills across mobile and web technologies
+- **Practical application** of programming language concepts
+- **Team collaboration** using Git and project management tools
+- **Real-world problem solving** for healthcare accessibility
+- **Software engineering best practices** in production-quality code
 
 ---
 
-*This activity demonstrates our understanding of fundamental programming language concepts through comparative analysis and practical examples.*
+## 📚 Documentation Repository
+
+The `docs/` folder contains comprehensive project documentation that consolidates all learning activities and technical implementations from the Programming Languages course.
+
+### 📄 Available Documentation
+
+**FINAL_PROJECT_DOCUMENTATION_PL-TeamBA.pdf**
+- Complete compilation of all programming language concepts explored
+- Detailed analysis of each activity with code examples
+- Team reflections and individual learning outcomes
+- Technical specifications and architecture diagrams
+- Comprehensive coverage of:
+  - Token analysis and syntax/semantic errors
+  - Variable scope and typing systems
+  - Control flow structures (if-else, loops, expressions)
+  - Subprograms, modularity, and abstraction
+  - Concurrency models and parallel execution
+  - BarangayCare application development
+
+### 🎓 Documentation Purpose
+
+This documentation serves multiple purposes:
+1. **Academic Record**: Formal documentation of course activities and learning
+2. **Technical Reference**: Detailed specifications for future development
+3. **Portfolio Material**: Demonstrates programming concepts mastery
+4. **Knowledge Transfer**: Enables future students to learn from implementations
+5. **Project Archive**: Preserves complete project history and decisions
+
+---
+
+*This repository demonstrates our comprehensive understanding of programming language concepts through theoretical exploration, practical examples, and real-world application development.*
