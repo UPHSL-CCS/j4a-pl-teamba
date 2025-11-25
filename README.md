@@ -404,6 +404,13 @@ BarangayCare/
 - Password hashing and secure authentication
 - CORS configuration for API access control
 
+**Database Design:**
+- **patients**: User profiles with Firebase UID mapping
+- **doctors**: Doctor information with schedule arrays
+- **appointments**: Booking records with status tracking
+- **medicine_inventory**: Stock management with reorder levels
+- **medicine_requests**: Request history and fulfillment tracking
+
 ### 🚀 Key Technical Features
 
 1. **Firebase Integration**
