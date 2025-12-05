@@ -16,6 +16,7 @@ import 'screens/admin/appointment_detail_screen.dart';
 import 'screens/admin/medicine_inventory_screen.dart';
 import 'screens/admin/medicine_requests_screen.dart';
 import 'screens/admin/admin_reports_screen.dart';
+import 'screens/chatbot/chatbot_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,20 +56,24 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterScreen(),
           '/complete-profile': (context) => const CompleteProfileScreen(),
           '/home': (context) => const HomeScreen(),
+          '/chatbot': (context) => const ChatbotScreen(),
           '/admin/dashboard': (context) => const AdminDashboardScreen(),
           '/admin/appointments': (context) {
-            final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+            final args = ModalRoute.of(context)?.settings.arguments
+                as Map<String, dynamic>?;
             return AdminAppointmentsScreen(
               initialStatus: args?['status'] as String?,
             );
           },
           '/admin/medicines': (context) {
-            final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+            final args = ModalRoute.of(context)?.settings.arguments
+                as Map<String, dynamic>?;
             return MedicineInventoryScreen(
               filter: args?['filter'] as String?,
             );
           },
-          '/admin/medicine-requests': (context) => const AdminMedicineRequestsScreen(),
+          '/admin/medicine-requests': (context) =>
+              const AdminMedicineRequestsScreen(),
           '/admin/reports': (context) => const AdminReportsScreen(),
         },
         onGenerateRoute: (settings) {
@@ -76,7 +81,8 @@ class MyApp extends StatelessWidget {
           if (settings.name == '/admin/appointment-detail') {
             final appointment = settings.arguments as Map<String, dynamic>;
             return MaterialPageRoute(
-              builder: (context) => AppointmentDetailScreen(appointment: appointment),
+              builder: (context) =>
+                  AppointmentDetailScreen(appointment: appointment),
             );
           }
           return null;

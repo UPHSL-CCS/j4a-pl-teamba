@@ -5,6 +5,7 @@ import '../appointments/my_appointments_screen.dart';
 import '../medicine/medicine_list_screen.dart';
 import '../profile/my_profile_screen.dart';
 import '../booking/doctor_list_screen.dart';
+import '../chatbot/chatbot_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -50,75 +51,91 @@ class HomeScreen extends StatelessWidget {
                 builder: (context, constraints) {
                   final cardWidth = (constraints.maxWidth - 16) / 2;
                   final cardHeight = cardWidth * 1.1;
-                  
+
                   return GridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                     childAspectRatio: cardWidth / cardHeight,
                     children: [
-                  _buildFeatureCard(
-                    context,
-                    icon: Icons.medical_services,
-                    title: 'Book Consultation',
-                    subtitle: 'Schedule with a doctor',
-                    color: Colors.blue,
-                    onTap: () {
-                      Navigator.push(
+                      _buildFeatureCard(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const DoctorListScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    icon: Icons.medication,
-                    title: 'Request Medicine',
-                    subtitle: 'Order from inventory',
-                    color: Colors.green,
-                    onTap: () {
-                      Navigator.push(
+                        icon: Icons.medical_services,
+                        title: 'Book Consultation',
+                        subtitle: 'Schedule with a doctor',
+                        color: Colors.blue,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DoctorListScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildFeatureCard(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const MedicineListScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    icon: Icons.calendar_today,
-                    title: 'My Appointments',
-                    subtitle: 'View schedule',
-                    color: Colors.orange,
-                    onTap: () {
-                      Navigator.push(
+                        icon: Icons.medication,
+                        title: 'Request Medicine',
+                        subtitle: 'Order from inventory',
+                        color: Colors.green,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MedicineListScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildFeatureCard(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyAppointmentsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    icon: Icons.person,
-                    title: 'My Profile',
-                    subtitle: 'Update info',
-                    color: Colors.purple,
-                    onTap: () {
-                      Navigator.push(
+                        icon: Icons.calendar_today,
+                        title: 'My Appointments',
+                        subtitle: 'View schedule',
+                        color: Colors.orange,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const MyAppointmentsScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildFeatureCard(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyProfileScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              );
+                        icon: Icons.person,
+                        title: 'My Profile',
+                        subtitle: 'Update info',
+                        color: Colors.purple,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MyProfileScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildFeatureCard(
+                        context,
+                        icon: Icons.chat_bubble_outline,
+                        title: 'Health Chatbot',
+                        subtitle: '24/7 assistant',
+                        color: Colors.teal,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ChatbotScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
